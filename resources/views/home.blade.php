@@ -5,5 +5,6 @@
 @section('content')
     @include('components.hero')
     @include('components.about')
-    @include('components.equipment', ['equipment' => $equipment])
+    @include('components.article')
+    @include('components.laboratorium')
 @endsection
