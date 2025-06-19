@@ -8,7 +8,7 @@
 <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
     <!-- Background Image with Gradient -->
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/hero.jpg') }}"
+        <img src="{{ asset('/images/hero.jpg') }}"
              alt="Layanan Peminjaman Alat"
              class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
@@ -116,122 +116,54 @@
             </div>
         </div>
 
+        <!-- Multi-select toggle -->
+        <div class="mb-4 flex items-center gap-2">
+            <input type="checkbox" id="multiSelectToggle" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+            <label for="multiSelectToggle" class="text-sm text-gray-700 select-none">Pilih lebih dari satu alat</label>
+        </div>
+
         <!-- Equipment Grid -->
         <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($equipments as $index => $equipment)
             <div class="equipment-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 scroll-animate"
                  data-animation="fade-up"
-                 data-delay="{{ $index * 100 }}"
-                 data-category="{{ $equipment['category'] }}"
-                 data-status="{{ $equipment['status'] }}"
-                 data-name="{{ strtolower($equipment['name']) }}">
-
+                 data-delay="{{ $index * 100 }}">
+                <div class="absolute top-4 left-4 z-10">
+                    <input type="radio" name="alatRadio" class="alat-radio w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" value="{{ $equipment->id }}" data-nama="{{ $equipment->nama }}">
+                    <input type="checkbox" class="alat-checkbox w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 hidden" value="{{ $equipment->id }}" data-nama="{{ $equipment->nama }}">
+                </div>
                 <!-- Image -->
                 <div class="relative overflow-hidden h-48 bg-gradient-to-br from-gray-100 to-gray-200">
-                    <img src="{{ asset('images/equipment/' . $equipment['image']) }}"
-                         alt="{{ $equipment['name'] }}"
-                         class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
-
-                    <!-- Status Badge -->
-                    <div class="absolute top-4 left-4">
-                        @if($equipment['status'] === 'available')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                            Tersedia
-                        </span>
-                        @else
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-200">
-                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                            Maintenance
-                        </span>
-                        @endif
-                    </div>
-
-                    <!-- Category Icon -->
-                    <div class="absolute top-4 right-4">
-                        <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="{{ $equipment['icon'] }} text-white text-sm"></i>
-                        </div>
-                    </div>
-
-                    <!-- Quantity Indicator -->
-                    <div class="absolute bottom-4 right-4">
-                        <div class="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg">
-                            <div class="text-xs text-gray-600">Tersedia</div>
-                            <div class="text-sm font-bold text-blue-600">
-                                {{ $equipment['quantity_available'] }}/{{ $equipment['quantity_total'] }}
-                            </div>
-                        </div>
-                    </div>
+                    @php $img = $equipment->gambar->first(); @endphp
+                    @if($img)
+                        <img src="{{ asset('public/images/' . $img->url) }}"
+                             alt="{{ $equipment->nama }}"
+                             class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">No Image</div>
+                    @endif
                 </div>
-
                 <!-- Content -->
                 <div class="p-6">
-                    <!-- Header -->
-                    <div class="mb-4">
-                        <div class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold mb-3 border border-blue-200">
-                            {{ $equipment['category'] }}
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight">{{ $equipment['name'] }}</h3>
-                        <p class="text-sm text-gray-500 font-medium">{{ $equipment['model'] }}</p>
-                    </div>
-
-                    <!-- Description -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight">{{ $equipment->nama }}</h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                        {{ $equipment['description'] }}
+                        {{ $equipment->deskripsi }}
                     </p>
-
-                    <!-- Specifications Preview -->
-                    <div class="mb-4">
-                        <h4 class="text-sm font-semibold text-gray-900 mb-2">Spesifikasi Utama</h4>
-                        <div class="space-y-1">
-                            @foreach(array_slice($equipment['specifications'], 0, 2) as $spec)
-                            <div class="flex items-center text-xs text-gray-600">
-                                <i class="fas fa-check-circle text-blue-500 mr-2 flex-shrink-0"></i>
-                                <span>{{ $spec }}</span>
-                            </div>
-                            @endforeach
-                            @if(count($equipment['specifications']) > 2)
-                            <div class="text-xs text-blue-600 font-medium">
-                                +{{ count($equipment['specifications']) - 2 }} spesifikasi lainnya
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Loan Duration -->
-                    <div class="flex items-center justify-between text-sm mb-6">
-                        <div class="flex items-center text-gray-600">
-                            <i class="fas fa-clock text-blue-500 mr-2"></i>
-                            <span>{{ $equipment['loan_duration'] }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="space-y-3">
-                        <button onclick="showEquipmentDetail({{ $equipment['id'] }})"
-                                class="w-full bg-blue-500 text-white px-4 py-3 rounded-xl font-semibold hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center">
-                            <i class="fas fa-eye mr-2"></i>
-                            Lihat Detail
-                        </button>
-
-                        @if($equipment['status'] === 'available' && $equipment['quantity_available'] > 0)
-                        <button onclick="openLoanModal({{ $equipment['id'] }})"
-                                class="w-full border-2 border-blue-500 text-blue-500 px-4 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 flex items-center justify-center">
-                            <i class="fas fa-hand-holding mr-2"></i>
-                            Ajukan Peminjaman
-                        </button>
-                        @else
-                        <button disabled
-                                class="w-full border-2 border-gray-300 text-gray-400 px-4 py-3 rounded-xl font-semibold cursor-not-allowed flex items-center justify-center">
-                            <i class="fas fa-times-circle mr-2"></i>
-                            Tidak Tersedia
-                        </button>
-                        @endif
-                    </div>
+                    <div class="mb-2 text-sm text-gray-700">Stok: <span class="font-semibold">{{ $equipment->stok }}</span></div>
+                    <div class="mb-4 text-sm text-gray-700">Harga: <span class="font-semibold">{{ $equipment->harga ? 'Rp ' . number_format($equipment->harga,0,',','.') : '-' }}</span></div>
+                    <button type="button" class="lihat-detail-btn w-full bg-blue-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center mt-2" data-id="{{ $equipment->id }}">
+                        <i class="fas fa-eye mr-2"></i> Lihat Detail
+                    </button>
                 </div>
             </div>
             @endforeach
+        </div>
+
+        <!-- Button to open loan modal -->
+        <div class="mt-8 flex justify-center">
+            <button id="openLoanModal" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold" disabled>
+                Ajukan Peminjaman
+            </button>
         </div>
 
         <!-- No Results Message -->
@@ -247,104 +179,98 @@
     </div>
 </section>
 
-<!-- Loan Request Modal -->
-<div id="loanModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onclick="closeLoanModal()"></div>
-
-        <!-- Modal content -->
-        <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-gray-900">Ajukan Peminjaman Alat</h3>
-                <button onclick="closeLoanModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+<!-- Loan Modal -->
+<div id="loanModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/40 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-8 relative">
+        <button onclick="closeLoanModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+        <h2 class="text-2xl font-bold mb-6 text-center">Formulir Peminjaman Alat</h2>
+        <form id="loanForm" method="POST" action="#">
+            @csrf
+            <input type="hidden" name="alat" id="alatInput">
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Nama Lengkap *</label>
+                <input type="text" name="namaPeminjam" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
             </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">No HP *</label>
+                <input type="text" name="noHp" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Tujuan Peminjaman</label>
+                <input type="text" name="tujuanPeminjaman" class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Tanggal Pinjam *</label>
+                <input type="date" name="tanggal_pinjam" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Tanggal Kembali *</label>
+                <input type="date" name="tanggal_pengembalian" required class="w-full px-4 py-3 border border-gray-200 rounded-xl">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Alat yang Dipilih</label>
+                <ul id="selectedAlatList" class="list-disc pl-5 text-sm text-gray-700"></ul>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-2">Rincian Peminjaman</label>
+                <table class="w-full text-sm border">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-2">Alat</th>
+                            <th class="p-2">Jumlah</th>
+                            <th class="p-2">Harga</th>
+                            <th class="p-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alatRincianTable"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right font-bold p-2">Total</td>
+                            <td class="font-bold p-2" id="totalHargaCell">Rp 0</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button type="button" onclick="closeLoanModal()" class="px-6 py-2 border border-gray-300 rounded-xl text-gray-700">Batal</button>
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-xl font-semibold">Kirim Permohonan</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-            <!-- Form -->
-            <form id="loanForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Personal Info -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap *</label>
-                        <input type="text" name="name" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">NIM *</label>
-                        <input type="text" name="student_id" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
-                        <input type="email" name="email" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">No. Telepon *</label>
-                        <input type="tel" name="phone" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Mulai *</label>
-                        <input type="date" name="start_date" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tanggal Selesai *</label>
-                        <input type="date" name="end_date" required
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Dosen Pembimbing *</label>
-                    <input type="text" name="supervisor" required
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tujuan Penggunaan *</label>
-                    <textarea name="purpose" rows="4" required
-                              class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Jelaskan tujuan dan rencana penggunaan alat..."></textarea>
-                </div>
-
-                <!-- Equipment Info -->
-                <div id="equipment-info" class="bg-gray-50 rounded-xl p-4">
-                    <!-- Equipment details will be populated by JavaScript -->
-                </div>
-
-                <!-- Terms -->
-                <div class="flex items-start space-x-3">
-                    <input type="checkbox" id="terms" required class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <label for="terms" class="text-sm text-gray-600">
-                        Saya menyetujui <a href="#" class="text-blue-600 hover:underline">syarat dan ketentuan</a> peminjaman alat laboratorium.
-                    </label>
-                </div>
-
-                <!-- Submit -->
-                <div class="flex space-x-4">
-                    <button type="button" onclick="closeLoanModal()"
-                            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors duration-200">
-                        Batal
-                    </button>
-                    <button type="submit"
-                            class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-200">
-                        Kirim Permohonan
-                    </button>
-                </div>
-            </form>
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/40 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-8 relative">
+        <h2 class="text-2xl font-bold mb-6 text-center">Rincian Peminjaman</h2>
+        <div id="confirmationContent"></div>
+        <form id="realSubmitForm" method="POST" action="{{ route('equipment.loan.request') }}" class="hidden">
+            @csrf
+            <input type="hidden" name="namaPeminjam">
+            <input type="hidden" name="noHp">
+            <input type="hidden" name="tujuanPeminjaman">
+            <input type="hidden" name="tanggal_pinjam">
+            <input type="hidden" name="tanggal_pengembalian">
+            <input type="hidden" name="alat">
+        </form>
+        <div class="flex justify-end gap-4 mt-6">
+            <button type="button" onclick="closeConfirmationModal()" class="px-6 py-2 border border-gray-300 rounded-xl text-gray-700">Batal</button>
+            <button type="button" id="confirmAndSubmitBtn" class="px-6 py-2 bg-blue-600 text-white rounded-xl font-semibold">Konfirmasi & Kirim</button>
         </div>
     </div>
 </div>
+
+@if(!empty($success))
+<div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 text-center text-lg font-semibold transition-opacity duration-500">
+    {{ $success }}
+</div>
+<script>
+setTimeout(() => {
+    const alert = document.getElementById('successAlert');
+    if(alert) alert.style.opacity = 0;
+}, 4000);
+</script>
+@endif
 
 <style>
 /* Line clamp for text truncation */
@@ -555,8 +481,190 @@ function closeLoanModal() {
 // Handle form submission
 document.getElementById('loanForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('Permohonan peminjaman berhasil dikirim! Kami akan menghubungi Anda dalam 1x24 jam.');
+    // Ambil data form
+    const form = e.target;
+    const data = {
+        namaPeminjam: form.namaPeminjam.value,
+        noHp: form.noHp.value,
+        tujuanPeminjaman: form.tujuanPeminjaman.value,
+        tanggal_pinjam: form.tanggal_pinjam.value,
+        tanggal_pengembalian: form.tanggal_pengembalian.value,
+        alat: selectedAlat.map(a => ({
+            id: a.id,
+            jumlah: a.jumlah
+        }))
+    };
+    // Tampilkan konfirmasi
+    showConfirmation(data);
     closeLoanModal();
+});
+
+let selectedAlat = [];
+const alatRadios = document.querySelectorAll('.alat-radio');
+const alatCheckboxes = document.querySelectorAll('.alat-checkbox');
+const openLoanModalBtn = document.getElementById('openLoanModal');
+const loanModal = document.getElementById('loanModal');
+const alatInput = document.getElementById('alatInput');
+const selectedAlatList = document.getElementById('selectedAlatList');
+const multiSelectToggle = document.getElementById('multiSelectToggle');
+
+function updateSelectionMode() {
+    if (multiSelectToggle.checked) {
+        // Enable multi-select (checkbox)
+        alatRadios.forEach(r => { r.classList.add('hidden'); r.checked = false; });
+        alatCheckboxes.forEach(cb => cb.classList.remove('hidden'));
+        selectedAlat = Array.from(document.querySelectorAll('.alat-checkbox:checked')).map(cb => ({
+            id: cb.value,
+            jumlah: 1
+        }));
+    } else {
+        // Single select (radio)
+        alatRadios.forEach(r => r.classList.remove('hidden'));
+        alatCheckboxes.forEach(cb => { cb.classList.add('hidden'); cb.checked = false; });
+        // If any radio is checked, set selectedAlat to that
+        const checkedRadio = document.querySelector('.alat-radio:checked');
+        selectedAlat = checkedRadio ? [{ id: checkedRadio.value, jumlah: 1 }] : [];
+    }
+    openLoanModalBtn.disabled = selectedAlat.length === 0;
+}
+
+multiSelectToggle.addEventListener('change', updateSelectionMode);
+alatRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (!multiSelectToggle.checked) {
+            selectedAlat = [{ id: this.value, jumlah: 1 }];
+            openLoanModalBtn.disabled = false;
+        }
+    });
+});
+alatCheckboxes.forEach(cb => {
+    cb.addEventListener('change', function() {
+        if (multiSelectToggle.checked) {
+            selectedAlat = Array.from(document.querySelectorAll('.alat-checkbox:checked')).map(cb => ({
+                id: cb.value,
+                jumlah: 1
+            }));
+            openLoanModalBtn.disabled = selectedAlat.length === 0;
+        }
+    });
+});
+
+// Lihat Detail
+const lihatDetailBtns = document.querySelectorAll('.lihat-detail-btn');
+lihatDetailBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        window.location.href = `/services/equipment-loan/${id}`;
+    });
+});
+
+openLoanModalBtn.addEventListener('click', function() {
+    loanModal.classList.remove('hidden');
+    updateSelectedAlatList();
+    // If jumlah not set, default to 1
+    selectedAlat.forEach(a => { if (!a.jumlah) a.jumlah = 1; });
+    renderRincianTable();
+    alatInput.value = JSON.stringify(selectedAlat);
+});
+
+// Data alat dari backend
+const alatData = @json($equipments);
+
+function getAlatById(id) {
+    return alatData.find(a => a.id === id);
+}
+
+function renderRincianTable() {
+    let total = 0;
+    let html = selectedAlat.map(a => {
+        const alat = getAlatById(a.id);
+        const harga = alat ? alat.harga : 0;
+        const jumlah = a.jumlah;
+        const subtotal = harga * jumlah;
+        total += subtotal;
+        return `<tr>
+            <td class='p-2'>${alat ? alat.nama : '-'}</td>
+            <td class='p-2'><input type='number' min='1' max='${alat ? alat.stok : 1}' value='${jumlah}' class='jumlah-input w-16 border rounded text-center' data-id='${a.id}'></td>
+            <td class='p-2'>Rp ${harga.toLocaleString('id-ID')}</td>
+            <td class='p-2'>Rp ${(subtotal).toLocaleString('id-ID')}</td>
+        </tr>`;
+    }).join('');
+    document.getElementById('alatRincianTable').innerHTML = html;
+    document.getElementById('totalHargaCell').innerText = 'Rp ' + total.toLocaleString('id-ID');
+}
+
+function updateJumlah(id, value, rerender = true) {
+    const alat = getAlatById(id);
+    const max = alat ? alat.stok : 1;
+    value = Math.max(1, Math.min(max, value));
+    const idx = selectedAlat.findIndex(a => a.id === id);
+    if (idx !== -1) selectedAlat[idx].jumlah = value;
+    if (rerender) renderRincianTable();
+    alatInput.value = JSON.stringify(selectedAlat);
+}
+
+function updateSelectedAlatList() {
+    selectedAlatList.innerHTML = selectedAlat.map(a => {
+        const nama = getAlatById(a.id)?.nama || '-';
+        return `<li>${nama}</li>`;
+    }).join('');
+}
+
+let lastConfirmationData = null;
+function showConfirmation(data) {
+    lastConfirmationData = data;
+    let alatRows = data.alat.map(a => {
+        const alat = getAlatById(a.id);
+        const harga = alat ? alat.harga : 0;
+        const subtotal = harga * a.jumlah;
+        return `<tr>
+            <td class='p-2'>${alat ? alat.nama : '-'}</td>
+            <td class='p-2'>${a.jumlah}</td>
+            <td class='p-2'>Rp ${harga.toLocaleString('id-ID')}</td>
+            <td class='p-2'>Rp ${(subtotal).toLocaleString('id-ID')}</td>
+        </tr>`;
+    }).join('');
+    let total = data.alat.reduce((sum, a) => {
+        const alat = getAlatById(a.id);
+        return sum + (alat ? alat.harga * a.jumlah : 0);
+    }, 0);
+    document.getElementById('confirmationContent').innerHTML = `
+        <div class='mb-4'>
+            <div><b>Nama:</b> ${data.namaPeminjam}</div>
+            <div><b>No HP:</b> ${data.noHp}</div>
+            <div><b>Tujuan:</b> ${data.tujuanPeminjaman}</div>
+            <div><b>Tanggal Pinjam:</b> ${data.tanggal_pinjam}</div>
+            <div><b>Tanggal Kembali:</b> ${data.tanggal_pengembalian}</div>
+        </div>
+        <div class='mb-4'>
+            <table class='w-full text-sm border'>
+                <thead><tr class='bg-gray-100'><th class='p-2'>Alat</th><th class='p-2'>Jumlah</th><th class='p-2'>Harga</th><th class='p-2'>Subtotal</th></tr></thead>
+                <tbody>${alatRows}</tbody>
+                <tfoot><tr><td colspan='3' class='text-right font-bold p-2'>Total</td><td class='font-bold p-2'>Rp ${total.toLocaleString('id-ID')}</td></tr></tfoot>
+            </table>
+        </div>
+    `;
+    document.getElementById('confirmationModal').classList.remove('hidden');
+}
+
+document.getElementById('confirmAndSubmitBtn').onclick = function() {
+    if (!lastConfirmationData) return;
+    const form = document.getElementById('realSubmitForm');
+    form.namaPeminjam.value = lastConfirmationData.namaPeminjam;
+    form.noHp.value = lastConfirmationData.noHp;
+    form.tujuanPeminjaman.value = lastConfirmationData.tujuanPeminjaman;
+    form.tanggal_pinjam.value = lastConfirmationData.tanggal_pinjam;
+    form.tanggal_pengembalian.value = lastConfirmationData.tanggal_pengembalian;
+    form.alat.value = JSON.stringify(lastConfirmationData.alat);
+    form.submit();
+};
+
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('jumlah-input')) {
+        const id = e.target.dataset.id;
+        const value = parseInt(e.target.value) || 1;
+        updateJumlah(id, value, true); // Always rerender
+    }
 });
 </script>
 @endsection
