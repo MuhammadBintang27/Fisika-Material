@@ -60,3 +60,5 @@ Route::prefix('services/testing')->name('testing.')->group(function () {
     Route::get('/{id}', [TestingServicesController::class, 'show'])->name('detail');
     Route::post('/{id}/request', [TestingServicesController::class, 'requestTest'])->name('request');
 });
+
+Route::post('/equipment-loan/request', [App\Http\Controllers\EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
