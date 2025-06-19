@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\ProfilLaboratorium;
 use App\Models\Misi;
+use App\Models\Artikel;
 
 use Illuminate\Http\Request;
 
@@ -11,39 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         // Data untuk artikel yang ditampilkan di beranda (3 artikel terbaru)
-        $featuredArticles = [
-            [
-                'id' => 1,
-                'title' => 'Pengembangan Sistem Monitoring Seismik Real-time',
-                'excerpt' => 'Laboratorium berhasil mengembangkan sistem monitoring aktivitas seismik yang dapat memberikan peringatan dini dengan akurasi tinggi...',
-                'author' => 'Dr. Ahmad Rahman',
-                'date' => '2025-06-15',
-                'category' => 'Penelitian',
-                'image' => 'images/article-1.jpg',
-                'slug' => 'pengembangan-sistem-monitoring-seismik'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Inovasi Metode Praktikum Fisika Modern',
-                'excerpt' => 'Penerapan teknologi AR dan VR dalam praktikum fisika modern memberikan pengalaman belajar yang lebih interaktif dan mendalam...',
-                'author' => 'Prof. Siti Nurhaliza',
-                'date' => '2025-06-12',
-                'category' => 'Pendidikan',
-                'image' => 'images/article-2.jpg',
-                'slug' => 'inovasi-metode-praktikum-fisika'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Kerjasama Penelitian dengan Universitas Tokyo',
-                'excerpt' => 'Program pertukaran peneliti dan mahasiswa dalam bidang fisika material menghasilkan publikasi internasional berkualitas tinggi...',
-                'author' => 'Dr. Rizki Pratama',
-                'date' => '2025-06-08',
-                'category' => 'Kolaborasi',
-                'image' => 'images/article-3.jpg',
-                'slug' => 'kerjasama-penelitian-universitas-tokyo'
-            ]
-        ];
-
+        $featuredArticles = Artikel::with('gambar')->orderByDesc('tanggalAcara')->take(3)->get();
 
         $profil = ProfilLaboratorium::with('misi')->first();
         $misis = Misi::all();
