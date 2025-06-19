@@ -26,36 +26,32 @@
             <!-- Article {{ $index + 1 }} -->
             <article class="group bg-white rounded-3xl overflow-hidden border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 articles-animate" data-animation="fade-up" data-delay="{{ ($index + 1) * 100 }}">
                 <div class="relative overflow-hidden">
-                    <img src="{{ asset($article['image']) }}"
-                         alt="{{ $article['title'] }}"
-                         class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute top-4 left-4">
-                        @if($article['category'] == 'Penelitian')
-                            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $article['category'] }}</span>
-                        @elseif($article['category'] == 'Pendidikan')
-                            <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $article['category'] }}</span>
-                        @elseif($article['category'] == 'Kolaborasi')
-                            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $article['category'] }}</span>
-                        @else
-                            <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-medium">{{ $article['category'] }}</span>
-                        @endif
-                    </div>
+                    @if($article->gambar && $article->gambar->first())
+                        <img src="{{ asset('images/' . $article->gambar->first()->url) }}"
+                             alt="{{ $article->namaAcara }}"
+                             class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="text-xs text-gray-400">URL: {{ 'images/' . $article->gambar->first()->url }}</div>
+                    @else
+                        <div class="w-full h-48 flex items-center justify-center bg-gray-200 text-gray-400">
+                            No Image<br>
+                            URL: {{ $article->gambar->first()->url ?? 'NO GAMBAR' }}
+                        </div>
+                    @endif
                 </div>
                 <div class="p-6">
                     <div class="flex items-center text-sm text-gray-500 mb-3">
                         <i class="fas fa-calendar mr-2"></i>
-                        <span>{{ date('d M Y', strtotime($article['date'])) }}</span>
+                        <span>{{ date('d M Y', strtotime($article->tanggalAcara)) }}</span>
                         <i class="fas fa-user ml-4 mr-2"></i>
-                        <span>{{ $article['author'] }}</span>
+                        <span>{{ $article->penulis ?? '-' }}</span>
                     </div>
                     <h3 class="font-poppins text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
-                        {{ $article['title'] }}
+                        {{ $article->namaAcara }}
                     </h3>
                     <p class="text-gray-600 leading-relaxed mb-4">
-                        {{ $article['excerpt'] }}
+                        {{ Str::limit(strip_tags($article->deskripsi), 100) }}
                     </p>
-                    <a href="{{ route('articles.show', $article['slug']) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200">
+                    <a href="{{ route('articles.show', $article->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200">
                         Baca Selengkapnya
                         <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
                     </a>

@@ -56,7 +56,6 @@
 <!-- Main Staff Section -->
 <section class="py-24 bg-gray-50 relative">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
         <!-- Filter & Search Section -->
         <div class="mb-16 staff-animate" data-animation="fade-down">
             <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-lg">
@@ -66,20 +65,15 @@
                         <button class="staff-filter-btn active px-6 py-3 bg-gradient-to-r from-[#968c82] to-[#635849] text-white rounded-full font-medium transition-all duration-300 hover:from-[#635849] hover:to-[#443f35] shadow-lg" data-filter="all">
                             <i class="fas fa-users mr-2"></i>Semua Tim ({{ $stats['total_staff'] }})
                         </button>
-                        <button class="staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50" data-filter="head-lecturer">
-                            <i class="fas fa-crown mr-2"></i>Kepala Laboratorium ({{ $stats['head-researchers'] }})
+                        @foreach($stats['jabatan_list'] as $jabatan => $count)
+                        <button class="staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50" data-filter="{{ $jabatan }}">
+                            <span class="mr-2">{{ $jabatan }}</span> ({{ $count }})
                         </button>
-                        <button class="staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50" data-filter="lecturer">
-                            <i class="fas fa-graduation-cap mr-2"></i>Dosen ({{ $stats['lecturers'] }})
-                        </button>
-                        <button class="staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50" data-filter="technician">
-                            <i class="fas fa-tools mr-2"></i>Laboran ({{ $stats['technicians'] }})
-                        </button>
+                        @endforeach
                     </div>
-
-                    <!-- Search -->
+                    <!-- Search (by name only) -->
                     <div class="relative">
-                        <input type="text" id="staff-search" placeholder="Cari berdasarkan nama atau keahlian..."
+                        <input type="text" id="staff-search" placeholder="Cari berdasarkan nama..."
                                class="pl-12 pr-4 py-3 w-80 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300">
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
@@ -89,112 +83,35 @@
 
         <!-- Staff Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16" id="staff-grid">
-            @foreach($staff as $index => $member)
+            @php
+                // Urutkan: Kepala Laboratorium paling atas, lalu urutkan jabatan lain sesuai abjad
+                $sortedStaff = collect($staff)->sortBy(function($item) {
+                    if (strtolower($item->jabatan) === 'kepala laboratorium') return '0';
+                    return $item->jabatan;
+                });
+            @endphp
+            @foreach($sortedStaff as $index => $member)
             <div class="staff-card group relative bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden staff-animate"
                  data-animation="fade-up"
                  data-delay="{{ ($index + 1) * 100 }}"
-                 data-category="{{ $member['category'] }}"
-                 data-search="{{ strtolower($member['name'] . ' ' . $member['specialization'] . ' ' . implode(' ', $member['research_interests'])) }}">
-
-                <!-- Background Glow -->
-                <div class="absolute inset-0 bg-gradient-to-br from-{{ $member['color'] }}-500/5 via-transparent to-{{ $member['color'] }}-700/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
+                 data-category="{{ $member->jabatan }}"
+                 data-search="{{ strtolower($member->nama) }}">
                 <div class="relative z-10">
-                    <!-- Header dengan Photo dan Basic Info -->
                     <div class="flex items-start space-x-6 mb-6">
-                        <!-- Staff Photo - Changed to Rectangle -->
-                        <div class="relative flex-shrink-0">
-                            <div class="w-28 h-36 bg-gradient-to-br from-{{ $member['color'] }}-200 to-{{ $member['color'] }}-300 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-500 overflow-hidden">
-                                @if($member['photo'])
-                                    <img src="{{ asset('images/staff/' . $member['photo']) }}"
-                                         alt="{{ $member['name'] }}"
-                                         class="w-full h-full object-cover rounded-xl">
-                                @else
-                                    <i class="fas fa-user text-{{ $member['color'] }}-600 text-3xl"></i>
-                                @endif
+                        <!-- Staff Photo (if available) -->
+                        @if($member->gambar && $member->gambar->first())
+                            <div class="relative flex-shrink-0">
+                                <div class="w-28 h-36 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-500 overflow-hidden">
+                                    <img src="{{ asset('images/' . $member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-xl">
+                                </div>
                             </div>
-                            <!-- Badge -->
-                            <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-br from-{{ $member['badge_color'] }}-400 to-{{ $member['badge_color'] }}-500 rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-{{ $member['badge_icon'] }} text-white text-xs"></i>
-                            </div>
-                        </div>
-
-                        <!-- Basic Info -->
+                        @endif
                         <div class="flex-1 min-w-0">
                             <h3 class="font-poppins text-xl font-bold text-gray-900 mb-1">
-                                {{ $member['name'] }}
+                                {{ $member->nama }}
                             </h3>
-                            <p class="text-{{ $member['color'] }}-600 font-medium mb-2">{{ $member['position'] }}</p>
-                            <p class="text-gray-600 text-sm mb-3">{{ $member['specialization'] }}</p>
-
-                            <!-- Quick Contact -->
-                            <div class="flex items-center space-x-3">
-                                @if($member['email'])
-                                <a href="mailto:{{ $member['email'] }}" class="w-8 h-8 bg-{{ $member['color'] }}-600 text-white rounded-lg flex items-center justify-center hover:bg-{{ $member['color'] }}-700 transition-colors duration-300">
-                                    <i class="fas fa-envelope text-xs"></i>
-                                </a>
-                                @endif
-                                @if($member['phone'])
-                                <a href="tel:{{ $member['phone'] }}" class="w-8 h-8 bg-{{ $member['color'] }}-600 text-white rounded-lg flex items-center justify-center hover:bg-{{ $member['color'] }}-700 transition-colors duration-300">
-                                    <i class="fas fa-phone text-xs"></i>
-                                </a>
-                                @endif
-                            </div>
+                            <p class="text-gray-600 font-medium mb-2">{{ $member->jabatan }}</p>
                         </div>
-                    </div>
-
-                    <!-- Detailed Information -->
-                    <div class="space-y-4">
-                        <!-- Office Info -->
-                        <div class="bg-gray-50 rounded-xl p-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                                <div>
-                                    <span class="font-medium text-gray-700">📍 Kantor:</span>
-                                    <span class="text-gray-600 block">{{ $member['office'] }}</span>
-                                </div>
-                                <div>
-                                    <span class="font-medium text-gray-700">🕒 Jam Kerja:</span>
-                                    <span class="text-gray-600 block">{{ $member['office_hours'] }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Research Interests -->
-                        <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2">Bidang Penelitian:</p>
-                            <ul class="text-sm text-gray-600 space-y-1">
-                                @foreach(array_slice($member['research_interests'], 0, 3) as $interest)
-                                <li class="flex items-center">
-                                    <i class="fas fa-circle text-{{ $member['color'] }}-400 text-xs mr-2"></i>
-                                    {{ $interest }}
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <!-- Social Links -->
-                        @if(count($member['social_links']) > 0)
-                        <div class="pt-4 border-t border-gray-200">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-700">Profil Online:</span>
-                                <div class="flex space-x-2">
-                                    @foreach($member['social_links'] as $platform => $url)
-                                    <a href="{{ $url }}" target="_blank" class="w-8 h-8 bg-gray-200 text-gray-600 rounded-lg flex items-center justify-center hover:bg-{{ $member['color'] }}-100 hover:text-{{ $member['color'] }}-600 transition-colors duration-300">
-                                        @if($platform === 'linkedin')
-                                            <i class="fab fa-linkedin-in text-xs"></i>
-                                        @elseif($platform === 'scholar')
-                                            <i class="fas fa-graduation-cap text-xs"></i>
-                                        @elseif($platform === 'researchgate')
-                                            <i class="fab fa-researchgate text-xs"></i>
-                                        @elseif($platform === 'github')
-                                            <i class="fab fa-github text-xs"></i>
-                                        @endif
-                                    </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>
@@ -580,13 +497,8 @@ document.addEventListener('DOMContentLoaded', function() {
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const filter = button.dataset.filter;
-
-            // Update active button
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-            updateFilterButtonStyles();
-
-            // Filter cards
             filterCards(filter, searchInput.value);
         });
     });
@@ -605,10 +517,8 @@ document.addEventListener('DOMContentLoaded', function() {
         staffCards.forEach(card => {
             const category = card.dataset.category;
             const searchData = card.dataset.search || '';
-
             const categoryMatch = categoryFilter === 'all' || category === categoryFilter;
             const searchMatch = searchTerm === '' || searchData.includes(searchTerm);
-
             if (categoryMatch && searchMatch) {
                 card.style.display = 'block';
                 setTimeout(() => {
@@ -621,17 +531,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     card.style.display = 'none';
                 }, 500);
-            }
-        });
-    }
-
-    // Update filter button styles
-    function updateFilterButtonStyles() {
-        filterButtons.forEach(btn => {
-            if (btn.classList.contains('active')) {
-                btn.className = 'staff-filter-btn active px-6 py-3 bg-gradient-to-r from-[#968c82] to-[#635849] text-white rounded-full font-medium transition-all duration-300 hover:from-[#635849] hover:to-[#443f35] shadow-lg';
-            } else {
-                btn.className = 'staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50';
             }
         });
     }
