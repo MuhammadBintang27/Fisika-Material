@@ -37,7 +37,7 @@
             <div class="scroll-animate" data-animation="slide-left">
                 <div class="relative">
                     <div class="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="{{ $equipment->gambar->first() ? asset('public/images/' . $equipment->gambar->first()->url) : asset('images/equipment/default.png') }}"
+                        <img src="{{ $equipment->gambar->first() ? asset('images/' . $equipment->gambar->first()->url) : asset('images/equipment/default.png') }}"
                              alt="{{ $equipment->nama }}"
                              class="w-full h-full object-cover">
                     </div>

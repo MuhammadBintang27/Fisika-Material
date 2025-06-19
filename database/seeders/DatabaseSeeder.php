@@ -21,10 +21,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            AlatSeeder::class,
             BiodataPengurusSeeder::class,
             ArtikelSeeder::class,
             GambarSeeder::class,
-            AlatSeeder::class,
+            
         ]);
     }
 }

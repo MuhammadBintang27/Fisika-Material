@@ -135,8 +135,9 @@
                 <!-- Image -->
                 <div class="relative overflow-hidden h-48 bg-gradient-to-br from-gray-100 to-gray-200">
                     @php $img = $equipment->gambar->first(); @endphp
+                    
                     @if($img)
-                        <img src="{{ asset('public/images/' . $img->url) }}"
+                        <img src="{{ asset('images/' . $img->url) }}"
                              alt="{{ $equipment->nama }}"
                              class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
                     @else
