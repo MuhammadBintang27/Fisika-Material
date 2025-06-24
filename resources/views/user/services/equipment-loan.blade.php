@@ -1,5 +1,5 @@
 {{-- resources/views/services/equipment-loan.blade.php --}}
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('title', 'Layanan Peminjaman Alat - Laboratorium Fisika Dasar')
 

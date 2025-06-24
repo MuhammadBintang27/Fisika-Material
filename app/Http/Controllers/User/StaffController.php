@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+    
 use Illuminate\Http\Request;
 use App\Models\BiodataPengurus;
 use App\Models\Gambar;
@@ -24,7 +26,7 @@ class StaffController extends Controller
             'jabatan_list' => $jabatanList,
         ];
 
-        return view('staff', compact('staff', 'stats'));
+        return view('user.staff.staff', compact('staff', 'stats'));
     }
 
     public function show($id)
@@ -32,6 +34,6 @@ class StaffController extends Controller
         $staff = BiodataPengurus::with(['gambar' => function($q) {
             $q->where('kategori', 'PENGURUS');
         }])->findOrFail($id);
-        return view('staff.show', compact('staff'));
+        return view('user.staff.staff.show', compact('staff'));
     }
 }

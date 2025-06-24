@@ -24,59 +24,19 @@
 
         <!-- Gallery Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <!-- Gallery Item 1 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="100">
-                <img src="https://images.unsplash.com/photo-1581092160607-0c6354e4dffc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Geophysics Lab Equipment" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
+            @forelse($galeriLaboratorium as $item)
+            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="{{ $loop->iteration * 100 }}">
+                <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Laboratorium Instrumentasi
+                    {{ $item->judul }}
                 </div>
             </div>
-
-            <!-- Gallery Item 2 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="200">
-                <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Geophysics Research Station" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Stasiun Penelitian
-                </div>
+            @empty
+            <div class="col-span-3 text-center text-gray-500 py-12">
+                Belum ada galeri laboratorium yang ditampilkan.
             </div>
-
-            <!-- Gallery Item 3 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="300">
-                <img src="https://images.unsplash.com/photo-1581093458791-8b0e48d81e64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Data Analysis Room" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Ruang Analisis Data
-                </div>
-            </div>
-
-            <!-- Gallery Item 4 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="400">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Field Testing Area" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Area Pengujian Lapangan
-                </div>
-            </div>
-
-            <!-- Gallery Item 5 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="500">
-                <img src="https://images.unsplash.com/photo-1581091877018-4b6dada07c21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Seismic Testing Lab" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Laboratorium Seismik
-                </div>
-            </div>
-
-            <!-- Gallery Item 6 -->
-            <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-down" data-delay="600">
-                <img src="https://images.unsplash.com/photo-1581092334651-d23647b6d81d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Geophysics Workshop" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-4 left-4 text-blue-900 text-lg font-poppins font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Bengkel Geofisika
-                </div>
-            </div>
+            @endforelse
         </div>
 
         <!-- CTA Section -->

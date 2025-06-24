@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
+
 use App\Models\ProfilLaboratorium;
 use App\Models\Misi;
 use App\Models\Artikel;
+use App\Models\GaleriLaboratorium;
 
 use Illuminate\Http\Request;
 
@@ -32,7 +36,9 @@ class HomeController extends Controller
             ]);
         }
 
-        return view('home', compact('featuredArticles', 'profil', 'misis'));
+        $galeriLaboratorium = GaleriLaboratorium::all();
+
+        return view('user.home.home', compact('featuredArticles', 'profil', 'misis', 'galeriLaboratorium'));
     }
 
     public function about()

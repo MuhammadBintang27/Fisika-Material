@@ -38,13 +38,13 @@
     </script>
 </head>
 <body>
-    @include('components.navbar')
+    @include('user.components.navbar')
 
     <main>
         @yield('content')
     </main>
 
-    @include('components.footer')
+    @include('user.components.footer')
 
     <!-- Custom JavaScript -->
     <script src="{{ asset('js/scripts.js') }}"></script>

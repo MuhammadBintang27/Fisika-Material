@@ -1,7 +1,8 @@
 <?php
-// app/Http/Controllers/ArticleController.php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;    
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Artikel;
@@ -14,7 +15,7 @@ class ArticleController extends Controller
         $articles = Artikel::with(['gambar' => function($q) {
             $q->where('kategori', 'ACARA');
         }])->orderByDesc('tanggalAcara')->get();
-        return view('articles.index', compact('articles'));
+        return view('user.articles.index', compact('articles'));
     }
 
     public function show($id)
@@ -22,7 +23,7 @@ class ArticleController extends Controller
         $article = Artikel::with(['gambar' => function($q) {
             $q->where('kategori', 'ACARA');
         }])->findOrFail($id);
-        return view('articles.show', compact('article'));
+        return view('user.articles.show', compact('article'));
     }
 
     // Method tambahan untuk API

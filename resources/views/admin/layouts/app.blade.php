@@ -58,6 +58,12 @@
                     <span>Artikel</span>
                 </a>
 
+                <a href="{{ route('admin.galeri.index') }}" 
+                   class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.galeri.*') ? 'bg-blue-50 text-blue-600' : '' }}">
+                    <i class="fas fa-image w-5 h-5 mr-3"></i>
+                    <span>Galeri Laboratorium</span>
+                </a>
+
                 <a href="{{ route('admin.equipment.index') }}" 
                    class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.equipment.*') ? 'bg-blue-50 text-blue-600' : '' }}">
                     <i class="fas fa-tools w-5 h-5 mr-3"></i>

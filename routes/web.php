@@ -1,18 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\StaffController;
-use App\Http\Controllers\FacilitiesController;
-use App\Http\Controllers\EquipmentLoanController;
-use App\Http\Controllers\TestingServicesController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ArticleController;
+use App\Http\Controllers\User\StaffController;
+use App\Http\Controllers\User\FacilitiesController;
+use App\Http\Controllers\User\EquipmentLoanController;
+use App\Http\Controllers\User\TestingServicesController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\Admin\GaleriLaboratoriumController;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,6 +146,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}', [App\Http\Controllers\Admin\KunjunganController::class, 'show'])->name('show');
             Route::put('/{id}/status', [App\Http\Controllers\Admin\KunjunganController::class, 'updateStatus'])->name('updateStatus');
             Route::delete('/{id}', [App\Http\Controllers\Admin\KunjunganController::class, 'destroy'])->name('destroy');
+        });
+
+        // Galeri Laboratorium Management
+        Route::prefix('galeri')->name('galeri.')->group(function () {
+            Route::get('/', [GaleriLaboratoriumController::class, 'index'])->name('index');
+            Route::get('/create', [GaleriLaboratoriumController::class, 'create'])->name('create');
+            Route::post('/', [GaleriLaboratoriumController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [GaleriLaboratoriumController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [GaleriLaboratoriumController::class, 'update'])->name('update');
+            Route::delete('/{id}', [GaleriLaboratoriumController::class, 'destroy'])->name('destroy');
         });
     });
 });

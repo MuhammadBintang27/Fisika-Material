@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Alat;
@@ -19,7 +21,7 @@ class EquipmentLoanController extends Controller
         $categories = ['all' => 'Semua Kategori'];
         // ... you can add more logic for categories if you add a category field to alat
         $success = session('success');
-        return view('services.equipment-loan', compact('equipments', 'categories', 'success'));
+        return view('user.services.equipment-loan', compact('equipments', 'categories', 'success'));
     }
 
     public function show($id)
@@ -28,7 +30,7 @@ class EquipmentLoanController extends Controller
         if (!$equipment) {
             abort(404);
         }
-        return view('services.equipment-detail', compact('equipment'));
+        return view('user.services.equipment-detail', compact('equipment'));
     }
 
     public function requestLoan(Request $request)

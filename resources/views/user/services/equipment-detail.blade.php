@@ -1,5 +1,5 @@
 {{-- resources/views/services/equipment-detail.blade.php --}}
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('title', $equipment->nama . ' - Detail Alat Laboratorium')
 

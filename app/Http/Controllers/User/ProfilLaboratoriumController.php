@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\ProfilLaboratorium;
 use App\Models\Misi;
@@ -13,13 +15,13 @@ class ProfilLaboratoriumController extends Controller
     {
         $profil = ProfilLaboratorium::with('misi')->first();
         $misis = Misi::all();
-        return view('profil_laboratorium.index', compact('profil', 'misis'));
+        return view('user.profil_laboratorium.index', compact('profil', 'misis'));
     }
 
     public function create()
     {
         $misis = Misi::all();
-        return view('profil_laboratorium.create', compact('misis'));
+        return view('user.profil_laboratorium.create', compact('misis'));
     }
 
     public function store(Request $request)
@@ -57,7 +59,7 @@ class ProfilLaboratoriumController extends Controller
     {
         $profil = ProfilLaboratorium::findOrFail($id);
         $misis = Misi::all();
-        return view('profil_laboratorium.edit', compact('profil', 'misis'));
+        return view('user.profil_laboratorium.edit', compact('profil', 'misis'));
     }
 
     public function update(Request $request, $id)

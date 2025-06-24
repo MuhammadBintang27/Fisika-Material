@@ -1,5 +1,5 @@
 {{-- resources/views/articles/index.blade.php --}}
-@extends('layouts.app')
+@extends('user.layouts.app')
 @section('title', 'Artikel - Laboratorium Fisika Dasar')
 @section('content')
 

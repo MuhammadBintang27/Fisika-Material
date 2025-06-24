@@ -1,5 +1,5 @@
 {{-- resources/views/staff.blade.php --}}
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('title', 'Staff dan Tenaga Ahli - Laboratorium Fisika Dasar')
 
