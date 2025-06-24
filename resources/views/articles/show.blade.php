@@ -97,13 +97,9 @@
         <!-- Featured Image -->
         <div class="mb-12">
             @if($article->gambar && $article->gambar->first())
-                <img src="{{ asset('images/' . $article->gambar->first()->url) }}"
-                     alt="{{ $article->namaAcara ?? $article->title }}"
-                     class="w-full h-80 object-cover rounded-3xl shadow-lg">
+                <img src="{{ asset($article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-64 object-cover rounded-xl mb-6">
             @else
-                <img src="{{ asset('images/default.png') }}"
-                     alt="No Image"
-                     class="w-full h-80 object-cover rounded-3xl shadow-lg">
+                <div class="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-6">No Image</div>
             @endif
         </div>
 

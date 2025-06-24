@@ -21,7 +21,7 @@ class GambarSeeder extends Seeder
             DB::table('gambar')->insert([
                 'id' => Str::uuid(),
                 'acaraId' => $artikel[0]->id,
-                'url' => 'fisika-1.jpeg', // file ada di public/images/
+                'url' => 'images/articles/1750654948.jpg',
                 'kategori' => 'ACARA',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -31,7 +31,7 @@ class GambarSeeder extends Seeder
                 DB::table('gambar')->insert([
                     'id' => Str::uuid(),
                     'acaraId' => $artikel[1]->id,
-                    'url' => 'IMG_8664.jpg', // file ada di public/images/
+                    'url' => 'images/articles/1750654948.jpg',
                     'kategori' => 'ACARA',
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -41,18 +41,18 @@ class GambarSeeder extends Seeder
 
         // Gambar untuk alat
         $alatGambar = [
-            'Oscilloscope Digital' => 'equipment/oscilloscope.jpeg',
-            'Multimeter Digital' => 'equipment/multimeter.jpeg',
-            'Function Generator' => 'equipment/function-generator.jpeg',
-            'Power Supply DC' => 'equipment/power-supply.jpeg',
-            'Spektrum Analyzer' => 'equipment/spectrum-analyzer.jpg',
-            'Digital Caliper' => 'equipment/digital-caliper.png',
+            'Oscilloscope Digital' => 'images/equipment/oscilloscope.jpeg',
+            'Multimeter Digital' => 'images/equipment/multimeter.jpeg',
+            'Function Generator' => 'images/equipment/function-generator.jpeg',
+            'Power Supply DC' => 'images/equipment/power-supply.jpeg',
+            'Spektrum Analyzer' => 'images/equipment/spectrum-analyzer.jpg',
+            'Digital Caliper' => 'images/equipment/digital-caliper.png',
         ];
         foreach ($alat as $a) {
             if (isset($alatGambar[$a->nama])) {
                 DB::table('gambar')->insert([
                     'id' => Str::uuid(),
-                    'alat_id' => $a->id,
+                    'alatID' => $a->id,
                     'url' => $alatGambar[$a->nama],
                     'kategori' => 'ALAT',
                     'created_at' => now(),
@@ -63,11 +63,11 @@ class GambarSeeder extends Seeder
 
         // Gambar untuk staff/pengurus
         $staffGambar = [
-            'Dr. Nasrullah, S.Si, M.Si.,M.Sc' => 'staff/ketua-lab.jpg',
-            'Intan Mulia Sari, S.Si., M.Si.' => 'staff/tenaga-pengajar-1.png',
-            'Anla Fet Hardi, S.Si., M.Si.' => 'staff/tenaga-pengajar-2.jpg',
-            'Vikah Suci Novianti, S.Si' => 'staff/laboran-1.jpg',
-            'Dini Rizqi Dwi Kunti Siregar, S.Si., M.Si' => 'staff/laboran-2.jpg',
+            'Dr. Nasrullah, S.Si, M.Si.,M.Sc' => 'images/staff/ketua-lab.jpg',
+            'Intan Mulia Sari, S.Si., M.Si.' => 'images/staff/tenaga-pengajar-1.png',
+            'Anla Fet Hardi, S.Si., M.Si.' => 'images/staff/tenaga-pengajar-2.jpg',
+            'Vikah Suci Novianti, S.Si' => 'images/staff/laboran-1.jpg',
+            'Dini Rizqi Dwi Kunti Siregar, S.Si., M.Si' => 'images/staff/laboran-2.jpg',
         ];
         foreach ($staff as $s) {
             if (isset($staffGambar[$s->nama])) {

@@ -14,7 +14,7 @@ class ArtikelSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'namaAcara' => 'Seminar Nasional Fisika Kebumian 2025',
-                'deskripsi' => 'Event tahunan yang mempertemukan para peneliti fisika kebumian dari seluruh Indonesia.',
+                'deskripsi' => 'Event tahunan yang mempertemukan para peneliti fisika kebumian dari seluruh Indonesia. Seminar ini akan membahas perkembangan terbaru dalam penelitian fisika kebumian dan aplikasinya dalam kehidupan sehari-hari.',
                 'penulis' => 'Dr. Rina Kartika',
                 'tanggalAcara' => '2025-05-25 09:00:00',
                 'created_at' => now(),
@@ -23,7 +23,7 @@ class ArtikelSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'namaAcara' => 'Workshop Kalibrasi Alat Ukur Geofisika',
-                'deskripsi' => 'Pelatihan kalibrasi alat ukur geofisika untuk meningkatkan akurasi pengukuran dalam penelitian.',
+                'deskripsi' => 'Pelatihan kalibrasi alat ukur geofisika untuk meningkatkan akurasi pengukuran dalam penelitian. Workshop ini akan memberikan pemahaman mendalam tentang teknik kalibrasi dan maintenance alat ukur geofisika.',
                 'penulis' => 'Dr. Maya Sari',
                 'tanggalAcara' => '2025-06-05 13:00:00',
                 'created_at' => now(),

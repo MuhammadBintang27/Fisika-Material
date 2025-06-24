@@ -15,6 +15,7 @@ class Misi extends Model
     protected $keyType = 'string';
     protected $fillable = [
         'pointMisi',
+        'profilLaboratoriumId',
     ];
 
     public function profilLaboratorium(): HasMany

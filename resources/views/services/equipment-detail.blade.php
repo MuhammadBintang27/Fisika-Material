@@ -34,37 +34,11 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <!-- Equipment Image -->
-            <div class="scroll-animate" data-animation="slide-left">
-                <div class="relative">
-                    <div class="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="{{ $equipment->gambar->first() ? asset('images/' . $equipment->gambar->first()->url) : asset('images/equipment/default.png') }}"
-                             alt="{{ $equipment->nama }}"
-                             class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Status Badge -->
-                    <div class="absolute top-6 left-6">
-                        @if($equipment->isBroken)
-                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800 border border-red-200 shadow-lg">
-                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                            Rusak
-                        </span>
-                        @else
-                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-200 shadow-lg">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                            Tersedia
-                        </span>
-                        @endif
-                    </div>
-
-                    <!-- Category Icon -->
-                    <div class="absolute top-6 right-6">
-                        <div class="w-14 h-14 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-                            <i class="{{ $equipment->icon }} text-white text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @if($equipment->gambar->first())
+                <img src="{{ asset($equipment->gambar->first()->url) }}" alt="{{ $equipment->nama }}" class="w-full h-64 object-cover rounded-xl mb-6">
+            @else
+                <div class="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-6">No Image</div>
+            @endif
 
             <!-- Equipment Details -->
             <div class="scroll-animate" data-animation="slide-right" data-delay="200">

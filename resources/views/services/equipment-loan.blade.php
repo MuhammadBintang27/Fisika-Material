@@ -134,10 +134,8 @@
                 </div>
                 <!-- Image -->
                 <div class="relative overflow-hidden h-48 bg-gradient-to-br from-gray-100 to-gray-200">
-                    @php $img = $equipment->gambar->first(); @endphp
-                    
-                    @if($img)
-                        <img src="{{ asset('images/' . $img->url) }}"
+                    @if($equipment->gambar->first())
+                        <img src="{{ asset($equipment->gambar->first()->url) }}"
                              alt="{{ $equipment->nama }}"
                              class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
                     @else
@@ -261,6 +259,21 @@
     </div>
 </div>
 
+@if ($errors->any())
+    <div class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 text-center text-lg font-semibold transition-opacity duration-500">
+        <ul class="list-disc list-inside">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    <script>
+    setTimeout(() => {
+        const alert = document.querySelector('.bg-red-500');
+        if(alert) alert.style.opacity = 0;
+    }, 5000);
+    </script>
+@endif
 @if(!empty($success))
 <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 text-center text-lg font-semibold transition-opacity duration-500">
     {{ $success }}
@@ -343,14 +356,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize filters
     initFilters();
 
-    // Set minimum date for date inputs
+    // Set minimum date for date inputs (fix selector)
     const today = new Date().toISOString().split('T')[0];
-    document.querySelector('input[name="start_date"]').setAttribute('min', today);
+    document.querySelector('input[name="tanggal_pinjam"]').setAttribute('min', today);
+    document.querySelector('input[name="tanggal_pengembalian"]').setAttribute('min', today);
 
     // Update end date minimum when start date changes
-    document.querySelector('input[name="start_date"]').addEventListener('change', function() {
+    document.querySelector('input[name="tanggal_pinjam"]').addEventListener('change', function() {
         const startDate = this.value;
-        document.querySelector('input[name="end_date"]').setAttribute('min', startDate);
+        document.querySelector('input[name="tanggal_pengembalian"]').setAttribute('min', startDate);
     });
 });
 
@@ -669,3 +683,4 @@ document.addEventListener('input', function(e) {
 });
 </script>
 @endsection
+

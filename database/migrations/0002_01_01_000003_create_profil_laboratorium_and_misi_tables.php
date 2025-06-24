@@ -8,26 +8,26 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('misi', function (Blueprint $table) {
+        Schema::create('profil_laboratorium', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('pointMisi');
+            $table->string('namaLaboratorium');
+            $table->text('tentangLaboratorium')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('profil_laboratorium', function (Blueprint $table) {
-            $table->id();
-            $table->string('namaLaboratorium');
-            $table->text('tentangLaboratorium');
-            $table->string('visi');
-            $table->uuid('misiId');
-            $table->foreign('misiId')->references('id')->on('misi')->onDelete('cascade');
+        Schema::create('misi', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('profilLaboratoriumId');
+            $table->text('misi');
             $table->timestamps();
+
+            $table->foreign('profilLaboratoriumId')->references('id')->on('profil_laboratorium')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('profil_laboratorium');
         Schema::dropIfExists('misi');
+        Schema::dropIfExists('profil_laboratorium');
     }
 };

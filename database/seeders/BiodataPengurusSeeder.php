@@ -14,7 +14,7 @@ class BiodataPengurusSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'nama' => 'Dr. Nasrullah, S.Si, M.Si.,M.Sc',
-                'jabatan' => 'Kepala Laboratorium',
+                'jabatan' => 'Ketua Laboratorium',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -27,25 +27,11 @@ class BiodataPengurusSeeder extends Seeder
             ],
             [
                 'id' => Str::uuid(),
-                'nama' => 'Anla Fet Hardi, S.Si., M.Si.',
-                'jabatan' => 'Tenaga Pengajar',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id' => Str::uuid(),
                 'nama' => 'Vikah Suci Novianti, S.Si',
-                'jabatan' => 'Laboran',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id' => Str::uuid(),
-                'nama' => 'Dini Rizqi Dwi Kunti Siregar, S.Si., M.Si',
                 'jabatan' => 'Laboran',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ]);
     }
-} 
+}

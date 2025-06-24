@@ -12,14 +12,14 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('pengurusId')->nullable();
             $table->uuid('acaraId')->nullable();
-            $table->uuid('alat_id')->nullable();
+            $table->uuid('alatID')->nullable();
             $table->string('url');
             $table->enum('kategori', ['PENGURUS', 'ACARA', 'ALAT']);
             $table->timestamps();
 
             $table->foreign('pengurusId')->references('id')->on('biodata_pengurus')->onDelete('cascade');
             $table->foreign('acaraId')->references('id')->on('artikel')->onDelete('cascade');
-            $table->foreign('alat_id')->references('id')->on('alat')->onDelete('set null');
+            $table->foreign('alatID')->references('id')->on('alat')->onDelete('cascade');
         });
     }
 

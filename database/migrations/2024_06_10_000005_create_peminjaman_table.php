@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('tujuanPeminjaman')->nullable();
             $table->dateTime('tanggal_pinjam')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('tanggal_pengembalian');
-            $table->enum('status', ['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED']);
+            $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED']);
             $table->timestamps();
         });
     }

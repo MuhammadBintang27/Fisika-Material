@@ -22,7 +22,7 @@ class Alat extends Model
 
     public function gambar()
     {
-        return $this->hasMany(Gambar::class, 'alat_id');
+        return $this->hasMany(Gambar::class, 'alatID');
     }
 
     public function peminjamanItems()

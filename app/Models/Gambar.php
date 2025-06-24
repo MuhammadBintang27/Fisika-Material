@@ -15,12 +15,12 @@ class Gambar extends Model
     protected $fillable = [
         'pengurusId',
         'acaraId',
-        'alat_id',
+        'alatID',
         'url',
         'kategori',
     ];
 
-    public function pengurus()
+    public function staff()
     {
         return $this->belongsTo(BiodataPengurus::class, 'pengurusId');
     }
@@ -32,6 +32,6 @@ class Gambar extends Model
 
     public function alat()
     {
-        return $this->belongsTo(Alat::class, 'alat_id');
+        return $this->belongsTo(Alat::class, 'alatID');
     }
 } 

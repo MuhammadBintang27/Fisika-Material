@@ -102,9 +102,11 @@
                         @if($member->gambar && $member->gambar->first())
                             <div class="relative flex-shrink-0">
                                 <div class="w-28 h-36 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-500 overflow-hidden">
-                                    <img src="{{ asset('images/' . $member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-xl">
+                                    <img src="{{ asset($member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-xl">
                                 </div>
                             </div>
+                        @else
+                            <div class="w-full h-40 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-4">No Image</div>
                         @endif
                         <div class="flex-1 min-w-0">
                             <h3 class="font-poppins text-xl font-bold text-gray-900 mb-1">
