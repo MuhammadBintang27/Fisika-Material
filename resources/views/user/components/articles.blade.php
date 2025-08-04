@@ -27,14 +27,13 @@
             <article class="group bg-white rounded-3xl overflow-hidden border border-yellow-200 hover:border-yellow-300 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 articles-animate" data-animation="fade-up" data-delay="{{ ($index + 1) * 100 }}">
                 <div class="relative overflow-hidden">
                     @if($article->gambar && $article->gambar->first())
-                        <img src="{{ asset('images/' . $article->gambar->first()->url) }}"
+                        <img src="{{ asset($article->gambar->first()->url) }}"
                              alt="{{ $article->namaAcara }}"
                              class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="text-xs text-gray-400">URL: {{ 'images/' . $article->gambar->first()->url }}</div>
                     @else
                         <div class="w-full h-48 flex items-center justify-center bg-yellow-50 text-yellow-400">
-                            No Image<br>
-                            URL: {{ $article->gambar->first()->url ?? 'NO GAMBAR' }}
+                            <i class="fas fa-image text-4xl mb-2"></i>
+                            <span class="text-sm">Tidak ada gambar</span>
                         </div>
                     @endif
                 </div>

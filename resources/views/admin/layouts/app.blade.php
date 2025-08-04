@@ -88,6 +88,12 @@
                     <span>Kunjungan</span>
                 </a>
 
+                <a href="{{ route('admin.pengujian.index') }}" 
+                   class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.pengujian.*') ? 'bg-blue-50 text-blue-600' : '' }}">
+                    <i class="fas fa-vial w-5 h-5 mr-3"></i>
+                    <span>Pengujian</span>
+                </a>
+
                 <a href="{{ route('admin.jenis-pengujian.index') }}" 
                    class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.jenis-pengujian.*') ? 'bg-blue-50 text-blue-600' : '' }}">
                     <i class="fas fa-flask w-5 h-5 mr-3"></i>

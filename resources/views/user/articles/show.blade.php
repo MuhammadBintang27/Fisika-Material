@@ -1,6 +1,6 @@
 {{-- resources/views/articles/show.blade.php --}}
 @extends('user.layouts.app')
-@section('title', $article['title'] . ' - Laboratorium Fisika Dasar')
+@section('title', $article->namaAcara . ' - Laboratorium Fisika Dasar')
 @section('content')
 
 <!-- Hero Section -->
@@ -28,7 +28,7 @@
                 <li>
                     <div class="flex items-center">
                         <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <span class="text-gray-700 font-medium">{{ $article['title'] }}</span>
+                        <span class="text-gray-700 font-medium">{{ $article->namaAcara }}</span>
                     </div>
                 </li>
             </ol>
@@ -36,37 +36,24 @@
 
         <!-- Article Header -->
         <div class="text-center mb-8">
-            <!-- Category Badge -->
-            <div class="mb-6">
-                @if($article['category'] == 'Penelitian')
-                    <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">{{ $article['category'] }}</span>
-                @elseif($article['category'] == 'Pendidikan')
-                    <span class="bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium">{{ $article['category'] }}</span>
-                @elseif($article['category'] == 'Kolaborasi')
-                    <span class="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium">{{ $article['category'] }}</span>
-                @else
-                    <span class="bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium">{{ $article['category'] }}</span>
-                @endif
-            </div>
-
             <!-- Title -->
             <h1 class="font-poppins text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                {{ $article['title'] }}
+                {{ $article->namaAcara }}
             </h1>
 
             <!-- Meta Info -->
             <div class="flex flex-wrap justify-center items-center gap-6 text-gray-600 mb-8">
                 <div class="flex items-center">
                     <i class="fas fa-user mr-2 text-blue-600"></i>
-                    <span>{{ $article['author'] }}</span>
+                    <span>{{ $article->penulis ?? 'Admin Laboratorium' }}</span>
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-calendar mr-2 text-blue-600"></i>
-                    <span>{{ date('d M Y', strtotime($article['date'])) }}</span>
+                    <span>{{ date('d M Y', strtotime($article->tanggalAcara)) }}</span>
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-clock mr-2 text-blue-600"></i>
-                    <span>5 menit baca</span>
+                    <span>{{ date('H:i', strtotime($article->tanggalAcara)) }} WIB</span>
                 </div>
             </div>
 
@@ -106,7 +93,7 @@
         <!-- Article Content -->
         <div class="prose prose-lg max-w-none">
             <div class="text-gray-700 leading-relaxed text-lg">
-                {!! $article['content'] !!}
+                {!! nl2br(e($article->deskripsi)) !!}
             </div>
         </div>
 
@@ -114,10 +101,10 @@
         <div class="mt-12 pt-8 border-t border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Tags:</h3>
             <div class="flex flex-wrap gap-2">
-                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">{{ $article['category'] }}</span>
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Fisika</span>
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Laboratorium</span>
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Penelitian</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Akademik</span>
             </div>
         </div>
 
@@ -129,10 +116,14 @@
                         <i class="fas fa-user text-blue-600 text-xl"></i>
                     </div>
                     <div>
-                        <h4 class="font-semibold text-gray-900 text-lg mb-2">{{ $article['author'] }}</h4>
+                        <h4 class="font-semibold text-gray-900 text-lg mb-2">{{ $article->penulis ?? 'Admin Laboratorium' }}</h4>
                         <p class="text-gray-600 leading-relaxed">
-                            Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika dan instrumentasi.
-                            Memiliki pengalaman lebih dari 10 tahun dalam penelitian dan pengembangan teknologi fisika.
+                            @if($article->deskripsi_penulis)
+                                {{ $article->deskripsi_penulis }}
+                            @else
+                                Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika dan instrumentasi.
+                                Memiliki pengalaman dalam penelitian dan pengembangan teknologi fisika.
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -171,62 +162,38 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Related Article 1 -->
+            @forelse($relatedArticles as $relatedArticle)
             <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <img src="{{ asset('images/article-2.jpg') }}"
-                     alt="Related Article"
-                     class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                @if($relatedArticle->gambar && $relatedArticle->gambar->first())
+                    <img src="{{ asset($relatedArticle->gambar->first()->url) }}"
+                         alt="{{ $relatedArticle->namaAcara }}"
+                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                @else
+                    <div class="w-full h-48 flex items-center justify-center bg-gray-200 text-gray-400 group-hover:scale-105 transition-transform duration-500">
+                        <i class="fas fa-image text-4xl"></i>
+                    </div>
+                @endif
                 <div class="p-6">
-                    <div class="text-sm text-blue-600 font-medium mb-2">Pendidikan</div>
+                    <div class="text-sm text-blue-600 font-medium mb-2">
+                        {{ date('d M Y', strtotime($relatedArticle->tanggalAcara)) }}
+                    </div>
                     <h3 class="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200">
-                        Inovasi Metode Praktikum Fisika Modern
+                        {{ $relatedArticle->namaAcara }}
                     </h3>
                     <p class="text-gray-600 text-sm mb-4">
-                        Penerapan teknologi AR dan VR dalam praktikum fisika...
+                        {{ Str::limit(strip_tags($relatedArticle->deskripsi), 100) }}
                     </p>
-                    <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                    <a href="{{ route('articles.show', $relatedArticle->id) }}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
                         Baca Selengkapnya →
                     </a>
                 </div>
             </article>
-
-            <!-- Related Article 2 -->
-            <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <img src="{{ asset('images/article-3.jpg') }}"
-                     alt="Related Article"
-                     class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="p-6">
-                    <div class="text-sm text-green-600 font-medium mb-2">Kolaborasi</div>
-                    <h3 class="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200">
-                        Kerjasama Penelitian dengan Universitas Tokyo
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                        Program pertukaran peneliti dan mahasiswa dalam bidang...
-                    </p>
-                    <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                        Baca Selengkapnya →
-                    </a>
-                </div>
-            </article>
-
-            <!-- Related Article 3 -->
-            <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <img src="{{ asset('images/article-4.jpg') }}"
-                     alt="Related Article"
-                     class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="p-6">
-                    <div class="text-sm text-purple-600 font-medium mb-2">Publikasi</div>
-                    <h3 class="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200">
-                        Publikasi Penelitian di Jurnal Internasional
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                        Tim peneliti berhasil mempublikasikan hasil penelitian...
-                    </p>
-                    <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                        Baca Selengkapnya →
-                    </a>
-                </div>
-            </article>
+            @empty
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-newspaper text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">Belum ada artikel terkait</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </section>

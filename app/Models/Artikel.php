@@ -16,6 +16,7 @@ class Artikel extends Model
         'namaAcara',
         'deskripsi',
         'penulis',
+        'deskripsi_penulis',
         'tanggalAcara',
     ];
 

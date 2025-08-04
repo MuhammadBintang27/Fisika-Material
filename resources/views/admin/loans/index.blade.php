@@ -57,7 +57,13 @@
                                     Peminjam
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Alat yang Dipinjam
+                                    Kategori
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Penelitian
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Alat
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Periode Peminjaman
@@ -89,13 +95,45 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full
+                                            @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800
+                                            @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800
+                                            @else bg-purple-100 text-purple-800
+                                            @endif">
+                                            {{ $loan->user_type_label }}
+                                        </span>
+                                        <div class="text-sm text-gray-500 mt-1">
+                                            {{ $loan->nip_nim }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
-                                            @foreach($loan->items as $item)
-                                                <div class="flex items-center space-x-2">
-                                                    <span class="font-medium">{{ $item->alat->namaAlat }}</span>
-                                                    <span class="text-gray-500">({{ $item->jumlah }})</span>
-                                                </div>
-                                            @endforeach
+                                            <div class="font-medium">{{ $loan->judul_penelitian ?? 'N/A' }}</div>
+                                            @if($loan->supervisor_name)
+                                                <div class="text-xs text-gray-500">Pembimbing: {{ $loan->supervisor_name }}</div>
+                                            @endif
+                                            @if($loan->durasi_jam)
+                                                <div class="text-xs text-gray-500">{{ $loan->durasi_jam }} jam</div>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">
+                                            @if($loan->items->count() > 0)
+                                                @foreach($loan->items->take(2) as $item)
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                                        <span>{{ $item->alat->nama }} ({{ $item->jumlah }})</span>
+                                                    </div>
+                                                @endforeach
+                                                @if($loan->items->count() > 2)
+                                                    <div class="text-xs text-gray-500 mt-1">
+                                                        +{{ $loan->items->count() - 2 }} alat lainnya
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-500">-</span>
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">

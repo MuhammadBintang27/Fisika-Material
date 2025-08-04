@@ -1,5 +1,5 @@
 {{-- resources/views/facilities.blade.php --}}
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('title', 'Fasilitas Laboratorium - Laboratorium Fisika Dasar')
 

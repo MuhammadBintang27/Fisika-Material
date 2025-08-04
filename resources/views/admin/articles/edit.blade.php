@@ -41,6 +41,25 @@
             @enderror
         </div>
 
+        <!-- Deskripsi Penulis -->
+        <div>
+            <label for="deskripsi_penulis" class="block text-sm font-medium text-gray-700 mb-2">
+                Deskripsi Penulis
+            </label>
+            <textarea id="deskripsi_penulis" 
+                      name="deskripsi_penulis" 
+                      rows="4"
+                      class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Tulis deskripsi singkat tentang penulis (opsional)...">{{ old('deskripsi_penulis', $article->deskripsi_penulis) }}</textarea>
+            <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
+                <span>Contoh: "Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika"</span>
+                <span id="penulisCharCount">{{ strlen($article->deskripsi_penulis ?? '') }} karakter</span>
+            </div>
+            @error('deskripsi_penulis')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Tanggal Acara -->
         <div>
             <label for="tanggalAcara" class="block text-sm font-medium text-gray-700 mb-2">
@@ -116,11 +135,28 @@
     </form>
 </div>
 <script>
+// Image preview functionality
 document.getElementById('image').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const preview = document.getElementById('preview');
     const previewContainer = document.getElementById('imagePreview');
+    
     if (file) {
+        // Validasi ukuran file (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file terlalu besar. Maksimal 2MB.');
+            e.target.value = '';
+            return;
+        }
+        
+        // Validasi tipe file
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Format file tidak didukung. Gunakan JPG, PNG, atau GIF.');
+            e.target.value = '';
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
@@ -129,6 +165,39 @@ document.getElementById('image').addEventListener('change', function(e) {
         reader.readAsDataURL(file);
     } else {
         previewContainer.classList.add('hidden');
+    }
+});
+
+// Character counter for author description
+document.getElementById('deskripsi_penulis').addEventListener('input', function(e) {
+    const charCount = document.getElementById('penulisCharCount');
+    const length = e.target.value.length;
+    charCount.textContent = length + ' karakter';
+    
+    // Change color based on length
+    if (length < 50) {
+        charCount.className = 'text-red-500';
+    } else if (length < 200) {
+        charCount.className = 'text-yellow-500';
+    } else {
+        charCount.className = 'text-green-500';
+    }
+});
+
+// Initialize character count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize author description character count
+    const penulisTextarea = document.getElementById('deskripsi_penulis');
+    const penulisCharCount = document.getElementById('penulisCharCount');
+    const penulisLength = penulisTextarea.value.length;
+    penulisCharCount.textContent = penulisLength + ' karakter';
+    
+    if (penulisLength < 50) {
+        penulisCharCount.className = 'text-red-500';
+    } else if (penulisLength < 200) {
+        penulisCharCount.className = 'text-yellow-500';
+    } else {
+        penulisCharCount.className = 'text-green-500';
     }
 });
 </script>

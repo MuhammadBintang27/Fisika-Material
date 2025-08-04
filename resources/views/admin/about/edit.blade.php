@@ -147,7 +147,7 @@
                     return (object)['pointMisi' => $misi];
                 });
             @endphp
-            @component('components.about', ['profil' => $previewProfil, 'misis' => $previewMisis])
+            @component('user.components.about', ['profil' => $previewProfil, 'misis' => $previewMisis])
             @endcomponent
         </div>
     </div>

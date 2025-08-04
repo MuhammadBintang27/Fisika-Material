@@ -129,5 +129,25 @@ class PengujianController extends Controller
 
         return redirect()->route('admin.pengujian.index')->with('success', 'Pengujian berhasil dihapus.');
     }
+
+    public function approve($id)
+    {
+        $pengujian = Pengujian::findOrFail($id);
+        if ($pengujian->status === 'PENDING') {
+            $pengujian->status = 'PROCESSING';
+            $pengujian->save();
+        }
+        return redirect()->route('admin.pengujian.show', $id)->with('success', 'Pengujian disetujui dan diproses.');
+    }
+
+    public function reject($id)
+    {
+        $pengujian = Pengujian::findOrFail($id);
+        if ($pengujian->status === 'PENDING') {
+            $pengujian->status = 'CANCELLED';
+            $pengujian->save();
+        }
+        return redirect()->route('admin.pengujian.show', $id)->with('success', 'Pengujian ditolak.');
+    }
 } 
  

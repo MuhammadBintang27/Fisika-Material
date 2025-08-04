@@ -82,7 +82,7 @@
         </div>
 
         <!-- Staff Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16" id="staff-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" id="staff-grid">
             @php
                 // Urutkan: Kepala Laboratorium paling atas, lalu urutkan jabatan lain sesuai abjad
                 $sortedStaff = collect($staff)->sortBy(function($item) {
@@ -91,28 +91,34 @@
                 });
             @endphp
             @foreach($sortedStaff as $index => $member)
-            <div class="staff-card group relative bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden staff-animate"
+            <div class="staff-card group relative bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden staff-animate"
                  data-animation="fade-up"
                  data-delay="{{ ($index + 1) * 100 }}"
                  data-category="{{ $member->jabatan }}"
                  data-search="{{ strtolower($member->nama) }}">
-                <div class="relative z-10">
-                    <div class="flex items-start space-x-6 mb-6">
-                        <!-- Staff Photo (if available) -->
+                <div class="relative z-10 text-center">
+                    <!-- Staff Photo -->
+                    <div class="mb-6">
                         @if($member->gambar && $member->gambar->first())
-                            <div class="relative flex-shrink-0">
-                                <div class="w-28 h-36 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-500 overflow-hidden">
-                                    <img src="{{ asset($member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-xl">
-                                </div>
+                            <div class="relative mx-auto w-40 h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                <img src="{{ asset($member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300">
                             </div>
                         @else
-                            <div class="w-full h-40 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-4">No Image</div>
+                            <div class="relative mx-auto w-40 h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
+                                <i class="fas fa-user text-5xl text-gray-400 group-hover:text-amber-500 transition-colors duration-300"></i>
+                            </div>
                         @endif
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-poppins text-xl font-bold text-gray-900 mb-1">
-                                {{ $member->nama }}
-                            </h3>
-                            <p class="text-gray-600 font-medium mb-2">{{ $member->jabatan }}</p>
+                    </div>
+                    
+                    <!-- Staff Info -->
+                    <div class="space-y-3">
+                        <h3 class="font-poppins text-xl font-bold text-gray-900 group-hover:text-amber-700 transition-colors duration-300">
+                            {{ $member->nama }}
+                        </h3>
+                        <div class="flex justify-center">
+                            <span class="text-sm text-amber-600 font-medium bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
+                                {{ $member->jabatan }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -299,11 +305,16 @@
 
 /* Staff Card Styles */
 .staff-card {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .staff-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(150, 140, 130, 0.15);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
 }
 
 /* Filter Button Styles */
@@ -354,6 +365,7 @@
 @media (max-width: 768px) {
     .staff-card {
         margin-bottom: 1.5rem;
+        min-height: 320px;
     }
 
     #staff-search {
@@ -375,23 +387,47 @@
         height: 40px;
     }
 
-    .staff-card .w-28 {
-        width: 6rem;
+    /* Adjust photo size for mobile */
+    .staff-card .w-40 {
+        width: 7rem;
     }
 
-    .staff-card .h-36 {
-        height: 8rem;
+    .staff-card .h-48 {
+        height: 8.5rem;
     }
 }
 
 @media (max-width: 640px) {
-    .staff-card .flex-col {
-        flex-direction: column;
+    .staff-card {
+        min-height: 300px;
+        padding: 1.5rem;
     }
 
-    .staff-card .space-x-6 {
-        space-x: 0;
-        gap: 1rem;
+    .staff-card .w-40 {
+        width: 6rem;
+    }
+
+    .staff-card .h-48 {
+        height: 7.5rem;
+    }
+
+    .staff-card h3 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .staff-card {
+        min-height: 280px;
+        padding: 1rem;
+    }
+
+    .staff-card .w-40 {
+        width: 5.5rem;
+    }
+
+    .staff-card .h-48 {
+        height: 7rem;
     }
 }
 </style>

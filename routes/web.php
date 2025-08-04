@@ -45,9 +45,15 @@ Route::get('/facilities', [FacilitiesController::class, 'index'])->name('facilit
 
 // Services - Equipment Loan
 Route::prefix('services/equipment-loan')->name('equipment.')->group(function () {
-    Route::get('/', [EquipmentLoanController::class, 'index'])->name('loan');
-    Route::get('/{id}', [EquipmentLoanController::class, 'show'])->name('detail');
-    Route::post('/{id}/request', [EquipmentLoanController::class, 'requestLoan'])->name('request');
+    Route::get('/', [EquipmentLoanController::class, 'index'])->name('loan');           // Pilihan alat (langsung)
+    Route::get('/tracking', [EquipmentLoanController::class, 'tracking'])->name('loan.tracking'); // Tracking
+    Route::get('/form', [EquipmentLoanController::class, 'form'])->name('loan.form');   // Formulir
+    Route::post('/submit', [EquipmentLoanController::class, 'submit'])->name('loan.submit'); // Submit
+    Route::get('/letter/{id}', [EquipmentLoanController::class, 'letter'])->name('loan.letter'); // Surat
+    Route::get('/download/{id}', [EquipmentLoanController::class, 'download'])->name('loan.download'); // Download
+    Route::get('/enhanced', [EquipmentLoanController::class, 'enhanced'])->name('loan.enhanced'); // Formulir lengkap
+    Route::get('/{id}', [EquipmentLoanController::class, 'show'])->name('detail');      // Detail alat
+    Route::post('/{id}/request', [EquipmentLoanController::class, 'requestLoan'])->name('request'); // Request lama
 });
 
 // Services - Testing Services
@@ -57,7 +63,51 @@ Route::prefix('services/testing')->name('testing.')->group(function () {
     Route::post('/{id}/request', [TestingServicesController::class, 'requestTest'])->name('request');
 });
 
-Route::post('/equipment-loan/request', [App\Http\Controllers\EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
+Route::post('/equipment-loan/request', [App\Http\Controllers\User\EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
+Route::get('/loans/tracking/{tracking_code}', [\App\Http\Controllers\User\EquipmentLoanController::class, 'tracking'])->name('loans.tracking');
+
+// Test route untuk debugging
+Route::get('/test-db', function() {
+    try {
+        $alatCount = \App\Models\Alat::count();
+        $jenisPengujianCount = \App\Models\JenisPengujian::count();
+        $peminjamanCount = \App\Models\Peminjaman::count();
+        return response()->json([
+            'status' => 'success', 
+            'alat_count' => $alatCount,
+            'jenis_pengujian_count' => $jenisPengujianCount,
+            'peminjaman_count' => $peminjamanCount
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
+});
+
+// Test route untuk membuat peminjaman
+Route::get('/test-peminjaman', function() {
+    try {
+        $peminjaman = \App\Models\Peminjaman::create([
+            'user_type' => 'mahasiswa',
+            'namaPeminjam' => 'Test User',
+            'noHp' => '08123456789',
+            'tanggal_pinjam' => now(),
+            'tanggal_pengembalian' => now()->addDays(1)
+        ]);
+        return response()->json(['status' => 'success', 'peminjaman_id' => $peminjaman->id]);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
+});
+
+// Layanan Pengujian (User)
+Route::get('/services/testing', [App\Http\Controllers\User\TestingServicesController::class, 'index'])->name('pengujian.index');
+Route::post('/services/testing', [App\Http\Controllers\User\TestingServicesController::class, 'store'])->name('pengujian.store');
+
+// Layanan Kunjungan (User)
+Route::get('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'index'])->name('kunjungan.index');
+Route::post('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'store'])->name('kunjungan.store');
+Route::get('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'form'])->name('kunjungan.form');
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Login routes (no middleware)
@@ -138,6 +188,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}/edit', [App\Http\Controllers\Admin\PengujianController::class, 'edit'])->name('edit');
             Route::put('/{id}', [App\Http\Controllers\Admin\PengujianController::class, 'update'])->name('update');
             Route::delete('/{id}', [App\Http\Controllers\Admin\PengujianController::class, 'destroy'])->name('destroy');
+            Route::post('/{id}/approve', [\App\Http\Controllers\Admin\PengujianController::class, 'approve'])->name('approve');
+            Route::post('/{id}/reject', [\App\Http\Controllers\Admin\PengujianController::class, 'reject'])->name('reject');
         });
 
         // Kunjungan Management

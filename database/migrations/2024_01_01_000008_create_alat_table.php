@@ -9,12 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('alat', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary(); // pakai UUID
             $table->string('nama');
             $table->text('deskripsi');
-            $table->integer('stok');
-            $table->boolean('isBroken')->default(false);
-            $table->double('harga')->nullable();
+            $table->boolean('isBroken')->default(true);
+            $table->integer('stok')->default(1);
+            $table->decimal('harga', 15, 2)->nullable();
             $table->timestamps();
         });
     }
@@ -23,4 +23,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('alat');
     }
-}; 
+};

@@ -69,7 +69,7 @@ class FacilitiesController extends Controller
             ]
         ];
 
-        return view('facilities', compact('facilities'));
+        return view('user.facilities.facilities', compact('facilities'));
     }
 
     public function show($id)

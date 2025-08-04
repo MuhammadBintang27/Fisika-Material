@@ -27,6 +27,7 @@ class ArticleController extends Controller
             'namaAcara' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'penulis' => 'nullable|string|max:255',
+            'deskripsi_penulis' => 'nullable|string',
             'tanggalAcara' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -36,6 +37,7 @@ class ArticleController extends Controller
             'namaAcara' => $request->namaAcara,
             'deskripsi' => $request->deskripsi,
             'penulis' => $request->penulis,
+            'deskripsi_penulis' => $request->deskripsi_penulis,
             'tanggalAcara' => $request->tanggalAcara,
         ]);
 
@@ -67,6 +69,7 @@ class ArticleController extends Controller
             'namaAcara' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'penulis' => 'nullable|string|max:255',
+            'deskripsi_penulis' => 'nullable|string',
             'tanggalAcara' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -76,17 +79,20 @@ class ArticleController extends Controller
             'namaAcara' => $request->namaAcara,
             'deskripsi' => $request->deskripsi,
             'penulis' => $request->penulis,
+            'deskripsi_penulis' => $request->deskripsi_penulis,
             'tanggalAcara' => $request->tanggalAcara,
         ]);
 
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
-            if ($article->gambar) {
-                $oldImagePath = public_path($article->gambar->url);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+            if ($article->gambar && $article->gambar->count() > 0) {
+                foreach ($article->gambar as $gambar) {
+                    $oldImagePath = public_path($gambar->url);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
                 }
-                $article->gambar->delete();
+                $article->gambar()->delete();
             }
 
             $image = $request->file('image');
@@ -109,12 +115,14 @@ class ArticleController extends Controller
         $article = Artikel::with('gambar')->findOrFail($id);
         
         // Hapus gambar jika ada
-        if ($article->gambar) {
-            $imagePath = public_path($article->gambar->url);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        if ($article->gambar && $article->gambar->count() > 0) {
+            foreach ($article->gambar as $gambar) {
+                $imagePath = public_path($gambar->url);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
             }
-            $article->gambar->delete();
+            $article->gambar()->delete();
         }
 
         $article->delete();

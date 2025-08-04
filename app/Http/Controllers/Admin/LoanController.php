@@ -43,16 +43,26 @@ class LoanController extends Controller
         }
         $url = 'https://wa.me/' . $wa . '?text=';
         if ($request->status === 'APPROVED') {
-            $msg = "Halo $loan->namaPeminjam, permohonan peminjaman alat Anda telah DISETUJUI.%0A";
-            $msg .= "Detail alat:%0A";
+            $msg = "Halo $loan->namaPeminjam, permohonan peminjaman alat Anda telah DISETUJUI.%0A%0A";
+            $msg .= "📋 Detail Penelitian:%0A";
+            $msg .= "Judul: " . ($loan->judul_penelitian ?? 'N/A') . "%0A";
+            $msg .= "Kategori: " . $loan->user_type_label . "%0A%0A";
+            $msg .= "🔧 Alat yang Disetujui:%0A";
             foreach ($loan->items as $item) {
-                $msg .= "- $item->alat->nama ($item->jumlah unit)%0A";
+                $msg .= "- " . $item->alat->nama . " (" . $item->jumlah . " unit)%0A";
             }
-            $msg .= "Tanggal Pinjam: " . date('d M Y', strtotime($loan->tanggal_pinjam)) . "%0A";
-            $msg .= "Tanggal Kembali: " . date('d M Y', strtotime($loan->tanggal_pengembalian)) . "%0A";
-            $msg .= "Silakan koordinasi lebih lanjut dengan admin.";
+            $msg .= "%0A📅 Jadwal Penelitian:%0A";
+            $msg .= "Mulai: " . $loan->tanggal_pinjam->format('d M Y H:i') . "%0A";
+            $msg .= "Selesai: " . $loan->tanggal_pengembalian->format('d M Y H:i') . "%0A";
+            $msg .= "Durasi: " . ($loan->durasi_jam ?? 'N/A') . " jam%0A%0A";
+            $msg .= "📍 Lokasi: Laboratorium Fisika Material dan Energi%0A";
+            $msg .= "🏢 Departemen Fisika, Universitas Syiah Kuala%0A%0A";
+            $msg .= "Silakan koordinasi lebih lanjut dengan admin laboratorium.";
         } elseif ($request->status === 'REJECTED') {
-            $msg = "Mohon maaf, permohonan peminjaman alat Anda TIDAK DAPAT DIPENUHI untuk saat ini. Terima kasih atas pengertiannya.";
+            $msg = "Mohon maaf, permohonan peminjaman alat Anda TIDAK DAPAT DIPENUHI untuk saat ini.%0A%0A";
+            $msg .= "Judul Penelitian: " . ($loan->judul_penelitian ?? 'N/A') . "%0A";
+            $msg .= "Tanggal Pengajuan: " . $loan->created_at->format('d M Y') . "%0A%0A";
+            $msg .= "Terima kasih atas pengertiannya. Silakan ajukan ulang di waktu yang lebih sesuai.";
         } else {
             $msg = null;
         }

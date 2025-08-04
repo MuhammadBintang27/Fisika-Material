@@ -24,7 +24,7 @@ class KunjunganController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:PENDING,APPROVED,REJECTED',
+            'status' => 'required|in:PENDING,PROCESSING,COMPLETED,CANCELLED',
         ]);
         $kunjungan = Kunjungan::findOrFail($id);
         $kunjungan->status = $request->status;

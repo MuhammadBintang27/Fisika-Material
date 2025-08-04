@@ -41,13 +41,19 @@
                                 <a href="{{ route('equipment.loan') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
                                     Peminjaman Alat
                                 </a>
-                                <a href="{{ route('testing.services') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                <a href="{{ route('equipment.loan.tracking') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                    Tracking Peminjaman
+                                </a>
+                                <a href="{{ route('pengujian.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
                                     Layanan Pengujian
+                                </a>
+                                <a href="{{ route('kunjungan.form') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                    Kunjungan Laboratorium
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('facilities') }}#fasilitas" class="nav-link text-white hover:text-yellow-400 font-medium transition-colors duration-200">Fasilitas</a>
+                    <a href="{{ route('facilities') }}" class="nav-link text-white hover:text-yellow-400 font-medium transition-colors duration-200">Fasilitas</a>
 
                 </div>
             </div>
@@ -83,12 +89,18 @@
                     <a href="{{ route('equipment.loan') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
                         Peminjaman Alat
                     </a>
-                    <a href="{{ route('testing.services') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('equipment.loan.tracking') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                        Tracking Peminjaman
+                    </a>
+                    <a href="{{ route('pengujian.index') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
                         Layanan Pengujian
+                    </a>
+                    <a href="{{ route('kunjungan.form') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                        Kunjungan Laboratorium
                     </a>
                 </div>
             </div>
-            <a href="{{ route('facilities') }}#fasilitas" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Fasilitas</a>
+            <a href="{{ route('facilities') }}" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Fasilitas</a>
 
         </div>
     </div>

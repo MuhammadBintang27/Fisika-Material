@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 2. Typewriter effect untuk "Laboratorium Fisika Dasar" (looping dengan warna berbeda)
     function typeWriter(element, speed = 100, isLooping = false) {
         const text1 = "Laboratorium ";
-        const text2 = "Fisika Dasar";
+        const text2 = "Fisika Material";
 
         return new Promise((resolve) => {
             let i = 0;

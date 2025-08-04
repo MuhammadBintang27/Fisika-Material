@@ -31,8 +31,9 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-medium rounded-full
                                     @if($item->status === 'PENDING') bg-yellow-100 text-yellow-800
-                                    @elseif($item->status === 'APPROVED') bg-green-100 text-green-800
-                                    @elseif($item->status === 'REJECTED') bg-red-100 text-red-800
+                                    @elseif($item->status === 'PROCESSING') bg-blue-100 text-blue-800
+                                    @elseif($item->status === 'COMPLETED') bg-green-100 text-green-800
+                                    @elseif($item->status === 'CANCELLED') bg-red-100 text-red-800
                                     @else bg-gray-100 text-gray-800
                                     @endif">
                                     {{ $item->status }}
@@ -43,22 +44,24 @@
                                     <a href="{{ route('admin.kunjungan.show', $item->id) }}" class="text-blue-600 hover:text-blue-900">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <form action="{{ route('admin.kunjungan.updateStatus', $item->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="status" value="APPROVED">
-                                        <button type="submit" class="text-green-600 hover:text-green-900" title="Setujui">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('admin.kunjungan.updateStatus', $item->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="status" value="REJECTED">
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="Tolak">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </form>
+                                    @if($item->status === 'PENDING')
+                                        <form action="{{ route('admin.kunjungan.updateStatus', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="PROCESSING">
+                                            <button type="submit" class="text-green-600 hover:text-green-900" title="Setujui">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.kunjungan.updateStatus', $item->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="CANCELLED">
+                                            <button type="submit" class="text-red-600 hover:text-red-900" title="Tolak">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                     <form action="{{ route('admin.kunjungan.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus kunjungan ini?')">
                                         @csrf
                                         @method('DELETE')

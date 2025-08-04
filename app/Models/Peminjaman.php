@@ -13,16 +13,54 @@ class Peminjaman extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
+        'user_type',
         'namaPeminjam',
         'noHp',
-        'tujuanPeminjaman',
+        'email',
+        'nip_nim',
+        'instansi',
+        'jabatan',
+        'judul_penelitian',
+        'deskripsi_penelitian',
         'tanggal_pinjam',
         'tanggal_pengembalian',
+        'durasi_jam',
         'status',
+        'notes',
+        'supervisor_name',
+        'supervisor_nip',
+    ];
+
+    protected $casts = [
+        'tanggal_pinjam' => 'datetime',
+        'tanggal_pengembalian' => 'datetime',
     ];
 
     public function items()
     {
         return $this->hasMany(PeminjamanItem::class, 'peminjamanId');
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        $labels = [
+            'PENDING' => 'Menunggu Persetujuan',
+            'APPROVED' => 'Disetujui',
+            'REJECTED' => 'Ditolak',
+            'COMPLETED' => 'Selesai',
+        ];
+
+        return $labels[$this->status] ?? $this->status;
+    }
+
+    public function getUserTypeLabelAttribute()
+    {
+        $labels = [
+            'dosen' => 'Dosen',
+            'mahasiswa' => 'Mahasiswa',
+            'pihak-luar' => 'Pihak Luar USK',
+        ];
+
+        return $labels[$this->user_type] ?? $this->user_type;
     }
 } 

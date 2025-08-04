@@ -12,16 +12,20 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('namaLaboratorium');
             $table->text('tentangLaboratorium')->nullable();
+            $table->text('visi')->nullable();
             $table->timestamps();
         });
 
         Schema::create('misi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('profilLaboratoriumId');
-            $table->text('misi');
+            $table->text('pointMisi');
             $table->timestamps();
 
-            $table->foreign('profilLaboratoriumId')->references('id')->on('profil_laboratorium')->onDelete('cascade');
+            $table->foreign('profilLaboratoriumId')
+                  ->references('id')
+                  ->on('profil_laboratorium')
+                  ->onDelete('cascade');
         });
     }
 

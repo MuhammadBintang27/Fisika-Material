@@ -124,6 +124,20 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-end space-x-4">
+            @if($pengujian->status === 'PENDING')
+                <form action="{{ route('admin.pengujian.approve', $pengujian->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-check mr-2"></i> Setujui
+                    </button>
+                </form>
+                <form action="{{ route('admin.pengujian.reject', $pengujian->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-times mr-2"></i> Tolak
+                    </button>
+                </form>
+            @endif
             <form action="{{ route('admin.pengujian.destroy', $pengujian->id) }}" method="POST" 
                   onsubmit="return confirm('Yakin ingin menghapus pengujian ini?')">
                 @csrf

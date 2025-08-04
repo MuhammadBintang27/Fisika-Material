@@ -23,7 +23,16 @@ class ArticleController extends Controller
         $article = Artikel::with(['gambar' => function($q) {
             $q->where('kategori', 'ACARA');
         }])->findOrFail($id);
-        return view('user.articles.show', compact('article'));
+        
+        // Ambil artikel terkait (3 artikel terbaru selain artikel saat ini)
+        $relatedArticles = Artikel::with(['gambar' => function($q) {
+            $q->where('kategori', 'ACARA');
+        }])->where('id', '!=', $article->id)
+          ->orderByDesc('tanggalAcara')
+          ->take(3)
+          ->get();
+        
+        return view('user.articles.show', compact('article', 'relatedArticles'));
     }
 
     // Method tambahan untuk API

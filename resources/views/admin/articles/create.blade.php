@@ -56,6 +56,25 @@
                     @enderror
                 </div>
 
+                <!-- Deskripsi Penulis -->
+                <div>
+                    <label for="deskripsi_penulis" class="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi Penulis
+                    </label>
+                    <textarea id="deskripsi_penulis" 
+                              name="deskripsi_penulis" 
+                              rows="4"
+                              class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Tulis deskripsi singkat tentang penulis (opsional)...">{{ old('deskripsi_penulis') }}</textarea>
+                    <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
+                        <span>Contoh: "Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika"</span>
+                        <span id="penulisCharCount">0 karakter</span>
+                    </div>
+                    @error('deskripsi_penulis')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Tanggal Acara -->
                 <div>
                     <label for="tanggalAcara" class="block text-sm font-medium text-gray-700 mb-2">
@@ -79,10 +98,14 @@
                     </label>
                     <textarea id="deskripsi" 
                               name="deskripsi" 
-                              rows="10"
+                              rows="12"
                               class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Tulis deskripsi artikel di sini..."
+                              placeholder="Tulis deskripsi artikel di sini. Anda dapat menggunakan format teks biasa atau HTML untuk formatting..."
                               required>{{ old('deskripsi') }}</textarea>
+                    <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
+                        <span>Minimal 100 karakter untuk deskripsi yang informatif</span>
+                        <span id="charCount">0 karakter</span>
+                    </div>
                     @error('deskripsi')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -91,17 +114,18 @@
                 <!-- Image -->
                 <div>
                     <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
-                        Gambar Artikel
+                        Gambar Artikel <span class="text-red-500">*</span>
                     </label>
                     <div class="flex items-center space-x-4">
                         <input type="file" 
                                id="image" 
                                name="image" 
                                accept="image/*"
-                               class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                               class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               required>
                     </div>
                     <p class="mt-1 text-sm text-gray-500">
-                        Format yang didukung: JPG, PNG, GIF. Maksimal 2MB.
+                        Format yang didukung: JPG, PNG, GIF. Maksimal 2MB. Gambar akan ditampilkan di halaman artikel.
                     </p>
                     @error('image')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -113,9 +137,12 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Preview Gambar
                     </label>
-                    <div class="w-48 h-32 border border-gray-300 rounded-lg overflow-hidden">
+                    <div class="w-64 h-40 border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
                         <img id="preview" src="" alt="Preview" class="w-full h-full object-cover">
                     </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Gambar akan ditampilkan seperti ini di halaman artikel
+                    </p>
                 </div>
 
                 <!-- Actions -->
@@ -143,6 +170,21 @@ document.getElementById('image').addEventListener('change', function(e) {
     const previewContainer = document.getElementById('imagePreview');
     
     if (file) {
+        // Validasi ukuran file (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file terlalu besar. Maksimal 2MB.');
+            e.target.value = '';
+            return;
+        }
+        
+        // Validasi tipe file
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Format file tidak didukung. Gunakan JPG, PNG, atau GIF.');
+            e.target.value = '';
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
@@ -151,6 +193,68 @@ document.getElementById('image').addEventListener('change', function(e) {
         reader.readAsDataURL(file);
     } else {
         previewContainer.classList.add('hidden');
+    }
+});
+
+// Character counter for description
+document.getElementById('deskripsi').addEventListener('input', function(e) {
+    const charCount = document.getElementById('charCount');
+    const length = e.target.value.length;
+    charCount.textContent = length + ' karakter';
+    
+    // Change color based on length
+    if (length < 100) {
+        charCount.className = 'text-red-500';
+    } else if (length < 500) {
+        charCount.className = 'text-yellow-500';
+    } else {
+        charCount.className = 'text-green-500';
+    }
+});
+
+// Character counter for author description
+document.getElementById('deskripsi_penulis').addEventListener('input', function(e) {
+    const charCount = document.getElementById('penulisCharCount');
+    const length = e.target.value.length;
+    charCount.textContent = length + ' karakter';
+    
+    // Change color based on length
+    if (length < 50) {
+        charCount.className = 'text-red-500';
+    } else if (length < 200) {
+        charCount.className = 'text-yellow-500';
+    } else {
+        charCount.className = 'text-green-500';
+    }
+});
+
+// Initialize character count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('deskripsi');
+    const charCount = document.getElementById('charCount');
+    const length = textarea.value.length;
+    charCount.textContent = length + ' karakter';
+    
+    if (length < 100) {
+        charCount.className = 'text-red-500';
+    } else if (length < 500) {
+        charCount.className = 'text-yellow-500';
+    } else {
+        charCount.className = 'text-green-500';
+    }
+
+    // Initialize author description character count
+    const penulisTextarea = document.getElementById('deskripsi_penulis');
+    const penulisCharCount = document.getElementById('penulisCharCount');
+    const penulisLength = penulisTextarea.value.length;
+    penulisCharCount.textContent = penulisLength + ' karakter';
+    
+    if (penulisLength < 50) {
+        penulisCharCount.className = 'text-red-500';
+    } else if (penulisLength < 200) {
+        penulisCharCount.className = 'text-yellow-500';
+    } else {
+        penulisCharCount.className = 'text-green-500';
     }
 });
 </script>

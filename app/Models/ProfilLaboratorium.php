@@ -11,10 +11,11 @@ class ProfilLaboratorium extends Model
     use HasUuids;
     protected $table = 'profil_laboratorium';
     protected $fillable = [
-        'namaLaboratorium',
-        'tentangLaboratorium',
+        'tentang',
         'visi',
-        'misiId',
+        'alamat',
+        'email',
+        'telepon',
     ];
 
     public function misi(): BelongsTo
