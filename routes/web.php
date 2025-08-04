@@ -51,7 +51,7 @@ Route::prefix('services/equipment-loan')->name('equipment.')->group(function () 
     Route::post('/submit', [EquipmentLoanController::class, 'submit'])->name('loan.submit'); // Submit
     Route::get('/letter/{id}', [EquipmentLoanController::class, 'letter'])->name('loan.letter'); // Surat
     Route::get('/download/{id}', [EquipmentLoanController::class, 'download'])->name('loan.download'); // Download
-    Route::get('/enhanced', [EquipmentLoanController::class, 'enhanced'])->name('loan.enhanced'); // Formulir lengkap
+    // Route::get('/enhanced', [EquipmentLoanController::class, 'enhanced'])->name('loan.enhanced'); // Formulir lengkap
     Route::get('/{id}', [EquipmentLoanController::class, 'show'])->name('detail');      // Detail alat
     Route::post('/{id}/request', [EquipmentLoanController::class, 'requestLoan'])->name('request'); // Request lama
 });
@@ -64,7 +64,7 @@ Route::prefix('services/testing')->name('testing.')->group(function () {
 });
 
 Route::post('/equipment-loan/request', [App\Http\Controllers\User\EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
-Route::get('/loans/tracking/{tracking_code}', [\App\Http\Controllers\User\EquipmentLoanController::class, 'tracking'])->name('loans.tracking');
+Route::get('/loans/tracking/{tracking_code?}', [\App\Http\Controllers\User\EquipmentLoanController::class, 'tracking'])->name('loans.tracking');
 
 // Test route untuk debugging
 Route::get('/test-db', function() {

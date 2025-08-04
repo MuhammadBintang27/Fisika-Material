@@ -55,19 +55,11 @@
             <h3 class="text-2xl font-bold text-gray-900 mb-6">Cari Peminjaman</h3>
             
             <form method="GET" action="{{ route('equipment.loan.tracking') }}" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Peminjam</label>
-                        <input type="text" name="nama" value="{{ request('nama') }}" 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Masukkan nama peminjam">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">NIP/NIM</label>
-                        <input type="text" name="nip_nim" value="{{ request('nip_nim') }}" 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Masukkan NIP/NIM">
-                    </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kode Tracking</label>
+                    <input type="text" name="tracking_code" value="{{ request('tracking_code') }}" 
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Masukkan kode tracking">
                 </div>
                 
                 <div class="flex justify-end">
@@ -96,14 +88,16 @@
                 </span></p>
                 @if($peminjaman->status === 'APPROVED')
                     <div class="mt-4">
-                        <a href="{{ route('loans.letter', $peminjaman->tracking_code) }}" class="btn btn-success">Download Surat Peminjaman (PDF)</a>
+                        <a href="{{ route('equipment.loan.letter', $peminjaman->tracking_code) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-file-pdf mr-2"></i>Download Surat Peminjaman (PDF)
+                        </a>
                     </div>
                 @endif
             </div>
         @endif
 
         <!-- Results -->
-        @if(request('nama') || request('nip_nim'))
+        @if(request('tracking_code'))
             @if($loans->count() > 0)
                 <div class="space-y-6">
                     @foreach($loans as $loan)
@@ -180,10 +174,12 @@
 
                             <!-- Actions -->
                             <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('equipment.loan.letter', $loan->id) }}" 
-                                   class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors text-center">
-                                    <i class="fas fa-print mr-2"></i>Lihat Surat
-                                </a>
+                                @if($loan->status === 'APPROVED')
+                                    <a href="{{ route('equipment.loan.letter', $loan->id) }}" 
+                                       class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors text-center">
+                                        <i class="fas fa-print mr-2"></i>Lihat Surat
+                                    </a>
+                                @endif
                                 @if($loan->status === 'PENDING')
                                     <span class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg text-sm font-medium text-center">
                                         <i class="fas fa-clock mr-2"></i>Menunggu Persetujuan
@@ -208,7 +204,7 @@
                         <i class="fas fa-search text-gray-400 text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Tidak ada peminjaman ditemukan</h3>
-                    <p class="text-gray-600">Coba periksa kembali nama atau NIP/NIM yang Anda masukkan.</p>
+                    <p class="text-gray-600">Coba periksa kembali kode tracking yang Anda masukkan.</p>
                 </div>
             @endif
         @else
@@ -217,7 +213,7 @@
                     <i class="fas fa-search text-blue-600 text-2xl"></i>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-2">Lacak Peminjaman Anda</h3>
-                <p class="text-gray-600">Masukkan nama dan NIP/NIM untuk melihat status peminjaman Anda.</p>
+                <p class="text-gray-600">Masukkan kode tracking untuk melihat status peminjaman Anda.</p>
             </div>
         @endif
     </div>
@@ -275,4 +271,4 @@ function initScrollAnimations() {
     });
 }
 </script>
-@endsection 
+@endsection

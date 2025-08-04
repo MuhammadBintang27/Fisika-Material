@@ -13,6 +13,8 @@ class Peminjaman extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
+        'id',
+        'tracking_code',
         'user_type',
         'namaPeminjam',
         'noHp',
