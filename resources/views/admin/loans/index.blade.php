@@ -19,6 +19,22 @@
         </div>
     </div>
 
+    <!-- Search Form -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <form method="GET" action="{{ route('admin.loans.index') }}" class="flex items-center space-x-4">
+            <div class="flex-1">
+                <input type="text" name="search" 
+                       value="{{ request()->input('search') }}"
+                       placeholder="Cari berdasarkan tracking code atau nama peminjam..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <button type="submit" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <i class="fas fa-search mr-2"></i>Cari
+            </button>
+        </form>
+    </div>
+
     <!-- Status Filter -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div class="flex items-center space-x-4">
@@ -199,5 +215,4 @@
     overflow: hidden;
 }
 </style>
-@endsection 
- 
+@endsection

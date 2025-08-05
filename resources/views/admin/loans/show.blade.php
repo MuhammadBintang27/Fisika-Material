@@ -191,13 +191,21 @@
                             </div>
                         </form>
                     </div>
-                    <script>
-                    function submitStatus(status) {
-                        document.getElementById('statusInput').value = status;
-                        document.getElementById('notesInput').value = '';
-                        document.getElementById('statusForm').submit();
-                    }
-                    </script>
+                @elseif($loan->status === 'APPROVED')
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Aksi Admin</h3>
+                        <form id="statusForm" method="POST" action="{{ route('admin.loans.updateStatus', $loan->id) }}" class="space-y-4">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" id="statusInput">
+                            <input type="hidden" name="notes" id="notesInput">
+                            <div class="flex items-center gap-4">
+                                <button type="button" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" onclick="submitStatus('COMPLETED')">
+                                    <i class="fas fa-check-circle mr-2"></i> Tandai Selesai & WhatsApp
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 @else
                     @if($loan->notes)
                         <div class="mt-8 pt-6 border-t border-gray-200">
@@ -224,5 +232,12 @@
         </div>
     </div>
 </div>
-@endsection 
- 
+
+<script>
+function submitStatus(status) {
+    document.getElementById('statusInput').value = status;
+    document.getElementById('notesInput').value = '';
+    document.getElementById('statusForm').submit();
+}
+</script>
+@endsection
