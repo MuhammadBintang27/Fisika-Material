@@ -43,25 +43,10 @@ class LoanController extends Controller
         ]);
 
         $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
-        $loan->update([
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
-
-        // Jika status berubah ke APPROVED, kurangi stok tersedia dan tambah stok_dipinjam
-        if ($request->status === 'APPROVED') {
-            foreach ($loan->items as $item) {
-                $alat = $item->alat;
-                if ($alat) {
-                    $newStock = max(0, $alat->stok - $item->jumlah);
-                    $newDipinjam = $alat->stok_dipinjam + $item->jumlah;
-                    $alat->update([
-                        'stok' => $newStock,
-                        'stok_dipinjam' => $newDipinjam,
-                    ]);
-                }
-            }
-        }
+        
+        // Don't update status immediately, just prepare WhatsApp message
+        // Status will be updated after admin confirms in preview page
+        
         // Handle return conditions for COMPLETED status
         if ($request->status === 'COMPLETED' && ($request->has('return_baik') || $request->has('return_rusak'))) {
             foreach ($loan->items as $item) {
@@ -99,65 +84,138 @@ class LoanController extends Controller
         $url = 'https://wa.me/' . $wa . '?text=';
         $msg = '';
 
+        // Header selalu sama
+        $header = "Selamat datang di *Laboratorium Fisika Material dan Energi*,\n";
+        $header .= "_Departemen Fisika, Universitas Syiah Kuala_\n\n";
+        $header .= "Halo *{$loan->namaPeminjam}*,\n\n";
+
         if ($request->status === 'APPROVED') {
-            $msg = "Halo *{$loan->namaPeminjam}*,%0A%0A";
-            $msg .= "🎉 *Permohonan Peminjaman Alat Anda Telah Disetujui!*%0A%0A";
-            $msg .= "📌 *Kode Peminjaman*: {$loan->tracking_code}%0A%0A";
-            $msg .= "📋 *Detail Penelitian*:%0A";
-            $msg .= "- Judul: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "%0A";
-            $msg .= "- Kategori: {$loan->user_type_label}%0A%0A";
-            $msg .= "🔧 *Alat yang Disetujui*:%0A";
+            $msg .= $header;
+            $msg .= "Permohonan peminjaman alat Anda telah *DISETUJUI*. Berikut detail peminjaman Anda:\n\n";
+            $msg .= "*Kode Peminjaman*: {$loan->tracking_code}\n\n";
+            $msg .= "*Detail Penelitian*:\n";
+            $msg .= "- Judul: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "\n";
+            $msg .= "- Kategori: {$loan->user_type_label}\n\n";
+            $msg .= "🔧 *Alat yang Disetujui*:\n";
             foreach ($loan->items as $item) {
-                $msg .= "- {$item->alat->nama} ({$item->jumlah} unit)%0A";
+                $msg .= "- {$item->alat->nama} ({$item->jumlah} unit)\n";
             }
-            $msg .= "%0A📅 *Jadwal Penelitian*:%0A";
-            $msg .= "- Mulai: " . $loan->tanggal_pinjam->format('d M Y H:i') . "%0A";
-            $msg .= "- Selesai: " . $loan->tanggal_pengembalian->format('d M Y H:i') . "%0A";
-            $msg .= "- Durasi: " . ($loan->durasi_jam ?? 'Tidak Ada') . " jam%0A%0A";
-            $msg .= "📍 *Lokasi*:%0A";
-            $msg .= "Laboratorium Fisika Material dan Energi%0A";
-            $msg .= "Departemen Fisika, Universitas Syiah Kuala%0A%0A";
-            $msg .= "📢 *Langkah Selanjutnya*:%0A";
-            $msg .= "Silakan hubungi admin laboratorium untuk koordinasi lebih lanjut.%0A";
-            $msg .= "Terima kasih dan sukses untuk penelitian Anda! 🌟";
+            $msg .= "\n*Jadwal Penelitian*:\n";
+            $msg .= "- Mulai: " . $loan->tanggal_pinjam->format('d M Y H:i') . "\n";
+            $msg .= "- Selesai: " . $loan->tanggal_pengembalian->format('d M Y H:i') . "\n";
+            $msg .= "- Durasi: " . ($loan->durasi_jam ?? 'Tidak Ada') . " jam\n\n";
+            $msg .= "*Lokasi*:\n";
+            $msg .= "Laboratorium Fisika Material dan Energi\n";
+            $msg .= "Departemen Fisika, Universitas Syiah Kuala\n\n";
+            $msg .= "*Langkah Selanjutnya*:\n";
+            $msg .= "Silakan menghubungi admin laboratorium untuk koordinasi pengambilan alat dan persiapan penelitian Anda.\n\n";
+            $msg .= "Terima kasih dan sukses selalu untuk penelitian Anda! 🌟";
         } elseif ($request->status === 'REJECTED') {
-            $msg = "Halo *{$loan->namaPeminjam}*,%0A%0A";
-            $msg .= "❌ *Permohonan Peminjaman Alat Anda Tidak Dapat Dipenuhi* %0A%0A";
-            $msg .= "📌 *Kode Peminjaman*: {$loan->tracking_code}%0A%0A";
-            $msg .= "📋 *Detail Pengajuan*:%0A";
-            $msg .= "- Judul Penelitian: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "%0A";
-            $msg .= "- Tanggal Pengajuan: " . $loan->created_at->format('d M Y') . "%0A%0A";
+            $msg .= $header;
+            $msg .= "Kami informasikan bahwa permohonan peminjaman alat Anda *TIDAK DAPAT DIPENUHI*. Berikut informasinya:\n\n";
+            $msg .= "*Kode Peminjaman*: {$loan->tracking_code}\n\n";
+            $msg .= "*Detail Pengajuan*:\n";
+            $msg .= "- Judul Penelitian: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "\n";
+            $msg .= "- Tanggal Pengajuan: " . $loan->created_at->format('d M Y') . "\n\n";
             if ($request->notes) {
-                $msg .= "📝 *Catatan Penolakan*:%0A{$request->notes}%0A%0A";
+                $msg .= "*Catatan Penolakan*:\n{$request->notes}\n\n";
             }
-            $msg .= "🙏 Terima kasih atas pengertiannya. Anda dapat mengajukan ulang di waktu yang lebih sesuai.";
+            $msg .= "Kami mohon maaf atas ketidaknyamanan ini. Anda dapat mengajukan permohonan kembali di waktu yang akan datang.\n";
+            $msg .= "Terima kasih.";
         } elseif ($request->status === 'COMPLETED') {
-            $msg = "Halo *{$loan->namaPeminjam}*,%0A%0A";
-            $msg .= "✅ *Peminjaman Alat Anda Telah Selesai* %0A%0A";
-            $msg .= "📌 *Kode Peminjaman*: {$loan->tracking_code}%0A%0A";
-            $msg .= "📋 *Detail Penelitian*:%0A";
-            $msg .= "- Judul: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "%0A";
-            $msg .= "- Kategori: {$loan->user_type_label}%0A%0A";
-            $msg .= "🔧 *Alat yang Dikembalikan*:%0A";
+            $msg .= $header;
+            $msg .= "Peminjaman alat Anda telah *SELESAI*. Berikut ringkasan peminjaman:\n\n";
+            $msg .= "*Kode Peminjaman*: {$loan->tracking_code}\n\n";
+            $msg .= "*Detail Penelitian*:\n";
+            $msg .= "- Judul: " . ($loan->judul_penelitian ?? 'Tidak Ada') . "\n";
+            $msg .= "- Kategori: {$loan->user_type_label}\n\n";
+            $msg .= "🔧 *Alat yang Dikembalikan*:\n";
             foreach ($loan->items as $item) {
                 $condition = $item->return_condition ?? 'Tidak Diketahui';
                 $conditionText = $condition === 'BAIK' ? '✅ Baik' : ($condition === 'RUSAK' ? '❌ Rusak' : 'ℹ️ Tidak Diketahui');
-                $msg .= "- {$item->alat->nama} ({$item->jumlah} unit) - {$conditionText}%0A";
+                $msg .= "- {$item->alat->nama} ({$item->jumlah} unit) - {$conditionText}\n";
             }
-            $msg .= "%0A📅 *Periode Peminjaman*:%0A";
-            $msg .= "- Mulai: " . $loan->tanggal_pinjam->format('d M Y H:i') . "%0A";
-            $msg .= "- Selesai: " . $loan->tanggal_pengembalian->format('d M Y H:i') . "%0A%0A";
-            $msg .= "📝 *Catatan*:%0A";
-            $msg .= "Jika ada alat yang dikembalikan dalam keadaan rusak, mohon maaf atas ketidaknyamanannya. Silakan hubungi admin untuk informasi lebih lanjut.%0A%0A";
-            $msg .= "🙏 Terima kasih telah menggunakan fasilitas Laboratorium Fisika Material dan Energi, Universitas Syiah Kuala.%0A";
-            $msg .= "Semoga penelitian Anda sukses! 🌟";
+            $msg .= "\n*Periode Peminjaman*:\n";
+            $msg .= "- Mulai: " . $loan->tanggal_pinjam->format('d M Y H:i') . "\n";
+            $msg .= "- Selesai: " . $loan->tanggal_pengembalian->format('d M Y H:i') . "\n\n";
+            $msg .= "*Catatan*:\n";
+            $msg .= "Jika ada alat yang mengalami kerusakan, mohon segera berkoordinasi dengan admin laboratorium.\n\n";
+            $msg .= "Terima kasih telah menggunakan fasilitas kami. Semoga penelitian Anda sukses! 🌟";
         }
 
+        // Redirect to WhatsApp preview page instead of direct WhatsApp
         if ($msg) {
-            $url .= urlencode($msg);
-            return redirect($url);
+            $whatsappUrl = $url . urlencode($msg);
+            
+            // Store data in session including the intended status
+            session([
+                'whatsapp_url' => $whatsappUrl,
+                'whatsapp_message' => $msg,
+                'whatsapp_phone' => $wa,
+                'intended_status' => $request->status,
+                'intended_notes' => $request->notes
+            ]);
+            
+            return redirect()->route('admin.loans.whatsapp-preview', $loan->id);
         }
+        
         return redirect()->route('admin.loans.show', $id)->with('success', 'Status peminjaman berhasil diperbarui.');
+    }
+
+    public function confirmStatusUpdate(Request $request, $id)
+    {
+        $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
+        
+        // Get intended status from session
+        $intendedStatus = session('intended_status');
+        $intendedNotes = session('intended_notes');
+        
+        if (!$intendedStatus) {
+            return redirect()->route('admin.loans.show', $id)->with('error', 'Data status tidak ditemukan.');
+        }
+        
+        // Update the loan status
+        $loan->update([
+            'status' => $intendedStatus,
+            'notes' => $intendedNotes,
+        ]);
+
+        // Jika status berubah ke APPROVED, kurangi stok tersedia dan tambah stok_dipinjam
+        if ($intendedStatus === 'APPROVED') {
+            foreach ($loan->items as $item) {
+                $alat = $item->alat;
+                if ($alat) {
+                    $newStock = max(0, $alat->stok - $item->jumlah);
+                    $newDipinjam = $alat->stok_dipinjam + $item->jumlah;
+                    $alat->update([
+                        'stok' => $newStock,
+                        'stok_dipinjam' => $newDipinjam,
+                    ]);
+                }
+            }
+        }
+        
+        // Clear session data
+        session()->forget(['whatsapp_url', 'whatsapp_message', 'whatsapp_phone', 'intended_status', 'intended_notes']);
+        
+        return redirect()->route('admin.loans.show', $id)->with('success', 'Status peminjaman berhasil diperbarui.');
+    }
+
+    public function whatsappPreview(Request $request, $id)
+    {
+        $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
+        
+        // Get data from session
+        $whatsappUrl = session('whatsapp_url');
+        $message = session('whatsapp_message');
+        $phone = session('whatsapp_phone');
+        
+        // If no session data, redirect back
+        if (!$whatsappUrl || !$message || !$phone) {
+            return redirect()->route('admin.loans.show', $id)->with('error', 'Data WhatsApp tidak ditemukan.');
+        }
+        
+        return view('admin.loans.whatsapp-preview', compact('loan', 'whatsappUrl', 'message', 'phone'));
     }
 
     public function destroy($id)
@@ -173,39 +231,79 @@ class LoanController extends Controller
         return redirect()->route('admin.loans.index')->with('success', 'Data peminjaman berhasil dihapus.');
     }
 
-    public function pending()
+    public function pending(Request $request)
     {
-        $loans = Peminjaman::with(['items.alat'])
+        $query = Peminjaman::with(['items.alat'])
             ->where('status', 'PENDING')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->orderBy('created_at', 'desc');
+        
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('tracking_code', 'like', "%{$search}%")
+                  ->orWhere('namaPeminjam', 'like', "%{$search}%");
+            });
+        }
+
+        $loans = $query->paginate(15);
         return view('admin.loans.pending', compact('loans'));
     }
 
-    public function approved()
+    public function approved(Request $request)
     {
-        $loans = Peminjaman::with(['items.alat'])
+        $query = Peminjaman::with(['items.alat'])
             ->where('status', 'APPROVED')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->orderBy('created_at', 'desc');
+        
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('tracking_code', 'like', "%{$search}%")
+                  ->orWhere('namaPeminjam', 'like', "%{$search}%");
+            });
+        }
+
+        $loans = $query->paginate(15);
         return view('admin.loans.approved', compact('loans'));
     }
 
-    public function completed()
+    public function completed(Request $request)
     {
-        $loans = Peminjaman::with(['items.alat'])
+        $query = Peminjaman::with(['items.alat'])
             ->where('status', 'COMPLETED')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->orderBy('created_at', 'desc');
+        
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('tracking_code', 'like', "%{$search}%")
+                  ->orWhere('namaPeminjam', 'like', "%{$search}%");
+            });
+        }
+
+        $loans = $query->paginate(15);
         return view('admin.loans.completed', compact('loans'));
     }
 
-    public function rejected()
+    public function rejected(Request $request)
     {
-        $loans = Peminjaman::with(['items.alat'])
+        $query = Peminjaman::with(['items.alat'])
             ->where('status', 'REJECTED')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->orderBy('created_at', 'desc');
+        
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('tracking_code', 'like', "%{$search}%")
+                  ->orWhere('namaPeminjam', 'like', "%{$search}%");
+            });
+        }
+
+        $loans = $query->paginate(15);
         return view('admin.loans.rejected', compact('loans'));
     }
 }

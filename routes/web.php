@@ -155,7 +155,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/completed', [LoanController::class, 'completed'])->name('completed');
             Route::get('/rejected', [LoanController::class, 'rejected'])->name('rejected');
             Route::get('/{id}', [LoanController::class, 'show'])->name('show');
+            Route::get('/{id}/whatsapp-preview', [LoanController::class, 'whatsappPreview'])->name('whatsapp-preview');
             Route::put('/{id}/status', [LoanController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/{id}/confirm-status', [LoanController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate');
             Route::delete('/{id}', [LoanController::class, 'destroy'])->name('destroy');
         });
 
