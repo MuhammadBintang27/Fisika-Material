@@ -29,10 +29,13 @@
                                     Alat
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Stok
+                                    Stok Tersedia
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kondisi
+                                    Stok Dipinjam
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Stok Rusak
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Harga
@@ -71,13 +74,15 @@
                                             {{ $equipment->stok }}
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full
-                                            @if(!$equipment->isBroken) bg-green-100 text-green-800
-                                            @else bg-red-100 text-red-800
-                                            @endif">
-                                            {{ $equipment->isBroken ? 'RUSAK' : 'BAIK' }}
-                                        </span>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">
+                                            {{ $equipment->stok_dipinjam ?? 0 }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">
+                                            {{ $equipment->stok_rusak ?? 0 }}
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">

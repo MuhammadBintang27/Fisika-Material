@@ -48,22 +48,46 @@ class LoanController extends Controller
             'notes' => $request->notes,
         ]);
 
-        // Handle return conditions for COMPLETED status
-        if ($request->status === 'COMPLETED' && $request->has('return_conditions')) {
+        // Jika status berubah ke APPROVED, kurangi stok tersedia dan tambah stok_dipinjam
+        if ($request->status === 'APPROVED') {
             foreach ($loan->items as $item) {
-                $condition = $request->input('return_conditions.' . $item->id);
-                if ($condition) {
-                    $item->update(['return_condition' => $condition]);
-                    // If the item is returned damaged, decrease the stock
-                    if ($condition === 'RUSAK') {
-                        $alat = Alat::findOrFail($item->alat_id);
-                        $newStock = max(0, $alat->stok - $item->jumlah); // Ensure stock doesn't go negative
-                        $alat->update([
-                            'stok' => $newStock,
-                            'isBroken' => $newStock === 0 ? true : $alat->isBroken, // Mark as broken if no stock left
-                        ]);
-                    }
+                $alat = $item->alat;
+                if ($alat) {
+                    $newStock = max(0, $alat->stok - $item->jumlah);
+                    $newDipinjam = $alat->stok_dipinjam + $item->jumlah;
+                    $alat->update([
+                        'stok' => $newStock,
+                        'stok_dipinjam' => $newDipinjam,
+                    ]);
                 }
+            }
+        }
+        // Handle return conditions for COMPLETED status
+        if ($request->status === 'COMPLETED' && ($request->has('return_baik') || $request->has('return_rusak'))) {
+            foreach ($loan->items as $item) {
+                $jumlah_baik = (int) $request->input('return_baik.' . $item->id, 0);
+                $jumlah_rusak = (int) $request->input('return_rusak.' . $item->id, 0);
+                $jumlah_total = $item->jumlah;
+                // Validasi: baik + rusak = jumlah dipinjam
+                if ($jumlah_baik + $jumlah_rusak !== $jumlah_total) {
+                    return back()->withErrors(['return_baik' => 'Jumlah baik + rusak harus sama dengan jumlah dipinjam'])->withInput();
+                }
+                $alat = Alat::findOrFail($item->alat_id);
+                // Update stok dipinjam
+                $alat->stok_dipinjam = max(0, $alat->stok_dipinjam - $jumlah_total);
+                // Update stok baik
+                if ($jumlah_baik > 0) {
+                    $alat->stok += $jumlah_baik;
+                }
+                // Update stok rusak
+                if ($jumlah_rusak > 0) {
+                    $alat->stok_rusak += $jumlah_rusak;
+                }
+                $alat->save();
+                // Simpan kondisi ke item (opsional, bisa disesuaikan)
+                $item->update([
+                    'return_condition' => $jumlah_rusak > 0 ? 'RUSAK' : 'BAIK',
+                ]);
             }
         }
 

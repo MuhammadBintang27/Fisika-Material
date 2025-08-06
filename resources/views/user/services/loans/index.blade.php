@@ -168,6 +168,13 @@
                         {{ $equipment->deskripsi }}
                     </p>
                     <div class="mb-2 text-sm text-gray-700">Stok: <span class="font-semibold">{{ $equipment->stok }}</span></div>
+                    <div class="mb-2 text-xs">
+                        Status: <span class="font-semibold {{ $equipment->stok > 0 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $equipment->stok > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
+                        </span>
+                    </div>
+                    {{-- Jika ingin tampilkan stok rusak: --}}
+                    {{-- <div class="mb-2 text-xs text-red-600">Rusak: <span class="font-semibold">{{ $equipment->stok_rusak ?? 0 }}</span></div> --}}
                     <div class="mb-4 text-sm text-gray-700">Harga: <span class="font-semibold">{{ $equipment->harga ? 'Rp ' . number_format($equipment->harga,0,',','.') : '-' }}</span></div>
                     
                     <!-- Quantity Input (hidden by default) -->

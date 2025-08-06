@@ -199,6 +199,19 @@
                             @method('PUT')
                             <input type="hidden" name="status" id="statusInput">
                             <input type="hidden" name="notes" id="notesInput">
+                            <div class="mb-4">
+                                <h4 class="font-semibold mb-2">Kondisi Pengembalian Alat</h4>
+                                @foreach($loan->items as $item)
+                                    <div class="flex items-center mb-2 gap-4">
+                                        <span class="w-48">{{ $item->alat->nama }} ({{ $item->jumlah }} unit)</span>
+                                        <input type="number" name="return_baik[{{ $item->id }}]" min="0" max="{{ $item->jumlah }}" value="{{ $item->jumlah }}" class="border rounded px-2 py-1 w-20" placeholder="Baik">
+                                        <span>Baik</span>
+                                        <input type="number" name="return_rusak[{{ $item->id }}]" min="0" max="{{ $item->jumlah }}" value="0" class="border rounded px-2 py-1 w-20" placeholder="Rusak">
+                                        <span>Rusak</span>
+                                    </div>
+                                @endforeach
+                                <small class="text-gray-500">Jumlah baik + rusak harus sama dengan jumlah dipinjam.</small>
+                            </div>
                             <div class="flex items-center gap-4">
                                 <button type="button" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" onclick="submitStatus('COMPLETED')">
                                     <i class="fas fa-check-circle mr-2"></i> Tandai Selesai & WhatsApp

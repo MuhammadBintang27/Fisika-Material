@@ -148,10 +148,9 @@ class EquipmentLoanController extends Controller
     public function download($id)
     {
         $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
-        
-        // Generate PDF using DomPDF or similar library
-        // For now, we'll redirect to the letter page for printing
-        return redirect()->route('equipment.loan.letter', $id);
+        $pdf = \PDF::loadView('user.services.loans.letter', compact('loan'));
+        $filename = 'Surat_Peminjaman_Alat_' . $loan->namaPeminjam . '_' . $loan->tracking_code . '.pdf';
+        return $pdf->download($filename);
     }
 
     // Tracking by code dan tracking by nama/NIM

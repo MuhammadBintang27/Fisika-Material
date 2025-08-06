@@ -88,7 +88,7 @@
                 </span></p>
                 @if($peminjaman->status === 'APPROVED')
                     <div class="mt-4">
-                        <a href="{{ route('equipment.loan.letter', $peminjaman->tracking_code) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                        <a href="{{ route('equipment.loan.download', $peminjaman->id) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                             <i class="fas fa-file-pdf mr-2"></i>Download Surat Peminjaman (PDF)
                         </a>
                     </div>

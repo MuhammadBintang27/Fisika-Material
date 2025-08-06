@@ -56,23 +56,59 @@
                     @enderror
                 </div>
 
-                <!-- Stok -->
+                <!-- Stok Tersedia -->
                 <div>
                     <label for="stok" class="block text-sm font-medium text-gray-700 mb-2">
-                        Stok <span class="text-red-500">*</span>
+                        Stok Tersedia <span class="text-red-500">*</span>
                     </label>
-                    <input type="number" 
-                           id="stok" 
-                           name="stok" 
+                    <input type="number"
+                           id="stok"
+                           name="stok"
                            value="{{ old('stok') }}"
                            min="0"
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                           placeholder="Jumlah stok"
+                           placeholder="Jumlah stok tersedia"
                            required>
                     @error('stok')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
+                <!-- Stok Rusak -->
+                <div>
+                    <label for="stok_rusak" class="block text-sm font-medium text-gray-700 mb-2">
+                        Stok Rusak
+                    </label>
+                    <input type="number"
+                           id="stok_rusak"
+                           name="stok_rusak"
+                           value="{{ old('stok_rusak', 0) }}"
+                           min="0"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                           placeholder="Jumlah alat rusak">
+                    @error('stok_rusak')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <!-- Stok Total (Info Otomatis) -->
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Stok Total (Otomatis)</label>
+                    <div class="px-3 py-2 rounded-lg bg-gray-100 border border-gray-200">
+                        <span id="stok_total_info">0</span> unit
+                    </div>
+                </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    function updateStokTotal() {
+                        var stok = parseInt(document.getElementById('stok').value) || 0;
+                        var stokRusak = parseInt(document.getElementById('stok_rusak').value) || 0;
+                        var stokDipinjam = 0; // selalu 0 saat create
+                        document.getElementById('stok_total_info').innerText = stok + stokRusak + stokDipinjam;
+                    }
+                    document.getElementById('stok').addEventListener('input', updateStokTotal);
+                    document.getElementById('stok_rusak').addEventListener('input', updateStokTotal);
+                    updateStokTotal();
+                });
+                </script>
 
                 <!-- Harga -->
                 <div>

@@ -14,6 +14,8 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->boolean('isBroken')->default(true);
             $table->integer('stok')->default(1);
+            $table->integer('stok_dipinjam')->default(0); // jumlah alat yang sedang dipinjam
+            $table->integer('stok_rusak')->default(0); // jumlah alat rusak
             $table->decimal('harga', 15, 2)->nullable();
             $table->timestamps();
         });

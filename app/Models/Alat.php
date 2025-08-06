@@ -16,6 +16,8 @@ class Alat extends Model
         'nama',
         'deskripsi',
         'stok',
+        'stok_dipinjam', // jumlah alat yang sedang dipinjam
+        'stok_rusak', // jumlah alat rusak
         'isBroken',
         'harga',
     ];

@@ -57,90 +57,83 @@
                     @enderror
                 </div>
 
-                <!-- Stok -->
+                <!-- Stok Tersedia -->
                 <div>
                     <label for="stok" class="block text-sm font-medium text-gray-700 mb-2">
-                        Stok <span class="text-red-500">*</span>
+                        Stok Tersedia <span class="text-red-500">*</span>
                     </label>
-                    <input type="number" 
-                           id="stok" 
-                           name="stok" 
+                    <input type="number"
+                           id="stok"
+                           name="stok"
                            value="{{ old('stok', $equipment->stok) }}"
                            min="0"
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                           placeholder="Jumlah stok"
+                           placeholder="Jumlah stok tersedia"
                            required>
                     @error('stok')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <!-- Harga -->
+                <!-- Stok Rusak -->
                 <div>
-                    <label for="harga" class="block text-sm font-medium text-gray-700 mb-2">
-                        Harga (Rp)
+                    <label for="stok_rusak" class="block text-sm font-medium text-gray-700 mb-2">
+                        Stok Rusak
                     </label>
-                    <input type="number" 
-                           id="harga" 
-                           name="harga" 
-                           value="{{ old('harga', $equipment->harga) }}"
+                    <input type="number"
+                           id="stok_rusak"
+                           name="stok_rusak"
+                           value="{{ old('stok_rusak', $equipment->stok_rusak ?? 0) }}"
                            min="0"
-                           step="1000"
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                           placeholder="Harga alat">
-                    @error('harga')
+                           placeholder="Jumlah alat rusak">
+                    @error('stok_rusak')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <!-- Kondisi -->
-                <div class="col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Kondisi Alat
+                <!-- Jumlah Diperbaiki -->
+                <div>
+                    <label for="jumlah_perbaikan" class="block text-sm font-medium text-gray-700 mb-2">
+                        Jumlah Diperbaiki (pindah dari rusak ke tersedia)
                     </label>
-                    <div class="flex items-center space-x-4">
-                        <label class="flex items-center">
-                            <input type="checkbox" 
-                                   name="isBroken" 
-                                   value="1"
-                                   {{ old('isBroken', $equipment->isBroken) ? 'checked' : '' }}
-                                   class="rounded border-gray-300 text-green-600 focus:ring-green-500">
-                            <span class="ml-2 text-sm text-gray-700">Alat Rusak</span>
-                        </label>
+                    <input type="number"
+                           id="jumlah_perbaikan"
+                           name="jumlah_perbaikan"
+                           value="0"
+                           min="0"
+                           max="{{ $equipment->stok_rusak ?? 0 }}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                           placeholder="Jumlah alat yang berhasil diperbaiki">
+                    @error('jumlah_perbaikan')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <!-- Status Otomatis -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status Otomatis</label>
+                    <div class="px-3 py-2 rounded-lg bg-gray-100 border border-gray-200">
+                        {{ ($equipment->stok ?? 0) > 0 ? 'Tersedia' : 'Tidak Tersedia' }}
                     </div>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Centang jika alat dalam kondisi rusak atau tidak dapat digunakan
-                    </p>
-                    @error('isBroken')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
-
-                <!-- Foto Alat -->
+                <!-- Stok Total (Info Otomatis) -->
                 <div class="col-span-2">
-                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
-                        Foto Alat
-                    </label>
-                    
-                    @if($equipment->gambar && $equipment->gambar->first())
-                        <div class="mb-4">
-                            <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
-                            <img src="{{ asset($equipment->gambar->first()->url) }}" alt="{{ $equipment->nama }}" class="w-32 h-32 rounded-lg object-cover border border-gray-300">
-                        </div>
-                    @endif
-                    
-                    <input type="file" 
-                           id="image" 
-                           name="image" 
-                           accept="image/*"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <p class="mt-1 text-sm text-gray-500">
-                        Format yang didukung: JPG, PNG, GIF. Maksimal 2MB. Biarkan kosong jika tidak ingin mengubah foto.
-                    </p>
-                    @error('image')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Stok Total (Otomatis)</label>
+                    <div class="px-3 py-2 rounded-lg bg-gray-100 border border-gray-200">
+                        <span id="stok_total_info">{{ ($equipment->stok ?? 0) + ($equipment->stok_dipinjam ?? 0) + ($equipment->stok_rusak ?? 0) }}</span> unit
+                    </div>
                 </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    function updateStokTotal() {
+                        var stok = parseInt(document.getElementById('stok').value) || 0;
+                        var stokRusak = parseInt(document.getElementById('stok_rusak').value) || 0;
+                        var stokDipinjam = {{ $equipment->stok_dipinjam ?? 0 }};
+                        document.getElementById('stok_total_info').innerText = stok + stokRusak + stokDipinjam;
+                    }
+                    document.getElementById('stok').addEventListener('input', updateStokTotal);
+                    document.getElementById('stok_rusak').addEventListener('input', updateStokTotal);
+                    updateStokTotal();
+                });
+                </script>
             </div>
 
             <!-- Submit Button -->

@@ -167,20 +167,8 @@
 </head>
 <body>
     <!-- Print Buttons -->
-    <div class="no-print print-buttons">
-        <a href="{{ route('equipment.loan') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Kembali ke Peminjaman
-        </a>
-        <a href="{{ route('equipment.loan.tracking') }}" class="btn btn-info">
-            <i class="fas fa-search"></i> Tracking Status
-        </a>
-        <button onclick="window.print()" class="btn btn-primary">
-            <i class="fas fa-print"></i> Cetak Surat
-        </button>
-        <a href="{{ route('equipment.loan.download', $loan->id) }}" class="btn btn-success">
-            <i class="fas fa-download"></i> Download PDF
-        </a>
-    </div>
+    {{-- Hapus seluruh blok tombol aksi di atas surat --}}
+    {{-- <div class="no-print print-buttons"> ... </div> --}}
 
     <!-- Letter Content -->
     <div class="header">
@@ -240,7 +228,7 @@
                     @foreach($loan->items as $index => $item)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->alat->namaAlat }}</td>
+                        <td>{{ $item->alat->nama }}</td>
                         <td>{{ $item->alat->deskripsi }}</td>
                         <td>{{ $item->jumlah }} unit</td>
                     </tr>
@@ -307,7 +295,7 @@
     </div>
 
     <!-- Status Information -->
-    <div style="margin-top: 50px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+    <!-- <div style="margin-top: 50px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
         <h3 style="margin: 0 0 10px 0; color: #007bff;">Status Peminjaman</h3>
         <p style="margin: 0;"><strong>Status:</strong> 
             <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;
@@ -323,7 +311,7 @@
         @if($loan->notes)
         <p style="margin: 5px 0 0 0;"><strong>Catatan:</strong> {{ $loan->notes }}</p>
         @endif
-    </div>
+    </div> -->
 
     <script>
         // Auto-print when page loads (optional)

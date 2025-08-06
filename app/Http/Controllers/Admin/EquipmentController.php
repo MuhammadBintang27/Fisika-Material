@@ -37,7 +37,8 @@ class EquipmentController extends Controller
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'stok' => $request->stok,
-            'isBroken' => $request->has('isBroken'),
+            'stok_dipinjam' => 0,
+            'stok_rusak' => $request->stok_rusak ?? 0,
             'harga' => $request->harga,
         ]);
 
@@ -75,11 +76,19 @@ class EquipmentController extends Controller
         ]);
 
         $equipment = Alat::findOrFail($id);
+        $jumlahPerbaikan = (int) $request->input('jumlah_perbaikan', 0);
+        $stokRusakLama = $equipment->stok_rusak ?? 0;
+        $stokRusakBaru = (int) $request->input('stok_rusak', $stokRusakLama);
+        if ($jumlahPerbaikan > $stokRusakLama) {
+            $jumlahPerbaikan = $stokRusakLama;
+        }
+        $stokRusakAkhir = max(0, $stokRusakBaru - $jumlahPerbaikan);
+        $stokAkhir = (int) $request->stok + $jumlahPerbaikan;
         $equipment->update([
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
-            'stok' => $request->stok,
-            'isBroken' => $request->has('isBroken'),
+            'stok' => $stokAkhir,
+            'stok_rusak' => $stokRusakAkhir,
             'harga' => $request->harga,
         ]);
 

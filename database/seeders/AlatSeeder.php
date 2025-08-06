@@ -16,7 +16,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Oscilloscope Digital',
                 'deskripsi' => 'Oscilloscope digital 50MHz dengan 2 channel untuk analisis sinyal elektronik.',
                 'stok' => 5,
-                'isBroken' => false,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 0,
                 'harga' => 7500000,
             ],
             [
@@ -24,7 +25,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Multimeter Digital',
                 'deskripsi' => 'Multimeter digital presisi tinggi untuk pengukuran tegangan, arus, dan resistansi.',
                 'stok' => 10,
-                'isBroken' => false,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 0,
                 'harga' => 1200000,
             ],
             [
@@ -32,7 +34,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Function Generator',
                 'deskripsi' => 'Generator fungsi 30MHz untuk menghasilkan berbagai bentuk gelombang.',
                 'stok' => 3,
-                'isBroken' => false,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 0,
                 'harga' => 5000000,
             ],
             [
@@ -40,7 +43,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Power Supply DC',
                 'deskripsi' => 'Power supply DC triple output untuk eksperimen elektronika.',
                 'stok' => 4,
-                'isBroken' => true,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 1,
                 'harga' => 3500000,
             ],
             [
@@ -48,7 +52,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Spektrum Analyzer',
                 'deskripsi' => 'Spektrum analyzer untuk analisis frekuensi sinyal RF.',
                 'stok' => 2,
-                'isBroken' => false,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 0,
                 'harga' => 15000000,
             ],
             [
@@ -56,7 +61,8 @@ class AlatSeeder extends Seeder
                 'nama' => 'Digital Caliper',
                 'deskripsi' => 'Jangka sorong digital presisi tinggi untuk pengukuran dimensi.',
                 'stok' => 15,
-                'isBroken' => false,
+                'stok_dipinjam' => 0,
+                'stok_rusak' => 0,
                 'harga' => 350000,
             ],
         ];
