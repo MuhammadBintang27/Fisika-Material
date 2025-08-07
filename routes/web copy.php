@@ -7,9 +7,6 @@ use App\Http\Controllers\User\StaffController;
 use App\Http\Controllers\User\FacilitiesController;
 use App\Http\Controllers\User\EquipmentLoanController;
 use App\Http\Controllers\User\TestingServicesController;
-use App\Http\Controllers\Admin\KunjunganController;
-use App\Http\Controllers\User\KunjunganUserController;
-use App\Http\Controllers\User\TrackingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -17,71 +14,87 @@ use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\GaleriLaboratoriumController;
-use App\Http\Controllers\Admin\JadwalController;
-use App\Http\Controllers\Admin\JenisPengujianController;
-use App\Http\Controllers\Admin\PengujianController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+// Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/equipment', [HomeController::class, 'equipment'])->name('equipment');
 Route::get('/services', [HomeController::class, 'services'])->name('services');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// Articles
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
 
+// Staff
 Route::get('/staff', [StaffController::class, 'index'])->name('staff');
 
+// Facilities
 Route::get('/facilities', [FacilitiesController::class, 'index'])->name('facilities');
 
+// Services - Equipment Loan
 Route::prefix('services/equipment-loan')->name('equipment.')->group(function () {
-    Route::get('/', [EquipmentLoanController::class, 'index'])->name('loan');
-    Route::get('/form', [EquipmentLoanController::class, 'form'])->name('loan.form');
-    Route::post('/submit', [EquipmentLoanController::class, 'submit'])->name('loan.submit');
-    Route::get('/letter/{id}', [EquipmentLoanController::class, 'letter'])->name('loan.letter');
-    Route::get('/download/{id}', [EquipmentLoanController::class, 'download'])->name('loan.download');
-    Route::get('/{id}', [EquipmentLoanController::class, 'show'])->name('detail');
-    Route::post('/{id}/request', [EquipmentLoanController::class, 'requestLoan'])->name('request');
+    Route::get('/', [EquipmentLoanController::class, 'index'])->name('loan');           // Pilihan alat (langsung)
+    Route::get('/tracking', [EquipmentLoanController::class, 'tracking'])->name('loan.tracking'); // Tracking
+    Route::get('/form', [EquipmentLoanController::class, 'form'])->name('loan.form');   // Formulir
+    Route::post('/submit', [EquipmentLoanController::class, 'submit'])->name('loan.submit'); // Submit
+    Route::get('/letter/{id}', [EquipmentLoanController::class, 'letter'])->name('loan.letter'); // Surat
+    Route::get('/download/{id}', [EquipmentLoanController::class, 'download'])->name('loan.download'); // Download
+    // Route::get('/enhanced', [EquipmentLoanController::class, 'enhanced'])->name('loan.enhanced'); // Formulir lengkap
+    Route::get('/{id}', [EquipmentLoanController::class, 'show'])->name('detail');      // Detail alat
+    Route::post('/{id}/request', [EquipmentLoanController::class, 'requestLoan'])->name('request'); // Request lama
 });
 
+// Services - Testing Services
 Route::prefix('services/testing')->name('testing.')->group(function () {
     Route::get('/', [TestingServicesController::class, 'index'])->name('services');
     Route::get('/{id}', [TestingServicesController::class, 'show'])->name('detail');
     Route::post('/{id}/request', [TestingServicesController::class, 'requestTest'])->name('request');
 });
 
-Route::post('/equipment-loan/request', [EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
+Route::post('/equipment-loan/request', [App\Http\Controllers\User\EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
+Route::get('/loans/tracking/{tracking_code?}', [\App\Http\Controllers\User\EquipmentLoanController::class, 'tracking'])->name('loans.tracking');
 
-Route::get('/services/testing', [TestingServicesController::class, 'index'])->name('pengujian.index');
-Route::post('/services/testing', [TestingServicesController::class, 'store'])->name('pengujian.store');
+// Layanan Pengujian (User)
+Route::get('/services/testing', [App\Http\Controllers\User\TestingServicesController::class, 'index'])->name('pengujian.index');
+Route::post('/services/testing', [App\Http\Controllers\User\TestingServicesController::class, 'store'])->name('pengujian.store');
 
+// Layanan Kunjungan (User)
+Route::get('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'index'])->name('kunjungan.index');
+Route::post('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'store'])->name('kunjungan.store');
+Route::get('/services/visit', [App\Http\Controllers\User\KunjunganController::class, 'form'])->name('kunjungan.form');
 
-Route::prefix('services/visits')->name('user.kunjungan.')->group(function () {
-    Route::get('/', [KunjunganUserController::class, 'form'])->name('form');
-    Route::post('/', [KunjunganUserController::class, 'store'])->name('store');
-    Route::get('/success', [KunjunganUserController::class, 'success'])->name('success');
-    Route::put('/{kunjungan}/cancel', [KunjunganUserController::class, 'cancel'])->name('cancel');
-});
-
-Route::get('/jadwal/get-available-sessions', [JadwalController::class, 'getAvailableSessions'])->name('jadwal.available-sessions')->middleware(['web', 'throttle:60,1']);
-
-Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking');
-Route::post('/tracking/cancel', [TrackingController::class, 'cancel'])->name('tracking.cancel');
-
+// Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Login routes (no middleware)
     Route::get('/login', [AdminController::class, 'login'])->name('login');
     Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate');
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
+    // Protected admin routes
     Route::middleware('admin')->group(function () {
+        // Dashboard
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
+        // About/Laboratory Profile Management
         Route::prefix('about')->name('about.')->group(function () {
             Route::get('/', [AboutController::class, 'index'])->name('index');
             Route::get('/edit', [AboutController::class, 'edit'])->name('edit');
             Route::put('/update', [AboutController::class, 'update'])->name('update');
         });
 
+        // Article Management
         Route::prefix('articles')->name('articles.')->group(function () {
             Route::get('/', [AdminArticleController::class, 'index'])->name('index');
             Route::get('/create', [AdminArticleController::class, 'create'])->name('create');
@@ -91,6 +104,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}', [AdminArticleController::class, 'destroy'])->name('destroy');
         });
 
+        // Equipment Management
         Route::prefix('equipment')->name('equipment.')->group(function () {
             Route::get('/', [EquipmentController::class, 'index'])->name('index');
             Route::get('/create', [EquipmentController::class, 'create'])->name('create');
@@ -100,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}', [EquipmentController::class, 'destroy'])->name('destroy');
         });
 
+        // Loan Management
         Route::prefix('loans')->name('loans.')->group(function () {
             Route::get('/', [LoanController::class, 'index'])->name('index');
             Route::get('/pending', [LoanController::class, 'pending'])->name('pending');
@@ -107,12 +122,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/completed', [LoanController::class, 'completed'])->name('completed');
             Route::get('/rejected', [LoanController::class, 'rejected'])->name('rejected');
             Route::get('/{id}', [LoanController::class, 'show'])->name('show');
-            Route::put('/{id}/status', [LoanController::class, 'updateStatus'])->name('updateStatus');
             Route::get('/{id}/whatsapp-preview', [LoanController::class, 'whatsappPreview'])->name('whatsapp-preview');
-            Route::post('/{id}/confirm', [LoanController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate');
+            Route::put('/{id}/status', [LoanController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/{id}/confirm-status', [LoanController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate');
             Route::delete('/{id}', [LoanController::class, 'destroy'])->name('destroy');
         });
 
+        // Staff Management
         Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('/', [AdminStaffController::class, 'index'])->name('index');
             Route::get('/create', [AdminStaffController::class, 'create'])->name('create');
@@ -122,40 +138,38 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}', [AdminStaffController::class, 'destroy'])->name('destroy');
         });
 
+        // Jenis Pengujian Management
         Route::prefix('jenis-pengujian')->name('jenis-pengujian.')->group(function () {
-            Route::get('/', [JenisPengujianController::class, 'index'])->name('index');
-            Route::get('/create', [JenisPengujianController::class, 'create'])->name('create');
-            Route::post('/', [JenisPengujianController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [JenisPengujianController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [JenisPengujianController::class, 'update'])->name('update');
-            Route::delete('/{id}', [JenisPengujianController::class, 'destroy'])->name('destroy');
+            Route::get('/', [App\Http\Controllers\Admin\JenisPengujianController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\JenisPengujianController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\JenisPengujianController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [App\Http\Controllers\Admin\JenisPengujianController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [App\Http\Controllers\Admin\JenisPengujianController::class, 'update'])->name('update');
+            Route::delete('/{id}', [App\Http\Controllers\Admin\JenisPengujianController::class, 'destroy'])->name('destroy');
         });
 
+        // Pengujian Management
         Route::prefix('pengujian')->name('pengujian.')->group(function () {
-            Route::get('/', [PengujianController::class, 'index'])->name('index');
-            Route::get('/create', [PengujianController::class, 'create'])->name('create');
-            Route::post('/', [PengujianController::class, 'store'])->name('store');
-            Route::get('/{id}', [PengujianController::class, 'show'])->name('show');
-            Route::get('/{id}/edit', [PengujianController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [PengujianController::class, 'update'])->name('update');
-            Route::delete('/{id}', [PengujianController::class, 'destroy'])->name('destroy');
-            Route::post('/{id}/approve', [PengujianController::class, 'approve'])->name('approve');
-            Route::post('/{id}/reject', [PengujianController::class, 'reject'])->name('reject');
+            Route::get('/', [App\Http\Controllers\Admin\PengujianController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\PengujianController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\PengujianController::class, 'store'])->name('store');
+            Route::get('/{id}', [App\Http\Controllers\Admin\PengujianController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [App\Http\Controllers\Admin\PengujianController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [App\Http\Controllers\Admin\PengujianController::class, 'update'])->name('update');
+            Route::delete('/{id}', [App\Http\Controllers\Admin\PengujianController::class, 'destroy'])->name('destroy');
+            Route::post('/{id}/approve', [\App\Http\Controllers\Admin\PengujianController::class, 'approve'])->name('approve');
+            Route::post('/{id}/reject', [\App\Http\Controllers\Admin\PengujianController::class, 'reject'])->name('reject');
         });
 
-       Route::prefix('kunjungan')->name('kunjungan.')->group(function () {
-    Route::get('/', [KunjunganController::class, 'index'])->name('index');
-    Route::get('/pending', [KunjunganController::class, 'pending'])->name('pending');
-    Route::get('/approved', [KunjunganController::class, 'approved'])->name('approved');
-    Route::get('/completed', [KunjunganController::class, 'completed'])->name('completed');
-    Route::get('/rejected', [KunjunganController::class, 'rejected'])->name('rejected');
-    Route::get('/{id}', [KunjunganController::class, 'show'])->name('show');
-    Route::put('/{id}/status', [KunjunganController::class, 'updateStatus'])->name('updateStatus');
-    Route::delete('/{id}', [KunjunganController::class, 'destroy'])->name('destroy');
-    Route::get('/{id}/whatsapp-preview', [App\Http\Controllers\Admin\KunjunganController::class, 'whatsappPreview'])->name('whatsapp-preview'); // Changed to kunjungan.whatsapp-preview
-    Route::post('/{id}/confirm-status', [App\Http\Controllers\Admin\KunjunganController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate'); // Changed to kunjungan.confirmStatusUpdate
-});
+        // Kunjungan Management
+        Route::prefix('kunjungan')->name('kunjungan.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\KunjunganController::class, 'index'])->name('index');
+            Route::get('/{id}', [App\Http\Controllers\Admin\KunjunganController::class, 'show'])->name('show');
+            Route::put('/{id}/status', [App\Http\Controllers\Admin\KunjunganController::class, 'updateStatus'])->name('updateStatus');
+            Route::delete('/{id}', [App\Http\Controllers\Admin\KunjunganController::class, 'destroy'])->name('destroy');
+        });
 
+        // Galeri Laboratorium Management
         Route::prefix('galeri')->name('galeri.')->group(function () {
             Route::get('/', [GaleriLaboratoriumController::class, 'index'])->name('index');
             Route::get('/create', [GaleriLaboratoriumController::class, 'create'])->name('create');
@@ -165,16 +179,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}', [GaleriLaboratoriumController::class, 'destroy'])->name('destroy');
         });
 
+        // Jadwal Management
         Route::prefix('jadwal')->name('jadwal.')->group(function () {
-            Route::get('/', [JadwalController::class, 'index'])->name('index');
-            Route::get('/create', [JadwalController::class, 'create'])->name('create');
-            Route::post('/', [JadwalController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [JadwalController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [JadwalController::class, 'update'])->name('update');
-            Route::delete('/{id}', [JadwalController::class, 'destroy'])->name('destroy');
-            Route::get('/calendar-data', [JadwalController::class, 'calendarData'])->name('calendar-data');
-            Route::get('/schedule-settings', [JadwalController::class, 'scheduleSettings'])->name('schedule-settings');
-            Route::post('/toggle-availability', [JadwalController::class, 'toggleAvailability'])->name('toggle-availability');
+            Route::get('/', [\App\Http\Controllers\Admin\JadwalController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\Admin\JadwalController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\Admin\JadwalController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [\App\Http\Controllers\Admin\JadwalController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [\App\Http\Controllers\Admin\JadwalController::class, 'update'])->name('update');
+            Route::delete('/{id}', [\App\Http\Controllers\Admin\JadwalController::class, 'destroy'])->name('destroy');
         });
     });
 });
+

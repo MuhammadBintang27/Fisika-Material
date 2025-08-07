@@ -9,15 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kunjungan', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('instansi');
+            $table->uuid('id')->primary();
+            $table->string('tracking_code')->unique();
+            $table->string('namaPengunjung');
             $table->string('noHp');
-            $table->string('email')->nullable();
+            $table->string('namaInstansi');
             $table->text('tujuan');
-            $table->date('tanggal_kunjungan');
-            $table->integer('jumlah_peserta');
-            $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED'])->default('PENDING');
+            $table->integer('jumlahPengunjung');
+            $table->enum('status', ['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED'])->default('PENDING');
+            $table->string('suratPengajuan')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

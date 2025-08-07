@@ -65,4 +65,17 @@ class Peminjaman extends Model
 
         return $labels[$this->user_type] ?? $this->user_type;
     }
+    // Methods
+    public function canBeCancelled()
+    {
+        return in_array($this->status, ['PENDING']);
+    }
+    public function canBeApproved()
+    {
+        return in_array($this->status, ['PENDING']);
+    }
+    public function canBeCompleted()
+    {
+        return in_array($this->status, ['PROCESSING']);
+    }
 } 

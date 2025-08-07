@@ -184,115 +184,95 @@
 
     <div class="content">
         <!-- Applicant Information -->
-        <div class="section">
-            <div class="section-title">Saya yang bertanda tangan di bawah ini sebagai {{ $loan->user_type === 'dosen' ? 'Dosen' : ($loan->user_type === 'mahasiswa' ? 'Mahasiswa' : 'Pihak Luar') }} dari {{ $loan->user_type === 'pihak-luar' ? $loan->instansi : 'Universitas Syiah Kuala' }}:</div>
-            
-            <div class="applicant-info">
-                <div class="applicant-row">
-                    <div class="applicant-label">Nama:</div>
-                    <div class="applicant-value">{{ $loan->namaPeminjam }}</div>
-                </div>
-                <div class="applicant-row">
-                    <div class="applicant-label">{{ $loan->user_type === 'dosen' ? 'NIP' : ($loan->user_type === 'mahasiswa' ? 'NIM' : 'NIP/ID') }}:</div>
-                    <div class="applicant-value">{{ $loan->nip_nim }}</div>
-                </div>
-                @if($loan->user_type === 'mahasiswa')
-                <div class="applicant-row">
-                    <div class="applicant-label">Dosen Pembimbing:</div>
-                    <div class="applicant-value">{{ $loan->supervisor_name }} ({{ $loan->supervisor_nip }})</div>
-                </div>
-                @endif
-                @if($loan->user_type === 'pihak-luar')
-                <div class="applicant-row">
-                    <div class="applicant-label">Jabatan:</div>
-                    <div class="applicant-value">{{ $loan->jabatan }}</div>
-                </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- Equipment Request -->
-        <div class="section">
-            <div class="section-title">Mohon diberikan izin kepada {{ $loan->user_type === 'dosen' ? 'dosen' : ($loan->user_type === 'mahasiswa' ? 'mahasiswa' : 'pihak luar') }} tersebut agar dapat memakai peralatan sebagai berikut:</div>
-            
-            <table class="equipment-table">
+        <div class="section" style="margin-bottom: 10px;">
+            <div style="margin-bottom: 8px;">Saya yang bertanda tangan di bawah ini sebagai Dosen Pembimbing/Pimpinan Instansi<br>dari mahasiswa/staf/peneliti:</div>
+            <table style="width:100%; border-collapse:collapse; margin-bottom: 10px;">
                 <thead>
                     <tr>
-                        <th>No.</th>
-                        <th>Nama Alat</th>
-                        <th>Spesifikasi</th>
-                        <th>Jumlah</th>
+                        <th style="border:1px solid #000; padding:4px; width:60%;">Nama</th>
+                        <th style="border:1px solid #000; padding:4px; width:40%;">{{ $loan->user_type === 'dosen' ? 'NIP' : ($loan->user_type === 'mahasiswa' ? 'NIM' : 'NIP/ID') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border:1px solid #000; padding:4px;">{{ $loan->namaPeminjam }}</td>
+                        <td style="border:1px solid #000; padding:4px;">{{ $loan->nip_nim }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section" style="margin-bottom: 10px;">
+            Mohon diberikan izin kepada mahasiswa/staf/peneliti tersebut agar dapat memakai peralatan sebagai berikut:
+            <table style="width:100%; border-collapse:collapse; margin-top: 8px;">
+                <thead>
+                    <tr>
+                        <th style="border:1px solid #000; padding:4px; width:5%;">No.</th>
+                        <th style="border:1px solid #000; padding:4px; width:35%;">Nama Alat</th>
+                        <th style="border:1px solid #000; padding:4px; width:40%;">Spesifikasi</th>
+                        <th style="border:1px solid #000; padding:4px; width:20%;">Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($loan->items as $index => $item)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->alat->nama }}</td>
-                        <td>{{ $item->alat->deskripsi }}</td>
-                        <td>{{ $item->jumlah }} unit</td>
+                        <td style="border:1px solid #000; padding:4px;">{{ $index + 1 }}</td>
+                        <td style="border:1px solid #000; padding:4px;">{{ $item->alat->nama }}</td>
+                        <td style="border:1px solid #000; padding:4px;">{{ $item->alat->deskripsi }}</td>
+                        <td style="border:1px solid #000; padding:4px;">{{ $item->jumlah }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        <!-- Research Details -->
-        <div class="research-details">
-            <div class="section-title">Peralatan tersebut digunakan untuk melaksanakan penelitian dengan judul:</div>
-            <div style="font-weight: bold; margin: 10px 0;">{{ $loan->judul_penelitian }}</div>
-            @if($loan->deskripsi_penelitian)
-            <div style="margin: 10px 0;">{{ $loan->deskripsi_penelitian }}</div>
-            @endif
-            <div style="margin-top: 15px;">
-                <strong>Di Laboratorium Fisika Material dan Energi Departemen Fisika Universitas Syiah Kuala pada:</strong><br>
-                Tanggal: {{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d F Y') }}<br>
-                Waktu: {{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('H:i') }} - {{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('H:i') }}<br>
-                Durasi: {{ $loan->durasi_jam }} jam
+        <div class="section" style="margin-bottom: 10px;">
+            Peralatan tersebut digunakan untuk melaksanakan penelitian dengan judul: <span>{{ $loan->judul_penelitian ?? '........' }}</span> di Laboratorium Fisika Material dan Energi Departemen Fisika Universitas Syiah Kuala pada:
+            <div style="display: flex; gap: 40px; margin-left: 30px; margin-top: 5px;">
+                <div>Tanggal/Tahun : {{ $loan->tanggal_pinjam ? \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d F Y') : '' }}</div>
+                <div>Waktu : {{ $loan->tanggal_pinjam ? \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('H:i') : '' }}</div>
             </div>
         </div>
-
-        <!-- Responsibility Clause -->
-        <div class="responsibility-clause">
-            <strong>Segala sesuatu yang menyebabkan kerugian akan menjadi tanggung jawab {{ $loan->user_type === 'dosen' ? 'dosen' : ($loan->user_type === 'mahasiswa' ? 'mahasiswa' : 'peminjam') }} yang bersangkutan.</strong>
+        <div class="section" style="margin-bottom: 10px;">
+            Segala sesuatu yang menyebabkan kerugian akan menjadi tanggung jawab mahasiswa yang bersangkutan.
         </div>
-
-        <div style="text-align: center; margin: 30px 0;">
+        <div class="section" style="margin-bottom: 10px;">
             Demikian surat ini dibuat, untuk dipergunakan sebagaimana mestinya.
         </div>
-
-        <div class="date-location">
-            Darussalam, {{ \Carbon\Carbon::parse($loan->created_at)->format('d F Y') }}
+        <div class="section" style="margin-bottom: 30px; text-align:center;">
+            Darussalam, {{ $loan->created_at ? \Carbon\Carbon::parse($loan->created_at)->format('d F Y') : 'tanggal, bulan, tahun' }}<br>
+            <br>
+            Menyetujui,
+        </div>
+        <div style="display: flex; justify-content: center; gap: 60px; margin-top: 40px;">
+            <div style="text-align: center; width: 300px;">
+                Kepala Laboratorium Fisika Material dan Energi,<br><br><br><br>
+                <strong>Saifullah, S. Si, M. Si</strong><br>
+                1100023129401912
+            </div>
+            <div style="text-align: center; width: 300px;">
+                Pembimbing Penelitian/Pimpinan Instansi,<br><br><br><br>
+                <strong>
+                    @if($loan->user_type === 'mahasiswa')
+                        {{ $loan->supervisor_name ?? '-' }}
+                    @elseif($loan->user_type === 'pihak-luar')
+                        {{ $loan->pimpinan_instansi ?? '-' }}
+                    @else
+                        {{ $loan->namaPeminjam }}
+                    @endif
+                </strong><br>
+                @if($loan->user_type === 'mahasiswa')
+                    {{ $loan->supervisor_nip ?? '-' }}
+                @elseif($loan->user_type === 'pihak-luar')
+                    {{ $loan->pimpinan_nip ?? '-' }}
+                @else
+                    {{ $loan->nip_nim }}
+                @endif
+            </div>
         </div>
     </div>
 
     <!-- Signature Section -->
-    <div class="signature-section">
-        <div class="signature-box">
-            <div>Menyetujui,</div>
-            <div>Kepala Laboratorium Fisika Material dan Energi,</div>
-            <div class="signature-line">
-                <br><br>
-                <strong>Nama Kepala Laboratorium</strong><br>
-                NIP.
-            </div>
-        </div>
-        
-        <div class="signature-box">
-            @if($loan->user_type === 'mahasiswa')
-            <div>Pembimbing Penelitian,</div>
-            @elseif($loan->user_type === 'pihak-luar')
-            <div>Pimpinan Instansi,</div>
-            @else
-            <div>Pemohon,</div>
-            @endif
-            <div class="signature-line">
-                <br><br>
-                <strong>{{ $loan->namaPeminjam }}</strong><br>
-                {{ $loan->user_type === 'dosen' ? 'NIP' : ($loan->user_type === 'mahasiswa' ? 'NIM' : 'NIP/ID') }}: {{ $loan->nip_nim }}
-            </div>
-        </div>
-    </div>
+    {{-- Hapus seluruh blok tanda tangan di bawah surat --}}
+    {{-- <div class="signature-section"> ... </div> --}}
 
     <!-- Status Information -->
     <!-- <div style="margin-top: 50px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">

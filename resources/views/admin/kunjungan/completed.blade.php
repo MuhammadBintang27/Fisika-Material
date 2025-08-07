@@ -1,14 +1,14 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Manajemen Kunjungan')
+@section('title', 'Kunjungan Selesai')
 
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen Kunjungan</h1>
-            <p class="text-gray-600">Kelola permintaan kunjungan laboratorium</p>
+            <h1 class="text-2xl font-bold text-gray-900">Kunjungan Selesai</h1>
+            <p class="text-gray-600">Kelola permintaan kunjungan laboratorium yang sudah selesai</p>
         </div>
         <div class="flex items-center space-x-2">
             <a href="{{ route('admin.kunjungan.pending') }}" 
@@ -21,7 +21,7 @@
 
     <!-- Search Form -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <form method="GET" action="{{ route('admin.kunjungan.index') }}" class="flex items-center space-x-4">
+        <form method="GET" action="{{ route('admin.kunjungan.completed') }}" class="flex items-center space-x-4">
             <div class="flex-1">
                 <input type="text" name="search" 
                        value="{{ request()->input('search') }}"
@@ -39,23 +39,23 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div class="flex items-center space-x-4">
             <a href="{{ route('admin.kunjungan.index') }}" 
-               class="px-4 py-2 rounded-lg font-medium {{ request()->routeIs('admin.kunjungan.index') ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
                 Semua
             </a>
             <a href="{{ route('admin.kunjungan.pending') }}" 
-               class="px-4 py-2 rounded-lg font-medium {{ request()->routeIs('admin.kunjungan.pending') ? 'bg-yellow-100 text-yellow-700' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
                 Pending
             </a>
             <a href="{{ route('admin.kunjungan.approved') }}" 
-               class="px-4 py-2 rounded-lg font-medium {{ request()->routeIs('admin.kunjungan.approved') ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
                 Disetujui
             </a>
             <a href="{{ route('admin.kunjungan.completed') }}" 
-               class="px-4 py-2 rounded-lg font-medium {{ request()->routeIs('admin.kunjungan.completed') ? 'bg-gray-100 text-gray-700' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-4 py-2 rounded-lg font-medium bg-gray-100 text-gray-700">
                 Selesai
             </a>
             <a href="{{ route('admin.kunjungan.rejected') }}" 
-               class="px-4 py-2 rounded-lg font-medium {{ request()->routeIs('admin.kunjungan.rejected') ? 'bg-red-100 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
                 Ditolak
             </a>
         </div>
@@ -95,23 +95,16 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
-                                            <div>{{ $visit->jadwal ? \Carbon\Carbon::parse($visit->jadwal->tanggal)->format('d M Y') : 'Tidak ada jadwal' }}</div>
+                                            <div>{{ \Carbon\Carbon::parse($visit->jadwal->tanggal)->format('d M Y') }}</div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
-                                            <div>{{ $visit->jadwal ? "{$visit->jadwal->jamMulai} - {$visit->jadwal->jamSelesai}" : 'Tidak ada jadwal' }}</div>
+                                            <div>{{ $visit->jadwal->jam_mulai }} - {{ $visit->jadwal->jam_selesai }}</div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full
-                                            @if($visit->status === 'PENDING') bg-yellow-100 text-yellow-800
-                                            @elseif($visit->status === 'PROCESSING') bg-green-100 text-green-800
-                                            @elseif($visit->status === 'CANCELLED') bg-red-100 text-red-700
-                                            @else bg-gray-100 text-gray-800
-                                            @endif">
-                                            {{ $visit->status_label }}
-                                        </span>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">{{ $visit->status_label }}</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center space-x-2">

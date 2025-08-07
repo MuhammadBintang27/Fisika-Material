@@ -124,7 +124,8 @@ class EquipmentLoanController extends Controller
 
         return view('user.services.loans.success', [
             'tracking_code' => $trackingCode,
-            'tracking_link' => route('equipment.loan.tracking', $trackingCode)
+            'tracking_link' => route('tracking', ['type' => 'peminjaman', 'tracking_code' => $peminjaman->tracking_code])
+
         ]);
     } catch (\Illuminate\Validation\ValidationException $e) {
         \Log::warning('Validation failed', ['errors' => $e->errors()]);

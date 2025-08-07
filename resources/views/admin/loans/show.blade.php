@@ -12,7 +12,7 @@
                 <p class="text-gray-600">Informasi lengkap peminjaman alat</p>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('equipment.loan.tracking') }}?nama={{ urlencode($loan->namaPeminjam) }}&nip_nim={{ urlencode($loan->nip_nim) }}" 
+                <a href="{{ route('tracking') }}?nama={{ urlencode($loan->namaPeminjam) }}&nip_nim={{ urlencode($loan->nip_nim) }}" 
                    target="_blank"
                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-external-link-alt mr-2"></i>

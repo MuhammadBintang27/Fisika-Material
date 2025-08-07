@@ -87,6 +87,11 @@
                     <i class="fas fa-calendar-check w-5 h-5 mr-3"></i>
                     <span>Kunjungan</span>
                 </a>
+                <a href="{{ route('admin.jadwal.index') }}" 
+                   class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-blue-50 text-blue-600' : '' }}">
+                    <i class="fas fa-calendar-alt w-5 h-5 mr-3"></i>
+                    <span>Jadwal</span>
+                </a>
 
                 <a href="{{ route('admin.pengujian.index') }}" 
                    class="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors {{ request()->routeIs('admin.pengujian.*') ? 'bg-blue-50 text-blue-600' : '' }}">

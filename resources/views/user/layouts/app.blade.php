@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Laboratorium Fisika Dasar')</title>
     <meta name="description" content="Laboratorium Fisika Dasar - Fasilitas unggulan untuk penelitian dan pendidikan fisika dengan teknologi terdepan">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Preconnect for faster font loading -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link rel="dns-prefetch" href="https://fonts.bunny.net">
@@ -35,6 +35,12 @@
                 }
             }
         }
+        
+    </script>
+    <script>
+        // CSRF token setup for AJAX
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        window.axios = { defaults: { headers: { 'X-CSRF-TOKEN': token } } };
     </script>
 </head>
 <body>

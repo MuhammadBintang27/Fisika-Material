@@ -1,12 +1,12 @@
 @extends('user.layouts.app')
 
-@section('title', 'Pengajuan Berhasil - Laboratorium Fisika Material dan Energi')
+@section('title', 'Pengajuan Kunjungan Berhasil - Laboratorium Fisika Material dan Energi')
 
 @section('content')
 <!-- Hero Section -->
 <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('/images/hero.jpg') }}" alt="Pengajuan Berhasil" class="w-full h-full object-cover">
+        <img src="{{ asset('/images/hero.jpg') }}" alt="Pengajuan Kunjungan Berhasil" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
@@ -22,7 +22,7 @@
                     <li>
                         <div class="flex items-center">
                             <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
-                            <span class="text-blue-200">Peminjaman Alat</span>
+                            <span class="text-blue-200">Kunjungan Laboratorium</span>
                         </div>
                     </li>
                     <li>
@@ -41,7 +41,7 @@
                 <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Berhasil</span>
             </h1>
             <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
-                Permohonan peminjaman alat Anda telah diterima!
+                Permohonan kunjungan laboratorium Anda telah diterima!
             </p>
         </div>
     </div>
@@ -54,10 +54,11 @@
             <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-check-circle text-green-600 text-3xl"></i>
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">Pengajuan Peminjaman Berhasil!</h3>
-            <p class="text-gray-600 mb-4">Terima kasih telah mengajukan peminjaman alat di Laboratorium Fisika Material dan Energi.</p>
-            <p class="text-gray-600 mb-6">Gunakan kode tracking berikut untuk memantau status peminjaman Anda:</p>
-            
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Pengajuan Kunjungan Berhasil!</h3>
+            <p class="text-gray-600 mb-4">
+                Terima kasih telah mengajukan kunjungan di Laboratorium Fisika Material dan Energi. 
+                Permohonan Anda sedang diproses dan Anda dapat melacak statusnya menggunakan kode tracking berikut:
+            </p>
             <div class="bg-gray-100 rounded-xl p-4 mb-6">
                 <p class="text-lg font-semibold text-gray-900">Kode Tracking: {{ $tracking_code }}</p>
                 <div class="mt-4 flex justify-center items-center space-x-2">
@@ -68,18 +69,17 @@
                     </button>
                 </div>
             </div>
-            
             <p class="text-sm text-gray-500 mb-6">
                 <i class="fas fa-info-circle mr-1"></i>
-                Simpan kode tracking atau bookmark link ini untuk memeriksa perkembangan status peminjaman Anda kapan saja.
+                Simpan kode tracking atau bookmark link ini untuk memeriksa perkembangan status kunjungan Anda kapan saja.
             </p>
             
             <div class="flex justify-center space-x-4">
                 <a href="{{ $tracking_link }}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
                     <i class="fas fa-search mr-2"></i>Cek Status Sekarang
                 </a>
-                <a href="{{ route('equipment.loan') }}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Peminjaman
+                <a href="{{ route('user.kunjungan.form') }}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Formulir
                 </a>
             </div>
         </div>

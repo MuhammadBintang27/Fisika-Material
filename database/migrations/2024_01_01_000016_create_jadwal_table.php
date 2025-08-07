@@ -9,13 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jadwal', function (Blueprint $table) {
-            $table->id();
-            $table->string('judul');
-            $table->text('deskripsi');
-            $table->datetime('tanggal_mulai');
-            $table->datetime('tanggal_selesai');
-            $table->string('lokasi')->nullable();
-            $table->string('status')->default('AKTIF');
+            $table->uuid('id')->primary();
+            $table->date('tanggal');
+            $table->time('jamMulai');
+            $table->time('jamSelesai');
+            $table->boolean('isActive')->default(true);
+            $table->uuid('kunjunganId')->nullable();
+            $table->foreign('kunjunganId')->references('id')->on('kunjungan')->onDelete('set null');
             $table->timestamps();
         });
     }
