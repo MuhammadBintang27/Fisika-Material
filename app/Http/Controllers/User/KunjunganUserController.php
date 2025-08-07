@@ -19,66 +19,68 @@ class KunjunganUserController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'namaPengunjung' => 'required|string|max:255',
-            'noHp' => 'required|string|max:20',
-            'namaInstansi' => 'required|string|max:255',
-            'tujuan' => 'required|string',
-            'tanggal' => 'required|date|after_or_equal:' . Carbon::today()->toDateString(),
-            'jamMulai' => 'required|date_format:H:i:s',
-            'jamSelesai' => 'required|date_format:H:i:s|after:jamMulai',
-            'jumlahPengunjung' => 'required|integer|min:1|max:50',
-            'suratPengajuan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
+{
+    $request->validate([
+        'namaPengunjung' => 'required|string|max:255',
+        'noHp' => 'required|string|max:20',
+        'namaInstansi' => 'required|string|max:255',
+        'tujuan' => 'required|string',
+        'tanggal' => 'required|date|after_or_equal:' . Carbon::today()->toDateString(),
+        'jamMulai' => 'required|date_format:H:i:s',
+        'jamSelesai' => 'required|date_format:H:i:s|after:jamMulai',
+        'jumlahPengunjung' => 'required|integer|min:1|max:50',
+        'suratPengajuan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    ]);
 
-        try {
-            return DB::transaction(function () use ($request) {
-                $startTime = Carbon::parse($request->jamMulai);
-                $endTime = Carbon::parse($request->jamSelesai);
-                if ($endTime->lte($startTime)) {
-                    return back()->withErrors(['jamSelesai' => 'Jam selesai harus setelah jam mulai.'])->withInput();
-                }
+    try {
+        return DB::transaction(function () use ($request) {
+            $startTime = Carbon::parse($request->jamMulai);
+            $endTime = Carbon::parse($request->jamSelesai);
+            if ($endTime->lte($startTime)) {
+                Log::warning('Invalid time range', ['jamMulai' => $request->jamMulai, 'jamSelesai' => $request->jamSelesai]);
+                return back()->withErrors(['jamSelesai' => 'Jam selesai harus setelah jam mulai.'])->withInput();
+            }
 
-                $selectedSchedule = Jadwal::where('tanggal', $request->tanggal)
-                    ->where('jamMulai', $request->jamMulai)
-                    ->where('jamSelesai', $request->jamSelesai)
-                    ->where('isActive', true)
-                    ->whereNull('kunjunganId')
-                    ->lockForUpdate()
-                    ->first();
+            $selectedSchedule = Jadwal::where('tanggal', $request->tanggal)
+                ->where('jamMulai', $request->jamMulai)
+                ->where('jamSelesai', $request->jamSelesai)
+                ->where('isActive', true)
+                ->whereNull('kunjunganId')
+                ->lockForUpdate()
+                ->first();
 
-                if (!$selectedSchedule) {
-                    return back()->withErrors(['jamMulai' => 'Jadwal tidak tersedia untuk waktu yang dipilih.'])->withInput();
-                }
+            if (!$selectedSchedule) {
+                Log::warning('No available schedule', ['tanggal' => $request->tanggal, 'jamMulai' => $request->jamMulai, 'jamSelesai' => $request->jamSelesai]);
+                return back()->withErrors(['jamMulai' => 'Jadwal tidak tersedia untuk waktu yang dipilih.'])->withInput();
+            }
 
-                $suratPath = $request->file('suratPengajuan')->store('surat-pengajuan', 'public');
+            $suratPath = $request->file('suratPengajuan')->store('surat-pengajuan', 'public');
 
-                $kunjungan = Kunjungan::create([
-                    'id' => \Illuminate\Support\Str::uuid(),
-                    'tracking_code' => Kunjungan::generateUniqueTrackingCode(),
-                    'namaPengunjung' => $request->namaPengunjung,
-                    'noHp' => $request->noHp,
-                    'namaInstansi' => $request->namaInstansi,
-                    'tujuan' => $request->tujuan,
-                    'jumlahPengunjung' => $request->jumlahPengunjung,
-                    'status' => 'PENDING',
-                    'suratPengajuan' => $suratPath,
-                    'jadwal_id' => $selectedSchedule->id,
-                ]);
+            $kunjungan = Kunjungan::create([
+                'id' => \Illuminate\Support\Str::uuid(),
+                'tracking_code' => Kunjungan::generateUniqueTrackingCode(),
+                'namaPengunjung' => $request->namaPengunjung,
+                'noHp' => $request->noHp,
+                'namaInstansi' => $request->namaInstansi,
+                'tujuan' => $request->tujuan,
+                'jumlahPengunjung' => $request->jumlahPengunjung,
+                'status' => 'PENDING',
+                'suratPengajuan' => $suratPath,
+                'jadwal_id' => $selectedSchedule->id,
+            ]);
 
-                $selectedSchedule->update(['kunjunganId' => $kunjungan->id]);
-                Log::info("Kunjungan created: ID={$kunjungan->id}, TrackingCode={$kunjungan->tracking_code}, Date={$request->tanggal}, User=" . (auth()->id() ?? 'guest') . ", IP={$request->ip()}");
-                return redirect()->route('kunjungan.success', [
-                    'tracking_code' => $kunjungan->tracking_code,
-                    'tracking_link' => route('tracking', ['type' => 'kunjungan', 'tracking_code' => $kunjungan->tracking_code])
-                ])->with('success', 'Pengajuan kunjungan berhasil dikirim!');
-            });
-        } catch (\Exception $e) {
-            Log::error("Error creating kunjungan: " . $e->getMessage() . ", User=" . (auth()->id() ?? 'guest') . ", IP={$request->ip()}");
-            return back()->with('error', 'Gagal mengajukan kunjungan: ' . $e->getMessage())->withInput();
-        }
+            $selectedSchedule->update(['kunjunganId' => $kunjungan->id]);
+            Log::info("Kunjungan created: ID={$kunjungan->id}, TrackingCode={$kunjungan->tracking_code}, Date={$request->tanggal}, User=" . (auth()->id() ?? 'guest') . ", IP={$request->ip()}");
+            return redirect()->route('user.kunjungan.success', [
+                'tracking_code' => $kunjungan->tracking_code,
+                'tracking_link' => route('tracking', ['type' => 'kunjungan', 'tracking_code' => $kunjungan->tracking_code])
+            ])->with('success', 'Pengajuan kunjungan berhasil dikirim!');
+        });
+    } catch (\Exception $e) {
+        Log::error("Error creating kunjungan: " . $e->getMessage() . ", User=" . (auth()->id() ?? 'guest') . ", IP={$request->ip()}, Input=" . json_encode($request->all()));
+        return back()->with('error', 'Gagal mengajukan kunjungan: ' . $e->getMessage())->withInput();
     }
+}
 
     public function success(Request $request)
     {

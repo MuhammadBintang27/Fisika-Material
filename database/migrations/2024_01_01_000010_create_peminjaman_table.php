@@ -24,7 +24,7 @@ return new class extends Migration
             $table->datetime('tanggal_pinjam');
             $table->datetime('tanggal_pengembalian');
             $table->integer('durasi_jam')->nullable();
-            $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED'])->default('PENDING');
+            $table->enum('status', ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'ONGOING'])->default('PENDING');
             $table->text('notes')->nullable();
             $table->string('supervisor_name')->nullable();
             $table->string('supervisor_nip')->nullable();

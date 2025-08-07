@@ -49,6 +49,7 @@ class Peminjaman extends Model
             'PENDING' => 'Menunggu Persetujuan',
             'APPROVED' => 'Disetujui',
             'REJECTED' => 'Ditolak',
+            'ONGOING' => 'Berlangsung',
             'COMPLETED' => 'Selesai',
         ];
 

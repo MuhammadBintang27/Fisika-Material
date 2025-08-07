@@ -1,14 +1,14 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Peminjaman Disetujui')
+@section('title', 'Peminjaman Disetujui / Berlangsung')
 
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Peminjaman Disetujui</h1>
-            <p class="text-gray-600">Kelola permintaan peminjaman alat laboratorium yang sudah disetujui</p>
+            <h1 class="text-2xl font-bold text-gray-900">Peminjaman Disetujui / Berlangsung</h1>
+            <p class="text-gray-600">Kelola permintaan peminjaman alat laboratorium yang sudah disetujui atau sedang berlangsung</p>
         </div>
         <div class="flex items-center space-x-2">
             <a href="{{ route('admin.loans.pending') }}" 
@@ -48,7 +48,7 @@
             </a>
             <a href="{{ route('admin.loans.approved') }}" 
                class="px-4 py-2 rounded-lg font-medium bg-green-100 text-green-700">
-                Disetujui
+                Disetujui / Berlangsung
             </a>
             <a href="{{ route('admin.loans.completed') }}" 
                class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
@@ -130,7 +130,9 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">APPROVED</span>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full @if($loan->status === 'APPROVED') bg-green-100 text-green-800 @else bg-blue-100 text-blue-800 @endif">
+                                            {{ $loan->status === 'ONGOING' ? 'BERLANGSUNG' : 'APPROVED' }}
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center space-x-2">
@@ -173,5 +175,4 @@
     overflow: hidden;
 }
 </style>
-@endsection 
- 
+@endsection

@@ -48,7 +48,7 @@
             </a>
             <a href="{{ route('admin.loans.approved') }}" 
                class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Disetujui
+                Disetujui / Berlangsung
             </a>
             <a href="{{ route('admin.loans.completed') }}" 
                class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
@@ -173,5 +173,4 @@
     overflow: hidden;
 }
 </style>
-@endsection 
- 
+@endsection

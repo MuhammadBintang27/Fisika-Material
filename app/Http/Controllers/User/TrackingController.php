@@ -12,86 +12,92 @@ use Illuminate\Support\Facades\Validator;
 class TrackingController extends Controller
 {
     public function index(Request $request)
-    {
-        $type = $request->query('type');
-        $tracking_code = $request->query('tracking_code');
-        $loans = collect();
-        $record = null;
+{
+    $type = $request->query('type');
+    $tracking_code = $request->query('tracking_code');
+    $loans = collect();
+    $record = null;
+    $peminjaman = null;
 
-        // Validate query parameters
-        $validator = Validator::make($request->query(), [
-            'type' => 'sometimes|in:peminjaman,kunjungan',
-            'tracking_code' => 'sometimes|string|max:255',
+    // Validate query parameters
+    $validator = Validator::make($request->query(), [
+        'type' => 'sometimes|in:peminjaman,kunjungan',
+        'tracking_code' => 'sometimes|string|max:255',
+    ]);
+
+    if ($validator->fails()) {
+        Log::warning("Invalid tracking parameters", [
+            'errors' => $validator->errors()->all(),
+            'ip' => $request->ip(),
+            'query' => $request->query()
         ]);
+        return view('user.services.tracking', [
+            'loans' => collect(),
+            'record' => null,
+            'peminjaman' => null,
+        ])->withErrors(['error' => 'Jenis pengajuan atau kode tracking tidak valid.']);
+    }
 
-        if ($validator->fails()) {
-            Log::warning("Invalid tracking parameters", [
-                'errors' => $validator->errors()->all(),
-                'ip' => $request->ip(),
-                'query' => $request->query()
-            ]);
-            return view('user.services.tracking', [
-                'loans' => collect(),
-                'record' => null,
-            ])->withErrors(['error' => 'Jenis pengajuan atau kode tracking tidak valid.']);
-        }
-
-        try {
-            if ($type && $tracking_code) {
-                if ($type === 'peminjaman') {
-                    $loans = Peminjaman::with('items.alat')
-                        ->where('tracking_code', $tracking_code)
-                        ->get();
-                    if ($loans->isEmpty()) {
-                        Log::info("Tracking failed: No loans found", [
-                            'tracking_code' => $tracking_code,
-                            'type' => $type,
-                            'ip' => $request->ip()
-                        ]);
-                        return view('user.services.tracking', [
-                            'loans' => collect(),
-                            'record' => null,
-                        ])->withErrors(['error' => 'Tidak ada peminjaman ditemukan untuk kode tracking tersebut.']);
-                    }
-                } elseif ($type === 'kunjungan') {
-                    $record = Kunjungan::with('jadwal')
-                        ->where('tracking_code', $tracking_code)
-                        ->first();
-                    if (!$record) {
-                        Log::info("Tracking failed: No kunjungan found", [
-                            'tracking_code' => $tracking_code,
-                            'type' => $type,
-                            'ip' => $request->ip()
-                        ]);
-                        return view('user.services.tracking', [
-                            'loans' => collect(),
-                            'record' => null,
-                        ])->withErrors(['error' => 'Tidak ada kunjungan ditemukan untuk kode tracking tersebut.']);
-                    }
+    try {
+        if ($type && $tracking_code) {
+            if ($type === 'peminjaman') {
+                $peminjaman = Peminjaman::with('items.alat')
+                    ->where('tracking_code', $tracking_code)
+                    ->first(); // Ubah dari get() ke first() untuk satu objek
+                $loans = $peminjaman ? collect([$peminjaman]) : collect(); // Sinkronkan dengan template
+                if (!$peminjaman) {
+                    Log::info("Tracking failed: No loans found", [
+                        'tracking_code' => $tracking_code,
+                        'type' => $type,
+                        'ip' => $request->ip()
+                    ]);
+                    return view('user.services.tracking', [
+                        'loans' => collect(),
+                        'record' => null,
+                        'peminjaman' => null,
+                    ])->withErrors(['error' => 'Tidak ada peminjaman ditemukan untuk kode tracking tersebut.']);
+                }
+            } elseif ($type === 'kunjungan') {
+                $record = Kunjungan::with('jadwal')
+                    ->where('tracking_code', $tracking_code)
+                    ->first();
+                if (!$record) {
+                    Log::info("Tracking failed: No kunjungan found", [
+                        'tracking_code' => $tracking_code,
+                        'type' => $type,
+                        'ip' => $request->ip()
+                    ]);
+                    return view('user.services.tracking', [
+                        'loans' => collect(),
+                        'record' => null,
+                        'peminjaman' => null,
+                    ])->withErrors(['error' => 'Tidak ada kunjungan ditemukan untuk kode tracking tersebut.']);
                 }
             }
-
-            Log::info("Tracking request processed", [
-                'tracking_code' => $tracking_code ?? 'none',
-                'type' => $type ?? 'none',
-                'ip' => $request->ip()
-            ]);
-
-            return view('user.services.tracking', compact('loans', 'record'));
-        } catch (\Exception $e) {
-            Log::error("Error tracking", [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'tracking_code' => $tracking_code ?? 'none',
-                'type' => $type ?? 'none',
-                'ip' => $request->ip()
-            ]);
-            return view('user.services.tracking', [
-                'loans' => collect(),
-                'record' => null,
-            ])->withErrors(['error' => 'Gagal melacak pengajuan: ' . $e->getMessage()]);
         }
+
+        Log::info("Tracking request processed", [
+            'tracking_code' => $tracking_code ?? 'none',
+            'type' => $type ?? 'none',
+            'ip' => $request->ip()
+        ]);
+
+        return view('user.services.tracking', compact('loans', 'record', 'peminjaman'));
+    } catch (\Exception $e) {
+        Log::error("Error tracking", [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'tracking_code' => $tracking_code ?? 'none',
+            'type' => $type ?? 'none',
+            'ip' => $request->ip()
+        ]);
+        return view('user.services.tracking', [
+            'loans' => collect(),
+            'record' => null,
+            'peminjaman' => null,
+        ])->withErrors(['error' => 'Gagal melacak pengajuan: ' . $e->getMessage()]);
     }
+}
 
     public function cancel(Request $request)
     {

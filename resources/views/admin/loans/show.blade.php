@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.app')
 
 @section('title', 'Detail Peminjaman')
@@ -107,25 +108,28 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                            <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d M Y H:i') }}</p>
+                            <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d M Y') }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-                            <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('d M Y H:i') }}</p>
+                            <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('d M Y') }}</p>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Durasi</label>
-                            <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->durasi_jam ?? 'N/A' }} jam</p>
-                        </div>
+                        @if($loan->durasi_jam)
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Durasi</label>
+                                <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->durasi_jam }} jam</p>
+                            </div>
+                        @endif
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                             <span class="px-3 py-1 text-sm font-medium rounded-full
                                 @if($loan->status === 'PENDING') bg-yellow-100 text-yellow-800
                                 @elseif($loan->status === 'APPROVED') bg-green-100 text-green-800
+                                @elseif($loan->status === 'ONGOING') bg-blue-100 text-blue-800
                                 @elseif($loan->status === 'REJECTED') bg-red-100 text-red-800
                                 @else bg-gray-100 text-gray-800
                                 @endif">
-                                {{ $loan->status_label }}
+                                {{ $loan->status === 'ONGOING' ? 'BERLANGSUNG' : $loan->status }}
                             </span>
                         </div>
                     </div>
@@ -133,45 +137,29 @@
 
                 <!-- Equipment List -->
                 <div class="mt-8 pt-6 border-t border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Alat yang Dipinjam</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Daftar Alat</h3>
                     <div class="bg-gray-50 rounded-lg p-6">
-                        <div class="space-y-4">
-                            @foreach($loan->items as $item)
-                                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                                    <div class="flex items-center space-x-4">
-                                        @if($item->alat->gambar && $item->alat->gambar->first())
-                                            <img src="{{ asset($item->alat->gambar->first()->url) }}" 
-                                                 alt="{{ $item->alat->namaAlat }}" 
-                                                 class="w-16 h-16 rounded-lg object-cover">
-                                        @else
-                                            <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                <i class="fas fa-tools text-gray-400 text-xl"></i>
-                                            </div>
-                                        @endif
-                                        <div>
-                                            <p class="font-medium text-gray-900">{{ $item->alat->namaAlat }}</p>
-                                            <p class="text-sm text-gray-500 mt-1">{{ $item->alat->deskripsi }}</p>
+                        @if($loan->items->count() > 0)
+                            <div class="space-y-4">
+                                @foreach($loan->items as $item)
+                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                            <span class="text-sm text-gray-900">{{ $item->alat->nama }} ({{ $item->jumlah }} unit)</span>
                                         </div>
+                                        @if($item->return_condition)
+                                            <span class="text-sm text-gray-500">Kondisi Pengembalian: {{ $item->return_condition }}</span>
+                                        @endif
                                     </div>
-                                    <div class="text-right">
-                                        <p class="font-medium text-gray-900 text-lg">{{ $item->jumlah }} unit</p>
-                                        <p class="text-sm text-gray-500 mt-1">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full
-                                                @if($item->alat->kondisi === 'BAIK') bg-green-100 text-green-800
-                                                @elseif($item->alat->kondisi === 'RUSAK') bg-red-100 text-red-800
-                                                @else bg-yellow-100 text-yellow-800
-                                                @endif">
-                                                {{ $item->alat->kondisi }}
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500">Tidak ada alat yang dipinjam.</p>
+                        @endif
                     </div>
                 </div>
 
-                <!-- Status Update Form -->
+                <!-- Admin Actions -->
                 @if($loan->status === 'PENDING')
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Aksi Admin</h3>
@@ -180,15 +168,12 @@
                             @method('PUT')
                             <input type="hidden" name="status" id="statusInput">
                             <input type="hidden" name="notes" id="notesInput">
-                            
-                            <!-- Notes field for rejection -->
                             <div id="notesField" class="hidden">
                                 <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Catatan Penolakan (Opsional)</label>
                                 <textarea name="notes" id="notes" rows="3" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Berikan alasan penolakan jika diperlukan..."></textarea>
                             </div>
-                            
                             <div class="flex items-center gap-4">
                                 <button type="button" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium" onclick="submitStatus('APPROVED')">
                                     <i class="fas fa-check mr-2"></i> Approve & WhatsApp
@@ -200,6 +185,30 @@
                         </form>
                     </div>
                 @elseif($loan->status === 'APPROVED')
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Aksi Admin</h3>
+                        <form id="statusForm" method="POST" action="{{ route('admin.loans.updateStatus', $loan->id) }}" class="space-y-4">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" id="statusInput">
+                            <input type="hidden" name="notes" id="notesInput">
+                            <div class="flex items-center gap-4">
+                                <button type="button" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium" onclick="submitStatus('ONGOING')">
+                                    <i class="fas fa-play-circle mr-2"></i> Tandai Berlangsung & WhatsApp
+                                </button>
+                                <button type="button" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium" onclick="showRejectForm()">
+                                    <i class="fas fa-times mr-2"></i> Tolak & WhatsApp
+                                </button>
+                            </div>
+                            <div id="notesField" class="hidden">
+                                <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Catatan Penolakan (Opsional)</label>
+                                <textarea name="notes" id="notes" rows="3" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Berikan alasan penolakan jika diperlukan..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                @elseif($loan->status === 'ONGOING')
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Aksi Admin</h3>
                         <form id="statusForm" method="POST" action="{{ route('admin.loans.updateStatus', $loan->id) }}" class="space-y-4">
@@ -262,7 +271,6 @@
 function submitStatus(status) {
     document.getElementById('statusInput').value = status;
     
-    // If rejecting, get notes from textarea
     if (status === 'REJECTED') {
         const notesTextarea = document.getElementById('notes');
         const notesValue = notesTextarea ? notesTextarea.value : '';
@@ -278,7 +286,6 @@ function showRejectForm() {
     const notesField = document.getElementById('notesField');
     notesField.classList.remove('hidden');
     
-    // Change button to submit form
     const rejectButton = document.querySelector('button[onclick="showRejectForm()"]');
     if (rejectButton) {
         rejectButton.onclick = function() {
