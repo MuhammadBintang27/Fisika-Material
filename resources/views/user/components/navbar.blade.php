@@ -42,7 +42,7 @@
                                     Peminjaman Alat
                                 </a>
                                 <a href="{{ route('tracking') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
-                                    Tracking Peminjaman
+                                    Tracking Pengajuan
                                 </a>
                                 <a href="{{ route('pengujian.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
                                     Layanan Pengujian
@@ -90,7 +90,7 @@
                         Peminjaman Alat
                     </a>
                     <a href="{{ route('tracking') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
-                        Tracking Peminjaman
+                        Tracking Pengajuan
                     </a>
                     <a href="{{ route('pengujian.index') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
                         Layanan Pengujian
