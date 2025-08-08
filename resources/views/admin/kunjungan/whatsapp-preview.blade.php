@@ -21,7 +21,7 @@
         </div>
 
         <!-- WhatsApp Preview -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
             <div class="p-6 sm:p-8">
                 <!-- Recipient Info -->
                 <div class="mb-6 pb-6 border-b border-gray-200">

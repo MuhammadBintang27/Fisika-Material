@@ -1,24 +1,73 @@
 @extends('admin.layouts.app')
+
 @section('title', 'Tambah Galeri Laboratorium')
+
 @section('content')
-<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-6">Tambah Galeri</h2>
-    <form action="{{ route('admin.galeri.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-4">
-            <label class="block text-gray-700 font-semibold mb-2">Judul</label>
-            <input type="text" name="judul" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="{{ old('judul') }}" required>
-            @error('judul')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Tambah Galeri Laboratorium</h1>
+            <p class="text-gray-600">Tambah foto ke galeri laboratorium</p>
         </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-semibold mb-2">Gambar</label>
-            <input type="file" name="gambar" accept="image/*" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-            @error('gambar')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-        </div>
-        <div class="flex justify-between items-center mt-6">
-            <a href="{{ route('admin.galeri.index') }}" class="text-gray-600 hover:underline">Kembali</a>
-            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Simpan</button>
-        </div>
-    </form>
+        <a href="{{ route('admin.galeri.index') }}" 
+           class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Kembali ke Daftar
+        </a>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+        <form action="{{ route('admin.galeri.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            @csrf
+            <div class="space-y-6">
+                <div>
+                    <label for="judul" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Judul <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" 
+                           name="judul" 
+                           id="judul"
+                           value="{{ old('judul') }}" 
+                           required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('judul') border-red-500 @enderror" 
+                           placeholder="Judul galeri">
+                    @error('judul')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                
+                <div>
+                    <label for="gambar" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Gambar <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file" 
+                           name="gambar" 
+                           id="gambar"
+                           accept="image/*" 
+                           required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('gambar') border-red-500 @enderror">
+                    <p class="text-xs text-gray-500 mt-1">Format yang didukung: JPG, PNG, GIF. Maksimal 2MB.</p>
+                    @error('gambar')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <a href="{{ route('admin.galeri.index') }}" 
+                   class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
+                    Batal
+                </a>
+                <button type="submit" 
+                        class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
+                    <i class="fas fa-save mr-2"></i>
+                    Simpan Galeri
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection 

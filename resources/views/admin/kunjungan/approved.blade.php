@@ -20,49 +20,50 @@
     </div>
 
     <!-- Search Form -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
         <form method="GET" action="{{ route('admin.kunjungan.approved') }}" class="flex items-center space-x-4">
             <div class="flex-1">
                 <input type="text" name="search" 
                        value="{{ request()->input('search') }}"
                        placeholder="Cari berdasarkan nama pengunjung, instansi, atau kode tracking..."
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400">
             </div>
             <button type="submit" 
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                <i class="fas fa-search mr-2"></i>Cari
+                    class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
+                <i class="fas fa-search mr-2"></i>
+                Cari
             </button>
         </form>
     </div>
 
     <!-- Status Filter -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
         <div class="flex items-center space-x-4">
             <a href="{{ route('admin.kunjungan.index') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-all duration-200">
                 Semua
             </a>
             <a href="{{ route('admin.kunjungan.pending') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-all duration-200">
                 Pending
             </a>
             <a href="{{ route('admin.kunjungan.approved') }}" 
-               class="px-4 py-2 rounded-lg font-medium bg-green-100 text-green-800">
+               class="px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-green-400 to-green-500 text-white shadow-md">
                 Disetujui
             </a>
             <a href="{{ route('admin.kunjungan.completed') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-all duration-200">
                 Selesai
             </a>
             <a href="{{ route('admin.kunjungan.rejected') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-all duration-200">
                 Ditolak
             </a>
         </div>
     </div>
 
     <!-- Visits List -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
         <div class="p-6">
             @if($kunjungan->count() > 0)
                 <div class="overflow-x-auto">

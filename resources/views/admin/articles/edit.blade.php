@@ -3,7 +3,7 @@
 @section('title', 'Edit Artikel')
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-8 mt-8">
+<div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-6">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">Edit Artikel</h1>
     <form method="POST" action="{{ route('admin.articles.update', $article->id) }}" enctype="multipart/form-data" class="space-y-6">
         @csrf

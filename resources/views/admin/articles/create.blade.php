@@ -3,7 +3,7 @@
 @section('title', 'Tambah Artikel')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="space-y-6">
     <div class="space-y-6">
         <!-- Header -->
         <div class="flex items-center justify-between">
@@ -19,7 +19,7 @@
         </div>
 
         <!-- Form -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
             <form method="POST" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data" class="p-6 space-y-6">
                 @csrf
 

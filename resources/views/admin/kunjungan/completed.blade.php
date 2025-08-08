@@ -20,7 +20,7 @@
     </div>
 
     <!-- Search Form -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
         <form method="GET" action="{{ route('admin.kunjungan.completed') }}" class="flex items-center space-x-4">
             <div class="flex-1">
                 <input type="text" name="search" 
@@ -36,7 +36,7 @@
     </div>
 
     <!-- Status Filter -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
         <div class="flex items-center space-x-4">
             <a href="{{ route('admin.kunjungan.index') }}" 
                class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Visits List -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
         <div class="p-6">
             @if($kunjungan->count() > 0)
                 <div class="overflow-x-auto">
