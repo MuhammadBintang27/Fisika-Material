@@ -216,6 +216,22 @@
     </div>
 </section>
 
+<!-- Floating Cart Button -->
+<button id="cart-btn" class="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 hover:scale-105 transition-all duration-300" style="display:none;">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count" class="font-bold">0</span>
+    <span>Dipilih</span>
+</button>
+<!-- Modal Cart -->
+<div id="cart-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+    <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-md relative">
+        <button id="close-cart-modal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+        <h2 class="text-xl font-bold mb-4 flex items-center"><i class="fas fa-shopping-cart mr-2"></i> Alat Terpilih</h2>
+        <ul id="cart-list" class="mb-6 space-y-2"></ul>
+        <button id="proceed-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">Lanjut ke Formulir</button>
+    </div>
+</div>
+
 <style>
 .line-clamp-3 {
     display: -webkit-box;
@@ -345,6 +361,7 @@ function initEquipmentSelection() {
             
             updateSelectedSummary();
             updateNextStepButton();
+            updateCartBtn(); // Update cart button
         });
     });
 
@@ -352,6 +369,7 @@ function initEquipmentSelection() {
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('quantity-input')) {
             updateSelectedSummary();
+            updateCartBtn(); // Update cart button
         }
     });
 }
@@ -402,6 +420,7 @@ function clearSelection() {
     
     updateSelectedSummary();
     updateNextStepButton();
+    updateCartBtn(); // Update cart button
 }
 
 function proceedToForm() {
@@ -431,6 +450,72 @@ document.addEventListener('click', function(e) {
     if (e.target.classList.contains('lihat-detail-btn')) {
         const id = e.target.dataset.id;
         window.location.href = `/services/equipment-loan/${id}`;
+    }
+});
+
+// Tambahan untuk tombol keranjang floating dan modal
+const cartBtn = document.getElementById('cart-btn');
+const cartCount = document.getElementById('cart-count');
+const cartModal = document.getElementById('cart-modal');
+const cartList = document.getElementById('cart-list');
+const proceedBtn = document.getElementById('proceed-btn');
+const closeCartModal = document.getElementById('close-cart-modal');
+
+function updateCartBtn() {
+    const selectedCheckboxes = document.querySelectorAll('.equipment-checkbox:checked');
+    cartCount.textContent = selectedCheckboxes.length;
+    cartBtn.style.display = selectedCheckboxes.length > 0 ? 'flex' : 'none';
+}
+
+function updateCartList() {
+    cartList.innerHTML = '';
+    const selectedCheckboxes = document.querySelectorAll('.equipment-checkbox:checked');
+    selectedCheckboxes.forEach(checkbox => {
+        const quantityInput = document.querySelector(`.quantity-input[data-id="${checkbox.value}"]`);
+        const quantity = quantityInput ? quantityInput.value : 1;
+        const li = document.createElement('li');
+        li.className = 'flex justify-between items-center border-b pb-2';
+        li.innerHTML = `<span>${checkbox.dataset.nama}</span><span class='text-xs text-gray-500'>${quantity} unit</span>`;
+        cartList.appendChild(li);
+    });
+}
+
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('equipment-checkbox') || e.target.classList.contains('quantity-input')) {
+        updateCartBtn();
+    }
+});
+
+cartBtn.addEventListener('click', function() {
+    updateCartList();
+    cartModal.classList.remove('hidden');
+});
+closeCartModal.addEventListener('click', function() {
+    cartModal.classList.add('hidden');
+});
+proceedBtn.addEventListener('click', function() {
+    proceedToForm();
+});
+// Inisialisasi awal
+updateCartBtn();
+
+// Event listener untuk hapus alat satuan di modal keranjang
+// (letakkan di akhir script agar pasti terpasang)
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-cart-item')) {
+        const id = e.target.getAttribute('data-id');
+        const checkbox = document.querySelector(`.equipment-checkbox[value="${id}"]`);
+        if (checkbox) {
+            checkbox.checked = false;
+            const card = checkbox.closest('.equipment-card');
+            card.classList.remove('selected');
+            const quantityDiv = card.querySelector('.equipment-quantity');
+            quantityDiv.classList.add('hidden');
+        }
+        updateCartBtn();
+        updateSelectedSummary();
+        updateNextStepButton();
+        updateCartList();
     }
 });
 </script>

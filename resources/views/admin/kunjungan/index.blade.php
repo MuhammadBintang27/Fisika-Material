@@ -122,7 +122,7 @@
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                 Selesai
                                             </span>
-                                        @elseif($visit->status === 'REJECTED')
+                                        @elseif($visit->status === 'CANCELLED')
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                 Ditolak
                                             </span>

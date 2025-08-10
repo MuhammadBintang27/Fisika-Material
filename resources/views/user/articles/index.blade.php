@@ -10,7 +10,7 @@
         <img src="{{ asset('images/hero.jpg') }}"
              alt="Hero Background"
              class="w-full h-full object-cover transform scale-105 transition-transform duration-[20s] ease-in-out hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#968c82]/80 via-[#635849]/70 to-[#443f35]/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
     <!-- Animated Particles -->

@@ -288,7 +288,7 @@
                         @php
                             $progressWidth = 0;
                             if($record->status === 'PENDING') $progressWidth = 25;
-                            elseif($record->status === 'PROCESSING') $progressWidth = 50;
+                            elseif($record->status === 'APPROVED') $progressWidth = 50;
                             elseif($record->status === 'COMPLETED') $progressWidth = 100;
                             elseif($record->status === 'CANCELLED') $progressWidth = 50;
                         @endphp
@@ -299,7 +299,7 @@
                     <div class="relative flex justify-between">
                         <!-- Step 1: Pengajuan Dikirim -->
                         <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($record->status, ['PENDING', 'PROCESSING', 'COMPLETED']) ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500' }}">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($record->status, ['PENDING', 'APPROVED', 'COMPLETED']) ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500' }}">
                                 <i class="fas fa-paper-plane"></i>
                             </div>
                             <span class="text-sm font-medium text-gray-600 text-center">Pengajuan<br>Dikirim</span>
@@ -307,7 +307,7 @@
                         
                         <!-- Step 2: Disetujui/Ditolak -->
                         <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($record->status, ['PROCESSING', 'COMPLETED']) ? 'bg-emerald-500 text-white' : ($record->status === 'CANCELLED' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500') }}">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($record->status, ['APPROVED', 'COMPLETED']) ? 'bg-emerald-500 text-white' : ($record->status === 'CANCELLED' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500') }}">
                                 @if($record->status === 'CANCELLED')
                                     <i class="fas fa-times-circle"></i>
                                 @else
@@ -339,19 +339,19 @@
                 <div class="mt-8 text-center">
                     <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-lg font-semibold
                         {{ $record->status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                        {{ $record->status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' : '' }}
+                        {{ $record->status === 'APPROVED' ? 'bg-blue-100 text-blue-800' : '' }}
                         {{ $record->status === 'COMPLETED' ? 'bg-green-100 text-green-800' : '' }}
                         {{ $record->status === 'CANCELLED' ? 'bg-red-100 text-red-800' : '' }}">
                         @php
                             $statusIcons = [
                                 'PENDING' => 'hourglass-half',
-                                'PROCESSING' => 'check-circle',
+                                'APPROVED' => 'check-circle',
                                 'COMPLETED' => 'flag-checkered',
                                 'CANCELLED' => 'times-circle'
                             ];
                             $statusTexts = [
                                 'PENDING' => 'Menunggu Persetujuan',
-                                'PROCESSING' => 'Disetujui',
+                                'APPROVED' => 'Disetujui',
                                 'COMPLETED' => 'Selesai',
                                 'CANCELLED' => 'Ditolak'
                             ];
@@ -361,7 +361,7 @@
                     </div>
                     @if($record->status === 'PENDING')
                         <p class="text-gray-600 mt-3">Pengajuan kunjungan Anda sedang menunggu review dari admin laboratorium</p>
-                    @elseif($record->status === 'PROCESSING')
+                    @elseif($record->status === 'APPROVED')
                         <p class="text-gray-600 mt-3">✅ Kunjungan disetujui! Silakan konfirmasi kehadiran via WhatsApp</p>
                     @elseif($record->status === 'COMPLETED')
                         <p class="text-gray-600 mt-3">✅ <strong>Kunjungan selesai!</strong> Terima kasih telah berkunjung ke laboratorium kami</p>

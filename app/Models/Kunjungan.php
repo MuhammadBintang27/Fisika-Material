@@ -39,9 +39,9 @@ class Kunjungan extends Model
     {
         return $query->where('status', 'PENDING');
     }
-    public function scopeProcessing($query)
+    public function scopeApproved($query)
     {
-        return $query->where('status', 'PROCESSING');
+        return $query->where('status', 'APPROVED');
     }
     public function scopeCompleted($query)
     {
@@ -57,7 +57,7 @@ class Kunjungan extends Model
     {
         return match($this->status) {
             'PENDING' => 'Menunggu',
-            'PROCESSING' => 'Diproses',
+            'APPROVED' => 'Disetujui',
             'COMPLETED' => 'Selesai',
             'CANCELLED' => 'Dibatalkan',
             default => $this->status
@@ -67,7 +67,7 @@ class Kunjungan extends Model
     {
         return match($this->status) {
             'PENDING' => 'warning',
-            'PROCESSING' => 'info',
+            'APPROVED' => 'info',
             'COMPLETED' => 'success',
             'CANCELLED' => 'danger',
             default => 'secondary'
@@ -85,7 +85,7 @@ class Kunjungan extends Model
     }
     public function canBeCompleted()
     {
-        return in_array($this->status, ['PROCESSING']);
+        return in_array($this->status, ['APPROVED']);
     }
 
     // Generate unique tracking_code

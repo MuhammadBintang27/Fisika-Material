@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('biodata_pengurus', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama');
-            $table->string('jabatan');
+            $table->enum('jabatan', ['Ketua Laboratorium', 'Tenaga Laboran']);
             $table->timestamps();
         });
     }

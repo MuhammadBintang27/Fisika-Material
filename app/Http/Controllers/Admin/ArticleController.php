@@ -10,9 +10,28 @@ use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Artikel::with('gambar')->orderBy('created_at', 'desc')->paginate(10);
+        $query = Artikel::with('gambar')->orderBy('created_at', 'desc');
+
+        // Search by namaAcara or penulis
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('namaAcara', 'like', '%' . $search . '%')
+                  ->orWhere('penulis', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by tanggalAcara range
+        if ($fromDate = $request->input('from_date')) {
+            $query->where('tanggalAcara', '>=', $fromDate);
+        }
+        if ($toDate = $request->input('to_date')) {
+            $query->where('tanggalAcara', '<=', $toDate);
+        }
+
+        $articles = $query->paginate(10);
+
         return view('admin.articles.index', compact('articles'));
     }
 
@@ -129,5 +148,4 @@ class ArticleController extends Controller
 
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dihapus.');
     }
-} 
- 
+}

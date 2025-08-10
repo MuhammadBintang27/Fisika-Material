@@ -96,7 +96,7 @@
                 <form action="{{ route('admin.kunjungan.updateStatus', $kunjungan->id) }}" method="POST" id="approveForm">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="status" value="PROCESSING">
+                    <input type="hidden" name="status" value="APPROVED">
                     <button type="submit" 
                             class="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
                         <i class="fas fa-check mr-2"></i>
@@ -120,7 +120,7 @@
                         <i class="fas fa-times mr-2"></i> Tolak & WhatsApp
                     </button>
                 </form>
-            @elseif($kunjungan->status === 'PROCESSING')
+            @elseif($kunjungan->status === 'APPROVED')
                 <form action="{{ route('admin.kunjungan.updateStatus', $kunjungan->id) }}" method="POST">
                     @csrf
                     @method('PUT')

@@ -18,14 +18,15 @@ class StaffController extends Controller
 
     public function create()
     {
-        return view('admin.staff.create');
+        $jabatans = ['Ketua Laboratorium', 'Tenaga Laboran'];
+        return view('admin.staff.create', compact('jabatans'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
+            'jabatan' => 'required|in:Ketua Laboratorium,Tenaga Laboran',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -54,14 +55,15 @@ class StaffController extends Controller
     public function edit($id)
     {
         $staff = BiodataPengurus::with('gambar')->findOrFail($id);
-        return view('admin.staff.edit', compact('staff'));
+        $jabatans = ['Ketua Laboratorium', 'Tenaga Laboran'];
+        return view('admin.staff.edit', compact('staff', 'jabatans'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
+            'jabatan' => 'required|in:Ketua Laboratorium,Tenaga Laboran',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -101,17 +103,17 @@ class StaffController extends Controller
         $staff = BiodataPengurus::with('gambar')->findOrFail($id);
         
         // Hapus gambar jika ada
-        if ($staff->gambar) {
-            $imagePath = public_path($staff->gambar->url);
+        if ($staff->gambar->isNotEmpty()) {
+            $gambar = $staff->gambar->first(); // Ambil gambar pertama
+            $imagePath = public_path($gambar->url); // Akses url dari instance Gambar
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
-            $staff->gambar->delete();
+            $gambar->delete(); // Hapus record gambar
         }
 
         $staff->delete();
 
         return redirect()->route('admin.staff.index')->with('success', 'Staf berhasil dihapus.');
     }
-} 
- 
+}

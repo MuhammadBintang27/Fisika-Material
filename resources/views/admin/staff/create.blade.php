@@ -42,13 +42,13 @@
                     <label for="jabatan" class="block text-sm font-semibold text-gray-700 mb-2">
                         Jabatan <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" 
-                           name="jabatan" 
-                           id="jabatan" 
-                           value="{{ old('jabatan') }}" 
-                           required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('jabatan') border-red-500 @enderror" 
-                           placeholder="Jabatan staf">
+                    <select name="jabatan" id="jabatan" required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('jabatan') border-red-500 @enderror">
+                        <option value="" disabled {{ old('jabatan') ? '' : 'selected' }}>Pilih Jabatan</option>
+                        @foreach($jabatans as $jabatan)
+                            <option value="{{ $jabatan }}" {{ old('jabatan') == $jabatan ? 'selected' : '' }}>{{ $jabatan }}</option>
+                        @endforeach
+                    </select>
                     @error('jabatan')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -83,5 +83,4 @@
         </form>
     </div>
 </div>
-@endsection 
- 
+@endsection

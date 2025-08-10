@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('namaInstansi');
             $table->text('tujuan');
             $table->integer('jumlahPengunjung');
-            $table->enum('status', ['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED'])->default('PENDING');
+            $table->enum('status', ['PENDING', 'APPROVED', 'COMPLETED', 'CANCELLED'])->default('PENDING');
             $table->string('suratPengajuan')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

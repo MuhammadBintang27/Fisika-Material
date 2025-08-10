@@ -45,7 +45,7 @@ class KunjunganController extends Controller
     {
         $search = $request->input('search');
         $kunjungan = Kunjungan::with('jadwal')
-            ->where('status', 'PROCESSING')
+            ->where('status', 'APPROVED')
             ->when($search, function ($query, $search) {
                 return $query->where('namaPengunjung', 'like', "%{$search}%")
                     ->orWhere('namaInstansi', 'like', "%{$search}%")
@@ -114,7 +114,7 @@ class KunjunganController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:PENDING,PROCESSING,COMPLETED,CANCELLED',
+            'status' => 'required|in:PENDING,APPROVED,COMPLETED,CANCELLED',
             'notes' => 'nullable|string',
         ]);
 
@@ -141,7 +141,7 @@ class KunjunganController extends Controller
         $message .= "Waktu: {$kunjungan->jadwal->jam_mulai} - {$kunjungan->jadwal->jam_selesai}\n";
         $message .= "Tujuan: {$kunjungan->tujuan}\n\n";
 
-        if ($request->status === 'PROCESSING') {
+        if ($request->status === 'APPROVED') {
             $message .= "Status: *DISETUJUI*\n";
             $message .= "Kunjungan Anda telah disetujui. Silakan datang sesuai jadwal yang telah ditentukan.";
         } elseif ($request->status === 'COMPLETED') {

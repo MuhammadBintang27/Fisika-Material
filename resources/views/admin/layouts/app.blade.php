@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard') - Laboratorium Fisika</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <style>
         [x-cloak] { display: none !important; }
         .sidebar-sticky {
@@ -24,15 +24,25 @@
             height: 100vh;
             overflow-y: hidden;
             z-index: 50;
+            background-color: #1e40af;
+            transition: width 0.3s ease;
         }
         .main-content {
-            margin-left: 16rem; /* 256px */
+            margin-left: 16rem;
             height: 100vh;
             overflow: hidden;
+            background-color: #f7fafc;
+            transition: margin-left 0.3s ease;
         }
         @media (max-width: 1023px) {
             .main-content {
                 margin-left: 0;
+            }
+            .sidebar-sticky {
+                transform: translateX(-100%);
+            }
+            .sidebar-sticky.active {
+                transform: translateX(0);
             }
         }
         /* Hide scrollbar for Chrome, Safari, Edge */
@@ -44,10 +54,10 @@
             scrollbar-width: none;
         }
         .sidebar-bg {
-            background-color: #3261d5;
+            background-color: #1e40af;
         }
         .main-bg {
-            background-color: #3261d5;
+            background-color: #1e40af;
         }
         .content-scroll {
             scrollbar-width: thin;
@@ -66,6 +76,30 @@
         }
         .content-scroll::-webkit-scrollbar-thumb:hover {
             background: #a0aec0;
+        }
+        /* Gaya item navigasi aktif */
+        nav a.active,
+        nav button.active {
+            background-color: #ffffff !important;
+            color: #1e40af !important;
+            position: relative;
+            z-index: 60;
+        }
+        nav a.active::after,
+        nav button.active::after {
+            content: '';
+            position: absolute;
+            right: -1rem;
+            top: 0;
+            bottom: 0;
+            width: 1rem;
+            background-color: #ffffff;
+            z-index: 59;
+        }
+        /* Pastikan transisi halus */
+        nav a,
+        nav button {
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
     </style>
 </head>
@@ -94,7 +128,8 @@
             <!-- Navigation -->
             <nav class="px-4 py-6 space-y-1 h-[calc(100vh-10rem)] overflow-y-auto">
                 <a href="{{ route('admin.dashboard') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-orange-500 text-white' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.dashboard')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
                     <span>Dashboard</span>
                 </a>
@@ -102,35 +137,36 @@
                 <!-- Kelola Tampilan Web -->
                 <div x-data="{ open: {{ request()->routeIs('admin.about.*') || request()->routeIs('admin.articles.*') || request()->routeIs('admin.galeri.*') || request()->routeIs('admin.staff.*') ? 'true' : 'false' }} }">
                     <button @click="open = !open; webManagementOpen = open" 
-                            class="w-full flex items-center justify-between px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.about.*') || request()->routeIs('admin.articles.*') || request()->routeIs('admin.galeri.*') || request()->routeIs('admin.staff.*') ? 'bg-orange-500' : '' }}">
+                            x-bind:class="{'active': request()->routeIs('admin.about.*') || request()->routeIs('admin.articles.*') || request()->routeIs('admin.galeri.*') || request()->routeIs('admin.staff.*')}" 
+                            class="w-full flex items-center justify-between px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.about.*') || request()->routeIs('admin.articles.*') || request()->routeIs('admin.galeri.*') || request()->routeIs('admin.staff.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-lg' : '' }}">
                         <div class="flex items-center">
                             <i class="fas fa-globe w-5 h-5 mr-3"></i>
-                            <span>Kelola Tampilan Web</span>
+                            <span>Kelola  Web</span>
                         </div>
                         <i class="fas fa-chevron-down transition-transform" :class="open ? 'rotate-180' : ''"></i>
                     </button>
                     
                     <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="ml-6 mt-2 space-y-1">
                         <a href="{{ route('admin.about.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.about.*') ? 'bg-orange-500' : '' }}">
+                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.about.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-md' : '' }}">
                             <i class="fas fa-info-circle w-4 h-4 mr-3"></i>
                             <span>Profil Laboratorium</span>
                         </a>
                         
                         <a href="{{ route('admin.articles.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-orange-500' : '' }}">
+                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-md' : '' }}">
                             <i class="fas fa-newspaper w-4 h-4 mr-3"></i>
                             <span>Artikel</span>
                         </a>
                         
                         <a href="{{ route('admin.galeri.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.galeri.*') ? 'bg-orange-500' : '' }}">
+                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.galeri.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-md' : '' }}">
                             <i class="fas fa-image w-4 h-4 mr-3"></i>
                             <span>Galeri Laboratorium</span>
                         </a>
                         
                         <a href="{{ route('admin.staff.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.staff.*') ? 'bg-orange-500' : '' }}">
+                           class="flex items-center px-4 py-2 text-sm text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.staff.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-md' : '' }}">
                             <i class="fas fa-users w-4 h-4 mr-3"></i>
                             <span>Staf & Tenaga Ahli</span>
                         </a>
@@ -138,37 +174,43 @@
                 </div>
 
                 <a href="{{ route('admin.equipment.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.equipment.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.equipment.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.equipment.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-tools w-5 h-5 mr-3"></i>
                     <span>Alat & Peralatan</span>
                 </a>
 
                 <a href="{{ route('admin.loans.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.loans.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.loans.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-handshake w-5 h-5 mr-3"></i>
                     <span>Peminjaman Alat</span>
                 </a>
 
                 <a href="{{ route('admin.kunjungan.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.kunjungan.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.kunjungan.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.kunjungan.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-calendar-check w-5 h-5 mr-3"></i>
                     <span>Kunjungan</span>
                 </a>
 
                 <a href="{{ route('admin.jadwal.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.jadwal.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-calendar-alt w-5 h-5 mr-3"></i>
                     <span>Jadwal</span>
                 </a>
 
                 <a href="{{ route('admin.pengujian.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.pengujian.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.pengujian.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-vial w-5 h-5 mr-3"></i>
                     <span>Pengujian</span>
                 </a>
 
                 <a href="{{ route('admin.jenis-pengujian.index') }}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.jenis-pengujian.*') ? 'bg-orange-500' : '' }}">
+                   x-bind:class="{'active': request()->routeIs('admin.jenis-pengujian.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.jenis-pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
                     <i class="fas fa-flask w-5 h-5 mr-3"></i>
                     <span>Jenis Pengujian</span>
                 </a>
@@ -251,8 +293,6 @@
                 Alpine.store('sidebarOpen', false);
             }
         });
-
-
     </script>
 </body>
 </html>
