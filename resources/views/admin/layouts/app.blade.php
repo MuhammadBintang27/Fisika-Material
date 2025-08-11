@@ -214,6 +214,15 @@
                     <i class="fas fa-flask w-5 h-5 mr-3"></i>
                     <span>Jenis Pengujian</span>
                 </a>
+
+                @if(auth()->user()->isSuperAdmin())
+                <a href="{{ route('admin.admin-management.index') }}" 
+                   x-bind:class="{'active': request()->routeIs('admin.admin-management.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.admin-management.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
+                    <i class="fas fa-user-shield w-5 h-5 mr-3"></i>
+                    <span>Manajemen Admin</span>
+                </a>
+                @endif
             </nav>
 
             <!-- User Info -->
@@ -224,7 +233,13 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-sm font-medium text-white truncate">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-white text-opacity-80">Administrator</p>
+                        <p class="text-xs text-white text-opacity-80">
+                            @if(auth()->user()->isSuperAdmin())
+                                Super Administrator
+                            @else
+                                Administrator
+                            @endif
+                        </p>
                     </div>
                     <form method="POST" action="{{ route('admin.logout') }}" class="inline">
                         @csrf

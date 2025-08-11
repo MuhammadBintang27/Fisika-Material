@@ -13,17 +13,35 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@fisika.com',
-            'password' => Hash::make('admin123'),
-            'is_admin' => true,
-            'email_verified_at' => now(),
-        ]);
+        // Create Super Admin
+        User::updateOrCreate(
+            ['email' => 'superadmin@fisika.com'],
+            [
+                'name' => 'Super Administrator',
+                'email' => 'superadmin@fisika.com',
+                'password' => Hash::make('superadmin123'),
+                'is_admin' => true,
+                'is_super_admin' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
-        $this->command->info('Admin user created successfully!');
-        $this->command->info('Email: admin@fisika.com');
-        $this->command->info('Password: admin123');
+        // Create Regular Admin
+        User::updateOrCreate(
+            ['email' => 'admin@fisika.com'],
+            [
+                'name' => 'Administrator',
+                'email' => 'admin@fisika.com',
+                'password' => Hash::make('admin123'),
+                'is_admin' => true,
+                'is_super_admin' => false,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $this->command->info('Admin users created successfully!');
+        $this->command->info('Super Admin - Email: superadmin@fisika.com, Password: superadmin123');
+        $this->command->info('Regular Admin - Email: admin@fisika.com, Password: admin123');
     }
 } 
  

@@ -128,6 +128,58 @@
         </div>
     </div>
 
+    @if(auth()->user()->isSuperAdmin())
+    <!-- Admin Management Stats -->
+    <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-xl font-bold">Manajemen Administrator</h3>
+                <p class="text-purple-100">Kelola akun administrator sistem</p>
+            </div>
+            <div class="hidden md:block">
+                <i class="fas fa-user-shield text-4xl text-purple-200 animate-pulse"></i>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Total Admins -->
+            <div class="bg-white bg-opacity-20 rounded-lg p-4 hover:bg-opacity-30 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-medium">Total Admin</p>
+                        <p class="text-3xl font-bold">{{ $stats['total_admins'] ?? 0 }}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-users text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Super Admins -->
+            <div class="bg-white bg-opacity-20 rounded-lg p-4 hover:bg-opacity-30 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-medium">Super Admin</p>
+                        <p class="text-3xl font-bold">{{ $stats['total_super_admins'] ?? 0 }}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-purple-300 border-opacity-30">
+            <a href="{{ route('admin.admin-management.index') }}" 
+               class="inline-flex items-center text-white hover:text-purple-200 font-medium transition-colors">
+                <i class="fas fa-cog mr-2"></i>
+                Kelola Administrator
+                <i class="fas fa-arrow-right ml-2 hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+    </div>
+    @endif
+
     <!-- Recent Activities -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent Loans -->

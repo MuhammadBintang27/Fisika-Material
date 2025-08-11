@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'is_super_admin',
     ];
 
     /**
@@ -45,6 +46,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_super_admin' => 'boolean',
         ];
     }
 
@@ -54,5 +56,21 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->is_admin === true;
+    }
+
+    /**
+     * Check if user is super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->is_super_admin === true;
+    }
+
+    /**
+     * Check if user can manage admins (super admin only)
+     */
+    public function canManageAdmins(): bool
+    {
+        return $this->isSuperAdmin();
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\GaleriLaboratoriumController;
 use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\Admin\JenisPengujianController;
 use App\Http\Controllers\Admin\PengujianController;
+use App\Http\Controllers\Admin\AdminManagementController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
@@ -175,6 +176,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/calendar-data', [JadwalController::class, 'calendarData'])->name('calendar-data');
             Route::get('/schedule-settings', [JadwalController::class, 'scheduleSettings'])->name('schedule-settings');
             Route::post('/toggle-availability', [JadwalController::class, 'toggleAvailability'])->name('toggle-availability');
+        });
+
+        // Admin Management Routes (Super Admin Only)
+        Route::middleware('super_admin')->prefix('admin-management')->name('admin-management.')->group(function () {
+            Route::get('/', [AdminManagementController::class, 'index'])->name('index');
+            Route::get('/create', [AdminManagementController::class, 'create'])->name('create');
+            Route::post('/', [AdminManagementController::class, 'store'])->name('store');
+            Route::get('/{id}', [AdminManagementController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [AdminManagementController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [AdminManagementController::class, 'update'])->name('update');
+            Route::delete('/{id}', [AdminManagementController::class, 'destroy'])->name('destroy');
         });
     });
 });

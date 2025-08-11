@@ -21,14 +21,14 @@ class BiodataPengurusSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'nama' => 'Intan Mulia Sari, S.Si., M.Si.',
-                'jabatan' => 'Tenaga Pengajar',
+                'jabatan' => 'Tenaga Laboran',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => Str::uuid(),
                 'nama' => 'Vikah Suci Novianti, S.Si',
-                'jabatan' => 'Laboran',
+                'jabatan' => 'Tenaga Laboran',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
