@@ -4,79 +4,85 @@
 @section('title', 'Detail Peminjaman')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between">
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-xl p-8 text-white shadow-xl border border-blue-600">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Detail Peminjaman</h1>
-                <p class="text-gray-600">Informasi lengkap peminjaman alat</p>
+                <h1 class="text-3xl font-bold mb-2">Detail Peminjaman</h1>
+                <p class="text-blue-100 text-lg">Informasi lengkap peminjaman alat laboratorium</p>
             </div>
             <div class="flex items-center space-x-3">
                 <a href="{{ route('tracking') }}?nama={{ urlencode($loan->namaPeminjam) }}&nip_nim={{ urlencode($loan->nip_nim) }}" 
                    target="_blank"
-                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-external-link-alt mr-2"></i>
+                   class="bg-white text-blue-700 px-6 py-3 rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold group">
+                    <i class="fas fa-external-link-alt mr-2 group-hover:rotate-12 transition-transform"></i>
                     Lihat di User
                 </a>
                 <a href="{{ route('admin.loans.index') }}" 
-                   class="text-gray-600 hover:text-gray-900">
-                    <i class="fas fa-arrow-left mr-2"></i>
+                   class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold group">
+                    <i class="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Daftar
                 </a>
             </div>
         </div>
+    </div>
 
-        <!-- Loan Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div class="p-6 sm:p-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Borrower Information -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Informasi Peminjam</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                                <span class="px-3 py-1 text-sm font-medium rounded-full
-                                    @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800
-                                    @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800
-                                    @else bg-purple-100 text-purple-800
-                                    @endif">
-                                    {{ $loan->user_type_label }}
-                                </span>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Peminjam</label>
-                                <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->namaPeminjam }}</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">NIP/NIM</label>
-                                <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->nip_nim ?? 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP</label>
-                                <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->noHp }}</p>
-                            </div>
-                            @if($loan->email)
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->email }}</p>
-                                </div>
-                            @endif
-                            @if($loan->instansi)
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Instansi</label>
-                                    <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->instansi }}</p>
-                                </div>
-                            @endif
-                            @if($loan->jabatan)
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Jabatan</label>
-                                    <p class="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">{{ $loan->jabatan }}</p>
-                                </div>
-                            @endif
-                        </div>
+    <!-- Loan Information -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Borrower Information -->
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+            <div class="p-8">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900">Informasi Peminjam</h3>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
+                        <span class="px-4 py-2 text-sm font-bold rounded-xl
+                            @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800
+                            @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800
+                            @else bg-purple-100 text-purple-800
+                            @endif">
+                            {{ $loan->user_type_label }}
+                        </span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Peminjam</label>
+                        <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->namaPeminjam }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">NIP/NIM</label>
+                        <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->nip_nim ?? 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nomor HP</label>
+                        <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->noHp }}</p>
+                    </div>
+                    @if($loan->email)
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
+                            <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->email }}</p>
+                        </div>
+                    @endif
+                    @if($loan->instansi)
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Instansi</label>
+                            <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->instansi }}</p>
+                        </div>
+                    @endif
+                    @if($loan->jabatan)
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Jabatan</label>
+                            <p class="text-sm text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">{{ $loan->jabatan }}</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
                     <!-- Research Information -->
                     <div>

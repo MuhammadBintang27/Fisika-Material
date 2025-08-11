@@ -3,60 +3,68 @@
 @section('title', 'Peminjaman Ditolak')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-8">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Peminjaman Ditolak</h1>
-            <p class="text-gray-600">Kelola permintaan peminjaman alat laboratorium yang ditolak</p>
-        </div>
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('admin.loans.pending') }}" 
-               class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
-                <i class="fas fa-clock mr-2"></i>
-                Pending ({{ \App\Models\Peminjaman::where('status', 'PENDING')->count() }})
-            </a>
+    <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-xl p-8 text-white shadow-xl border border-red-500">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Peminjaman Ditolak</h1>
+                <p class="text-red-100 text-lg">Kelola peminjaman alat laboratorium yang ditolak</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('admin.loans.pending') }}" 
+                   class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-semibold group">
+                    <i class="fas fa-clock mr-2 group-hover:animate-pulse"></i>
+                    Pending ({{ \App\Models\Peminjaman::where('status', 'PENDING')->count() }})
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Search Form -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <form method="GET" action="{{ route('admin.loans.rejected') }}" class="flex items-center space-x-4">
-            <div class="flex-1">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
+        <div class="flex items-center space-x-3 mb-6">
+            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                <i class="fas fa-search text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Pencarian Peminjaman</h3>
+        </div>
+        <form method="GET" action="{{ route('admin.loans.rejected') }}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div class="flex-1 w-full">
                 <input type="text" name="search" 
                        value="{{ request()->input('search') }}"
                        placeholder="Cari berdasarkan tracking code atau nama peminjam..."
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all">
             </div>
             <button type="submit" 
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    class="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 shadow-lg font-semibold">
                 <i class="fas fa-search mr-2"></i>Cari
             </button>
         </form>
     </div>
 
     <!-- Status Filter -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <div class="flex items-center space-x-4">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <div class="flex items-center space-x-2 overflow-x-auto">
             <a href="{{ route('admin.loans.index') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Semua
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-list mr-2"></i>Semua
             </a>
             <a href="{{ route('admin.loans.pending') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Pending
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-clock mr-2"></i>Pending
             </a>
             <a href="{{ route('admin.loans.approved') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Disetujui / Berlangsung
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-check-circle mr-2"></i>Disetujui
             </a>
             <a href="{{ route('admin.loans.completed') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Selesai
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-check-double mr-2"></i>Selesai
             </a>
             <a href="{{ route('admin.loans.rejected') }}" 
-               class="px-4 py-2 rounded-lg font-medium bg-red-100 text-red-700">
-                Ditolak
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg">
+                <i class="fas fa-times-circle mr-2"></i>Ditolak
             </a>
         </div>
     </div>
@@ -81,42 +89,41 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($loans as $loan)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-red-50 transition-colors duration-200">
                                     <td class="px-6 py-4">
-                                        <div>
-                                            <div class="text-sm font-medium text-gray-900">{{ $loan->namaPeminjam }}</div>
-                                            <div class="text-sm text-gray-500">{{ $loan->noHp }}</div>
-                                            @if($loan->tujuanPeminjaman)
-                                                <div class="text-sm text-gray-500 line-clamp-1">{{ Str::limit($loan->tujuanPeminjaman, 50) }}</div>
-                                            @endif
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div class="h-10 w-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
+                                                    <span class="text-sm font-medium text-white">{{ substr($loan->namaPeminjam, 0, 1) }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $loan->namaPeminjam }}</div>
+                                                <div class="text-sm text-gray-500">{{ $loan->noHp }}</div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800 @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800 @else bg-purple-100 text-purple-800 @endif">{{ $loan->user_type_label }}</span>
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800 @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800 @else bg-purple-100 text-purple-800 @endif">{{ $loan->user_type_label }}</span>
                                         <div class="text-sm text-gray-500 mt-1">{{ $loan->nip_nim }}</div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">
-                                            <div class="font-medium">{{ $loan->judul_penelitian ?? 'N/A' }}</div>
-                                            @if($loan->supervisor_name)
-                                                <div class="text-xs text-gray-500">Pembimbing: {{ $loan->supervisor_name }}</div>
-                                            @endif
-                                            @if($loan->durasi_jam)
-                                                <div class="text-xs text-gray-500">{{ $loan->durasi_jam }} jam</div>
-                                            @endif
-                                        </div>
+                                        <div class="text-sm text-gray-900">{{ $loan->judul_penelitian ?? 'N/A' }}</div>
+                                        @if($loan->supervisor_name)
+                                            <div class="text-sm text-gray-500">Pembimbing: {{ $loan->supervisor_name }}</div>
+                                        @endif
+                                        @if($loan->durasi_jam)
+                                            <div class="text-sm text-gray-500">{{ $loan->durasi_jam }} jam</div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
                                             @if($loan->items->count() > 0)
                                                 @foreach($loan->items->take(2) as $item)
-                                                    <div class="flex items-center space-x-2">
-                                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-                                                        <span>{{ $item->alat->nama }} ({{ $item->jumlah }})</span>
-                                                    </div>
+                                                    <div class="mb-1">{{ $item->alat->nama }} ({{ $item->jumlah }})</div>
                                                 @endforeach
                                                 @if($loan->items->count() > 2)
-                                                    <div class="text-xs text-gray-500 mt-1">+{{ $loan->items->count() - 2 }} alat lainnya</div>
+                                                    <div class="text-xs text-gray-500">+{{ $loan->items->count() - 2 }} alat lainnya</div>
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">-</span>
@@ -126,12 +133,12 @@
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
                                             <div>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d M Y') }}</div>
-                                            <div class="text-gray-500">s/d</div>
+                                            <div class="text-gray-500">sampai</div>
                                             <div>{{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('d M Y') }}</div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">REJECTED</span>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">REJECTED</span>
                                     </td>
                                     <td class="px-6 py-4">
                                         @if($loan->notes)
@@ -142,16 +149,20 @@
                                             <span class="text-gray-500 text-sm">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex items-center space-x-2">
-                                            <a href="{{ route('admin.loans.show', $loan->id) }}" class="text-blue-600 hover:text-blue-900">
-                                                <i class="fas fa-eye"></i>
+                                    <td class="px-6 py-4 text-sm font-medium">
+                                        <div class="flex items-center space-x-3">
+                                            <a href="{{ route('admin.loans.show', $loan->id) }}" 
+                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                                <i class="fas fa-eye mr-1"></i>
+                                                Detail
                                             </a>
                                             <form method="POST" action="{{ route('admin.loans.destroy', $loan->id) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data peminjaman ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" 
+                                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                                                    <i class="fas fa-trash mr-1"></i>
+                                                    Hapus
                                                 </button>
                                             </form>
                                         </div>
