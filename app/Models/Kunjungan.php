@@ -74,6 +74,14 @@ class Kunjungan extends Model
         };
     }
 
+    public function getSuratPengajuanUrlAttribute()
+    {
+        if ($this->suratPengajuan) {
+            return asset('storage/' . $this->suratPengajuan);
+        }
+        return null;
+    }
+
     // Methods
     public function canBeCancelled()
     {

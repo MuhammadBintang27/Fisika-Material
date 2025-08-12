@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use App\Models\Kunjungan;
+use App\Models\PengajuanPengujian;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,10 +19,11 @@ class TrackingController extends Controller
     $loans = collect();
     $record = null;
     $peminjaman = null;
+    $pengujian = null;
 
     // Validate query parameters
     $validator = Validator::make($request->query(), [
-        'type' => 'sometimes|in:peminjaman,kunjungan',
+        'type' => 'sometimes|in:peminjaman,kunjungan,pengujian',
         'tracking_code' => 'sometimes|string|max:255',
     ]);
 
@@ -35,6 +37,7 @@ class TrackingController extends Controller
             'loans' => collect(),
             'record' => null,
             'peminjaman' => null,
+            'pengujian' => null,
         ])->withErrors(['error' => 'Jenis pengajuan atau kode tracking tidak valid.']);
     }
 
@@ -55,6 +58,7 @@ class TrackingController extends Controller
                         'loans' => collect(),
                         'record' => null,
                         'peminjaman' => null,
+                        'pengujian' => null,
                     ])->withErrors(['error' => 'Tidak ada peminjaman ditemukan untuk kode tracking tersebut.']);
                 }
             } elseif ($type === 'kunjungan') {
@@ -71,7 +75,25 @@ class TrackingController extends Controller
                         'loans' => collect(),
                         'record' => null,
                         'peminjaman' => null,
+                        'pengujian' => null,
                     ])->withErrors(['error' => 'Tidak ada kunjungan ditemukan untuk kode tracking tersebut.']);
+                }
+            } elseif ($type === 'pengujian') {
+                $pengujian = PengajuanPengujian::with(['layanan', 'hasil'])
+                    ->where('trackingCode', $tracking_code)
+                    ->first();
+                if (!$pengujian) {
+                    Log::info("Tracking failed: No pengujian found", [
+                        'tracking_code' => $tracking_code,
+                        'type' => $type,
+                        'ip' => $request->ip()
+                    ]);
+                    return view('user.services.tracking', [
+                        'loans' => collect(),
+                        'record' => null,
+                        'peminjaman' => null,
+                        'pengujian' => null,
+                    ])->withErrors(['error' => 'Tidak ada pengujian ditemukan untuk kode tracking tersebut.']);
                 }
             }
         }
@@ -82,7 +104,7 @@ class TrackingController extends Controller
             'ip' => $request->ip()
         ]);
 
-        return view('user.services.tracking', compact('loans', 'record', 'peminjaman'));
+        return view('user.services.tracking', compact('loans', 'record', 'peminjaman', 'pengujian'));
     } catch (\Exception $e) {
         Log::error("Error tracking", [
             'error' => $e->getMessage(),
@@ -95,6 +117,7 @@ class TrackingController extends Controller
             'loans' => collect(),
             'record' => null,
             'peminjaman' => null,
+            'pengujian' => null,
         ])->withErrors(['error' => 'Gagal melacak pengajuan: ' . $e->getMessage()]);
     }
 }
@@ -102,8 +125,8 @@ class TrackingController extends Controller
     public function cancel(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'type' => 'required|in:peminjaman,kunjungan',
-            'id' => 'required|string|uuid',
+            'type' => 'required|in:peminjaman,kunjungan,pengujian',
+            'id' => 'required|string',
         ]);
 
         if ($validator->fails()) {

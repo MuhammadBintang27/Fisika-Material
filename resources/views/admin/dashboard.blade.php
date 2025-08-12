@@ -115,7 +115,7 @@
                 </div>
             </div>
             <div class="mt-6 pt-4 border-t border-gray-100">
-                <a href="{{ route('admin.jenis-pengujian.index') }}" class="inline-flex items-center text-orange-600 hover:text-orange-700 text-sm font-semibold group-hover:underline transition-all">
+                <a href="{{ route('admin.layanan-pengujian.index') }}" class="inline-flex items-center text-orange-600 hover:text-orange-700 text-sm font-semibold group-hover:underline transition-all">
                     <span>Kelola Jenis</span>
                     <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </a>
@@ -134,7 +134,7 @@
                 </div>
             </div>
             <div class="mt-6 pt-4 border-t border-gray-100">
-                <a href="{{ route('admin.pengujian.index') }}" class="inline-flex items-center text-red-600 hover:text-red-700 text-sm font-semibold group-hover:underline transition-all">
+                <a href="{{ route('admin.pengajuan-pengujian.index') }}" class="inline-flex items-center text-red-600 hover:text-red-700 text-sm font-semibold group-hover:underline transition-all">
                     <span>Kelola Pengujian</span>
                     <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </a>
@@ -359,25 +359,14 @@
                 </div>
             </a>
             
-            <a href="{{ route('admin.jenis-pengujian.create') }}" 
+            <a href="{{ route('admin.layanan-pengujian.create') }}" 
                class="group flex items-center p-5 bg-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 hover:border-orange-300">
                 <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
                     <i class="fas fa-plus text-white text-lg"></i>
                 </div>
                 <div>
-                    <span class="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">Jenis Pengujian</span>
-                    <p class="text-xs text-gray-500">Tambah jenis baru</p>
-                </div>
-            </a>
-            
-            <a href="{{ route('admin.pengujian.create') }}" 
-               class="group flex items-center p-5 bg-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 hover:border-red-300 md:col-span-2 lg:col-span-1">
-                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-plus text-white text-lg"></i>
-                </div>
-                <div>
-                    <span class="font-semibold text-gray-900 group-hover:text-red-600 transition-colors">Tambah Pengujian</span>
-                    <p class="text-xs text-gray-500">Buat pengujian baru</p>
+                    <span class="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">Layanan Pengujian</span>
+                    <p class="text-xs text-gray-500">Tambah layanan baru</p>
                 </div>
             </a>
         </div>

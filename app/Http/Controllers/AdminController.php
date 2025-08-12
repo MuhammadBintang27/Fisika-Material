@@ -19,9 +19,7 @@ class AdminController extends Controller
             'total_equipment' => Alat::count(),
             'pending_loans' => Peminjaman::where('status', 'PENDING')->count(),
             'total_staff' => BiodataPengurus::count(),
-            'total_jenis_pengujian' => \App\Models\JenisPengujian::count(),
-            'total_pengujian' => \App\Models\Pengujian::count(),
-            'total_admins' => User::where('is_admin', true)->orWhere('is_super_admin', true)->count(),
+                       'total_admins' => User::where('is_admin', true)->orWhere('is_super_admin', true)->count(),
             'total_super_admins' => User::where('is_super_admin', true)->count(),
         ];
 

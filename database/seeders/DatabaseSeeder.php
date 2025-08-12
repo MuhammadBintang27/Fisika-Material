@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             BiodataPengurusSeeder::class,
             ArtikelSeeder::class,
             GambarSeeder::class,
-            JenisPengujianSeeder::class,
+            LayananPengujianSeeder::class,
         ]);
     }
 }

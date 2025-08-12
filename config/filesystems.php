@@ -47,6 +47,26 @@ return [
             'report' => false,
         ],
 
+        // Dedicated disk for testing results with better organization
+        'testing_results' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/testing-results'),
+            'url' => env('APP_URL').'/storage/testing-results',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        // Dedicated disk for supporting files
+        'supporting_files' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/supporting-files'),
+            'url' => env('APP_URL').'/storage/supporting-files',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

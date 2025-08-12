@@ -201,18 +201,18 @@
                     <span>Jadwal</span>
                 </a>
 
-                <a href="{{ route('admin.pengujian.index') }}" 
-                   x-bind:class="{'active': request()->routeIs('admin.pengujian.*')}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
-                    <i class="fas fa-vial w-5 h-5 mr-3"></i>
-                    <span>Pengujian</span>
+                <a href="{{ route('admin.layanan-pengujian.index') }}" 
+                   x-bind:class="{'active': request()->routeIs('admin.layanan-pengujian.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.layanan-pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
+                    <i class="fas fa-flask w-5 h-5 mr-3"></i>
+                    <span>Layanan Pengujian</span>
                 </a>
 
-                <a href="{{ route('admin.jenis-pengujian.index') }}" 
-                   x-bind:class="{'active': request()->routeIs('admin.jenis-pengujian.*')}" 
-                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.jenis-pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
-                    <i class="fas fa-flask w-5 h-5 mr-3"></i>
-                    <span>Jenis Pengujian</span>
+                <a href="{{ route('admin.pengajuan-pengujian.index') }}" 
+                   x-bind:class="{'active': request()->routeIs('admin.pengajuan-pengujian.*')}" 
+                   class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors {{ request()->routeIs('admin.pengajuan-pengujian.*') ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : '' }}">
+                    <i class="fas fa-vial w-5 h-5 mr-3"></i>
+                    <span>Pengajuan Pengujian</span>
                 </a>
 
                 @if(auth()->user()->isSuperAdmin())

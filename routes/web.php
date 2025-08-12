@@ -18,8 +18,9 @@ use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\GaleriLaboratoriumController;
 use App\Http\Controllers\Admin\JadwalController;
-use App\Http\Controllers\Admin\JenisPengujianController;
-use App\Http\Controllers\Admin\PengujianController;
+use App\Http\Controllers\Admin\LayananPengujianController;
+use App\Http\Controllers\Admin\PengajuanPengujianController;
+use App\Http\Controllers\User\PengujianController;
 use App\Http\Controllers\Admin\AdminManagementController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -46,15 +47,13 @@ Route::prefix('services/equipment-loan')->name('equipment.')->group(function () 
 });
 
 Route::prefix('services/testing')->name('testing.')->group(function () {
-    Route::get('/', [TestingServicesController::class, 'index'])->name('services');
-    Route::get('/{id}', [TestingServicesController::class, 'show'])->name('detail');
-    Route::post('/{id}/request', [TestingServicesController::class, 'requestTest'])->name('request');
+    Route::get('/', [App\Http\Controllers\User\PengujianController::class, 'index'])->name('services');
+    Route::post('/submit', [App\Http\Controllers\User\PengujianController::class, 'submit'])->name('submit');
+    Route::get('/success', [App\Http\Controllers\User\PengujianController::class, 'success'])->name('success');
+    Route::get('/tracking', [App\Http\Controllers\User\PengujianController::class, 'tracking'])->name('tracking');
+    Route::get('/{id}', [App\Http\Controllers\User\PengujianController::class, 'show'])->name('detail');
+    Route::get('/hasil/{pengajuanId}/download/{hasilId}', [App\Http\Controllers\User\PengujianController::class, 'downloadHasil'])->name('downloadHasil');
 });
-
-Route::post('/equipment-loan/request', [EquipmentLoanController::class, 'requestLoan'])->name('equipment.loan.request');
-
-Route::get('/services/testing', [TestingServicesController::class, 'index'])->name('pengujian.index');
-Route::post('/services/testing', [TestingServicesController::class, 'store'])->name('pengujian.store');
 
 
 Route::prefix('services/visits')->name('user.kunjungan.')->group(function () {
@@ -123,39 +122,37 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}', [AdminStaffController::class, 'destroy'])->name('destroy');
         });
 
-        Route::prefix('jenis-pengujian')->name('jenis-pengujian.')->group(function () {
-            Route::get('/', [JenisPengujianController::class, 'index'])->name('index');
-            Route::get('/create', [JenisPengujianController::class, 'create'])->name('create');
-            Route::post('/', [JenisPengujianController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [JenisPengujianController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [JenisPengujianController::class, 'update'])->name('update');
-            Route::delete('/{id}', [JenisPengujianController::class, 'destroy'])->name('destroy');
+        Route::prefix('layanan-pengujian')->name('layanan-pengujian.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\LayananPengujianController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\LayananPengujianController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\LayananPengujianController::class, 'store'])->name('store');
+            Route::get('/{id}', [App\Http\Controllers\Admin\LayananPengujianController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [App\Http\Controllers\Admin\LayananPengujianController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [App\Http\Controllers\Admin\LayananPengujianController::class, 'update'])->name('update');
+            Route::delete('/{id}', [App\Http\Controllers\Admin\LayananPengujianController::class, 'destroy'])->name('destroy');
         });
 
-        Route::prefix('pengujian')->name('pengujian.')->group(function () {
-            Route::get('/', [PengujianController::class, 'index'])->name('index');
-            Route::get('/create', [PengujianController::class, 'create'])->name('create');
-            Route::post('/', [PengujianController::class, 'store'])->name('store');
-            Route::get('/{id}', [PengujianController::class, 'show'])->name('show');
-            Route::get('/{id}/edit', [PengujianController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [PengujianController::class, 'update'])->name('update');
-            Route::delete('/{id}', [PengujianController::class, 'destroy'])->name('destroy');
-            Route::post('/{id}/approve', [PengujianController::class, 'approve'])->name('approve');
-            Route::post('/{id}/reject', [PengujianController::class, 'reject'])->name('reject');
+        Route::prefix('pengajuan-pengujian')->name('pengajuan-pengujian.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'index'])->name('index');
+            Route::get('/{id}', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'show'])->name('show');
+            Route::patch('/{id}/status', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'updateStatus'])->name('update-status');
+            Route::post('/{id}/upload-hasil', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'uploadHasil'])->name('upload-hasil');
+            Route::get('/{id}/whatsapp-preview', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'whatsappPreview'])->name('whatsapp-preview');
+            Route::post('/{id}/confirm-status', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'confirmStatusUpdate'])->name('confirm-status');
         });
 
-       Route::prefix('kunjungan')->name('kunjungan.')->group(function () {
-    Route::get('/', [KunjunganController::class, 'index'])->name('index');
-    Route::get('/pending', [KunjunganController::class, 'pending'])->name('pending');
-    Route::get('/approved', [KunjunganController::class, 'approved'])->name('approved');
-    Route::get('/completed', [KunjunganController::class, 'completed'])->name('completed');
-    Route::get('/rejected', [KunjunganController::class, 'rejected'])->name('rejected');
-    Route::get('/{id}', [KunjunganController::class, 'show'])->name('show');
-    Route::put('/{id}/status', [KunjunganController::class, 'updateStatus'])->name('updateStatus');
-    Route::delete('/{id}', [KunjunganController::class, 'destroy'])->name('destroy');
-    Route::get('/{id}/whatsapp-preview', [App\Http\Controllers\Admin\KunjunganController::class, 'whatsappPreview'])->name('whatsapp-preview'); // Changed to kunjungan.whatsapp-preview
-    Route::post('/{id}/confirm-status', [App\Http\Controllers\Admin\KunjunganController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate'); // Changed to kunjungan.confirmStatusUpdate
-});
+        Route::prefix('kunjungan')->name('kunjungan.')->group(function () {
+            Route::get('/', [KunjunganController::class, 'index'])->name('index');
+            Route::get('/pending', [KunjunganController::class, 'pending'])->name('pending');
+            Route::get('/approved', [KunjunganController::class, 'approved'])->name('approved');
+            Route::get('/completed', [KunjunganController::class, 'completed'])->name('completed');
+            Route::get('/rejected', [KunjunganController::class, 'rejected'])->name('rejected');
+            Route::get('/{id}', [KunjunganController::class, 'show'])->name('show');
+            Route::put('/{id}/status', [KunjunganController::class, 'updateStatus'])->name('updateStatus');
+            Route::delete('/{id}', [KunjunganController::class, 'destroy'])->name('destroy');
+            Route::get('/{id}/whatsapp-preview', [App\Http\Controllers\Admin\KunjunganController::class, 'whatsappPreview'])->name('whatsapp-preview');
+            Route::post('/{id}/confirm-status', [App\Http\Controllers\Admin\KunjunganController::class, 'confirmStatusUpdate'])->name('confirmStatusUpdate');
+        });
 
         Route::prefix('galeri')->name('galeri.')->group(function () {
             Route::get('/', [GaleriLaboratoriumController::class, 'index'])->name('index');

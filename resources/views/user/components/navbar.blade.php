@@ -44,7 +44,7 @@
                                 <a href="{{ route('tracking') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
                                     Tracking Pengajuan
                                 </a>
-                                <a href="{{ route('pengujian.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                                <a href="{{ route('testing.services') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
                                     Layanan Pengujian
                                 </a>
                                 <a href="{{ route('user.kunjungan.form') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
@@ -92,7 +92,7 @@
                     <a href="{{ route('tracking') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
                         Tracking Pengajuan
                     </a>
-                    <a href="{{ route('pengujian.index') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('testing.services') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
                         Layanan Pengujian
                     </a>
                     <a href="{{ route('user.kunjungan.form') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">

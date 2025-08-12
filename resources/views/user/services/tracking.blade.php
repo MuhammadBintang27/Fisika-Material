@@ -22,7 +22,7 @@
                     <li>
                         <div class="flex items-center">
                             <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
-                            <span class="text-blue-200">Peminjaman Alat</span>
+                            <span class="text-blue-200">Layanan Laboratorium</span>
                         </div>
                     </li>
                     <li>
@@ -38,10 +38,10 @@
         <div class="scroll-animate mb-8 opacity-0" data-animation="fade-up" data-delay="200">
             <h1 class="font-poppins text-4xl md:text-6xl font-bold leading-tight mb-6">
                 <span class="text-white">Tracking</span>
-                <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Peminjaman</span>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Layanan</span>
             </h1>
             <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
-                Lacak status peminjaman alat atau kunjungan laboratorium Anda
+                Lacak status peminjaman alat, kunjungan laboratorium, atau pengujian/karakterisasi Anda
             </p>
         </div>
     </div>
@@ -60,6 +60,7 @@
                     <select name="type" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="peminjaman" {{ request('type') === 'peminjaman' || !request('type') ? 'selected' : '' }}>Peminjaman Alat</option>
                         <option value="kunjungan" {{ request('type') === 'kunjungan' ? 'selected' : '' }}>Kunjungan Laboratorium</option>
+                        <option value="pengujian" {{ request('type') === 'pengujian' ? 'selected' : '' }}>Pengujian/Karakterisasi</option>
                     </select>
                 </div>
                 <div>
@@ -71,14 +72,14 @@
                 
                 <div class="flex justify-end">
                     <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-search mr-2"></i>Cari {{ request('type') === 'kunjungan' ? 'Kunjungan' : 'Peminjaman' }}
+                        <i class="fas fa-search mr-2"></i>Cari {{ request('type') === 'kunjungan' ? 'Kunjungan' : (request('type') === 'pengujian' ? 'Pengujian' : 'Peminjaman') }}
                     </button>
                 </div>
             </form>
         </div>
 
         <!-- Status Progress for Peminjaman -->
-        @if(request('type') !== 'kunjungan' && isset($peminjaman))
+        @if((request('type') === 'peminjaman' || !request('type')) && isset($peminjaman))
             <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Status Peminjaman</h3>
                 
@@ -411,8 +412,278 @@
             </div>
         @endif
 
+        <!-- Status Progress for Pengujian -->
+        @if(request('type') === 'pengujian' && isset($pengujian))
+            <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Status Pengujian</h3>
+                
+                <div class="relative">
+                    <!-- Progress Line -->
+                    <div class="absolute top-6 left-0 w-full h-1 bg-gray-200 rounded-full">
+                        @php
+                            $progressWidth = 0;
+                            if($pengujian->status === 'MENUNGGU') $progressWidth = 20;
+                            elseif($pengujian->status === 'DISETUJUI') $progressWidth = 40;
+                            elseif($pengujian->status === 'DITOLAK') $progressWidth = 40;
+                            elseif($pengujian->status === 'DIPROSES') $progressWidth = 70;
+                            elseif($pengujian->status === 'SELESAI') $progressWidth = 100;
+                        @endphp
+                        <div class="h-full bg-emerald-500 rounded-full transition-all duration-1000" style="width: {{ $progressWidth }}%"></div>
+                    </div>
+                    
+                    <!-- Progress Steps -->
+                    <div class="relative flex justify-between">
+                        <!-- Step 1: Pengajuan Dikirim -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($pengujian->status, ['MENUNGGU', 'DISETUJUI', 'DIPROSES', 'SELESAI']) ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500' }}">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-600 text-center">Pengajuan<br>Dikirim</span>
+                        </div>
+                        
+                        <!-- Step 2: Disetujui/Ditolak -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($pengujian->status, ['DISETUJUI', 'DIPROSES', 'SELESAI']) ? 'bg-emerald-500 text-white' : ($pengujian->status === 'DITOLAK' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500') }}">
+                                @if($pengujian->status === 'DITOLAK')
+                                    <i class="fas fa-times-circle"></i>
+                                @else
+                                    <i class="fas fa-check-circle"></i>
+                                @endif
+                            </div>
+                            <span class="text-sm font-medium text-gray-600 text-center">
+                                @if($pengujian->status === 'DITOLAK')
+                                    Ditolak
+                                @else
+                                    Disetujui
+                                @endif
+                            </span>
+                        </div>
+                        
+                        <!-- Step 3: Diproses -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ in_array($pengujian->status, ['DIPROSES', 'SELESAI']) ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500' }}">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-600 text-center">Sedang<br>Diproses</span>
+                        </div>
+                        
+                        <!-- Step 4: Selesai -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 {{ $pengujian->status === 'SELESAI' ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500' }}">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-600 text-center">Hasil<br>Tersedia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Status -->
+                <div class="mt-8 text-center">
+                    <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-lg font-semibold
+                        {{ $pengujian->status === 'MENUNGGU' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                        {{ $pengujian->status === 'DISETUJUI' ? 'bg-green-100 text-green-800' : '' }}
+                        {{ $pengujian->status === 'DIPROSES' ? 'bg-blue-100 text-blue-800' : '' }}
+                        {{ $pengujian->status === 'SELESAI' ? 'bg-green-100 text-green-800' : '' }}
+                        {{ $pengujian->status === 'DITOLAK' ? 'bg-red-100 text-red-800' : '' }}">
+                        @php
+                            $statusIcons = [
+                                'MENUNGGU' => 'hourglass-half',
+                                'DISETUJUI' => 'check-circle',
+                                'DIPROSES' => 'cogs',
+                                'SELESAI' => 'flag-checkered',
+                                'DITOLAK' => 'times-circle'
+                            ];
+                            $statusTexts = [
+                                'MENUNGGU' => 'Menunggu Persetujuan',
+                                'DISETUJUI' => 'Disetujui',
+                                'DIPROSES' => 'Sedang Diproses',
+                                'SELESAI' => 'Selesai',
+                                'DITOLAK' => 'Ditolak'
+                            ];
+                        @endphp
+                        <i class="fas fa-{{ $statusIcons[$pengujian->status] ?? 'question-circle' }}"></i>
+                        {{ $statusTexts[$pengujian->status] ?? $pengujian->status }}
+                    </div>
+                    @if($pengujian->status === 'MENUNGGU')
+                        <p class="text-gray-600 mt-3">Pengajuan pengujian Anda sedang menunggu review dari admin laboratorium</p>
+                    @elseif($pengujian->status === 'DISETUJUI')
+                        <p class="text-gray-600 mt-3">✅ Pengajuan disetujui! Silakan serahkan sampel sesuai jadwal yang ditentukan</p>
+                        @if($pengujian->estimasiSelesai)
+                            <p class="text-gray-600 mt-1">📅 Estimasi selesai: {{ \Carbon\Carbon::parse($pengujian->estimasiSelesai)->format('d M Y') }}</p>
+                        @endif
+                    @elseif($pengujian->status === 'DIPROSES')
+                        <p class="text-gray-600 mt-3">🔬 Sampel sedang dalam proses pengujian di laboratorium</p>
+                        @if($pengujian->estimasiSelesai)
+                            <p class="text-gray-600 mt-1">📅 Estimasi selesai: {{ \Carbon\Carbon::parse($pengujian->estimasiSelesai)->format('d M Y') }}</p>
+                        @endif
+                    @elseif($pengujian->status === 'SELESAI')
+                        <p class="text-gray-600 mt-3">✅ <strong>Pengujian selesai!</strong> Hasil pengujian sudah tersedia untuk diunduh</p>
+                    @elseif($pengujian->status === 'DITOLAK')
+                        <p class="text-gray-600 mt-3">❌ Pengajuan pengujian ditolak. {{ $pengujian->catatanAdmin ? 'Alasan: ' . $pengujian->catatanAdmin : '' }}</p>
+                    @endif
+                </div>
+
+                <!-- Pengujian Summary -->
+                <div class="mt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Kode Tracking</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $pengujian->trackingCode }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Nama Pengaju</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $pengujian->namaPengaju }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Jenis Layanan</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $pengujian->layanan->namaLayanan }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Tanggal Penyerahan</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ \Carbon\Carbon::parse($pengujian->tanggalPenyerahan)->format('d M Y') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Jumlah Sampel</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $pengujian->jumlahSampel }} sampel</p>
+                        </div>
+                        @if($pengujian->instansi)
+                        <div>
+                            <p class="text-sm text-gray-500">Instansi</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $pengujian->instansi }}</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengujian Details -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900">{{ $pengujian->namaPengaju }}</h4>
+                            <p class="text-sm text-gray-600">{{ $pengujian->instansi ?? 'Tidak ada instansi' }}</p>
+                            @if($pengujian->user_type)
+                                <p class="text-sm text-gray-600">{{ $pengujian->nip_nim }} • {{ $pengujian->getUserTypeLabelAttribute() }}</p>
+                            @endif
+                        </div>
+                        <div class="text-right">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full {{ $pengujian->getStatusBadgeAttribute() }}">
+                                {{ $pengujian->status }}
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">{{ $pengujian->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-900 mb-3">Informasi Layanan</h5>
+                            <div class="space-y-2 text-sm">
+                                <p><span class="font-medium">Layanan:</span> {{ $pengujian->layanan->namaLayanan }}</p>
+                                @if($pengujian->layanan->deskripsi)
+                                    <p><span class="font-medium">Deskripsi:</span> {{ Str::limit($pengujian->layanan->deskripsi, 100) }}</p>
+                                @endif
+                                @if($pengujian->layanan->harga)
+                                    <p><span class="font-medium">Harga:</span> Rp {{ number_format($pengujian->layanan->harga, 0, ',', '.') }}</p>
+                                @endif
+                                @if($pengujian->judul_penelitian)
+                                    <p><span class="font-medium">Judul Penelitian:</span> {{ $pengujian->judul_penelitian }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h5 class="font-semibold text-gray-900 mb-3">Informasi Sampel</h5>
+                            <div class="space-y-2 text-sm">
+                                <p><span class="font-medium">Jumlah:</span> {{ $pengujian->jumlahSampel }} sampel</p>
+                                <p><span class="font-medium">Deskripsi:</span> {{ Str::limit($pengujian->deskripsiSampel, 100) }}</p>
+                                @if($pengujian->filePendukung)
+                                    <p><span class="font-medium">File Pendukung:</span> <a href="{{ asset('storage/' . $pengujian->filePendukung) }}" target="_blank" class="text-blue-600 hover:underline">Lihat File</a></p>
+                                @endif
+                                @if($pengujian->supervisor_name)
+                                    <p><span class="font-medium">Pembimbing:</span> {{ $pengujian->supervisor_name }} ({{ $pengujian->supervisor_nip }})</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hasil Pengujian -->
+                    @if($pengujian->status === 'SELESAI' && $pengujian->hasil && $pengujian->hasil->count() > 0)
+                    <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-file-download text-green-600 mr-2"></i>
+                            <h5 class="font-semibold text-green-900">Hasil Pengujian Tersedia</h5>
+                        </div>
+                        <p class="text-green-700 text-sm mb-4">Hasil pengujian sudah selesai dan dapat diunduh. Silakan download file hasil pengujian di bawah ini:</p>
+                        
+                        <div class="space-y-3">
+                            @foreach($pengujian->hasil as $hasil)
+                            <div class="flex items-center justify-between p-3 bg-white border border-green-200 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-file-alt text-green-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="font-medium text-gray-900">{{ $hasil->namaFile ?: 'Hasil Pengujian' }}</h6>
+                                        <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                            @if($hasil->ukuranFile)
+                                                <span><i class="fas fa-weight mr-1"></i>{{ $hasil->ukuranFile }}</span>
+                                            @endif
+                                            @if($hasil->uploadedAt)
+                                                <span><i class="fas fa-clock mr-1"></i>{{ $hasil->uploadedAt->format('d/m/Y H:i') }}</span>
+                                            @endif
+                                        </div>
+                                        @if($hasil->catatan)
+                                            <p class="text-sm text-gray-600 mt-1">{{ $hasil->catatan }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{{ route('testing.downloadHasil', ['pengajuanId' => $pengujian->id, 'hasilId' => $hasil->id]) }}" 
+                                       class="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Download
+                                    </a>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-blue-600 mr-2 mt-1"></i>
+                                <div class="text-sm text-blue-700">
+                                    <p class="font-medium mb-1">Catatan Penting:</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Hasil pengujian telah diverifikasi oleh tim laboratorium</li>
+                                        <li>File hasil dapat diunduh kapan saja selama masih tersimpan di sistem</li>
+                                        <li>Jika mengalami kesulitan dalam mengunduh, silakan hubungi tim laboratorium</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @elseif($pengujian->status === 'SELESAI')
+                    <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                            <p class="text-yellow-700 text-sm">
+                                <strong>Pengujian telah selesai</strong> namun hasil belum tersedia untuk diunduh. 
+                                Silakan hubungi tim laboratorium jika diperlukan.
+                            </p>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+
         <!-- No Results -->
-        @if(request('tracking_code') && !isset($peminjaman) && !isset($record))
+        @if(request('tracking_code') && !isset($peminjaman) && !isset($record) && !isset($pengujian))
             <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
                 <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <i class="fas fa-search text-gray-400 text-2xl"></i>
