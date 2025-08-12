@@ -5,64 +5,53 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Kunjungan Selesai</h1>
-            <p class="text-gray-600">Kelola permintaan kunjungan laboratorium yang sudah selesai</p>
-        </div>
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('admin.kunjungan.pending') }}" 
-               class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors">
-                <i class="fas fa-clock mr-2"></i>
-                Pending ({{ \App\Models\Kunjungan::where('status', 'PENDING')->count() }})
-            </a>
-        </div>
-    </div>
-
-    <!-- Search Form -->
-    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
-        <form method="GET" action="{{ route('admin.kunjungan.completed') }}" class="flex items-center space-x-4">
-            <div class="flex-1">
-                <input type="text" name="search" 
-                       value="{{ request()->input('search') }}"
-                       placeholder="Cari berdasarkan nama pengunjung, instansi, atau kode tracking..."
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+    <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl shadow-lg text-white p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Kunjungan Selesai</h1>
+                <p class="text-indigo-100">Kelola permintaan kunjungan laboratorium yang sudah selesai</p>
             </div>
-            <button type="submit" 
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                <i class="fas fa-search mr-2"></i>Cari
-            </button>
-        </form>
+            <div class="text-right">
+                <div class="text-2xl font-bold">{{ $kunjungan->total() }}</div>
+                <div class="text-indigo-100">Total Kunjungan</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Status Filter -->
-    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 p-4">
-        <div class="flex items-center space-x-4">
+    <!-- Status Navigation -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <div class="flex items-center space-x-2 overflow-x-auto">
             <a href="{{ route('admin.kunjungan.index') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Semua
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-list mr-2"></i>Semua
             </a>
             <a href="{{ route('admin.kunjungan.pending') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Pending
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-clock mr-2"></i>Pending
             </a>
             <a href="{{ route('admin.kunjungan.approved') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-check-circle mr-2"></i>Disetujui
+            </a>
+            <a href="{{ route('admin.kunjungan.completed') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg">
+                <i class="fas fa-check-double mr-2"></i>Selesai
+            </a>
+            <a href="{{ route('admin.kunjungan.rejected') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap text-gray-600 hover:bg-gray-100">
+                <i class="fas fa-times-circle mr-2"></i>Ditolak
+            </a>
+        </div>
+    </div>
                 Disetujui
             </a>
             <a href="{{ route('admin.kunjungan.completed') }}" 
                class="px-4 py-2 rounded-lg font-medium bg-gray-100 text-gray-700">
-                Selesai
-            </a>
-            <a href="{{ route('admin.kunjungan.rejected') }}" 
-               class="px-4 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100">
-                Ditolak
-            </a>
         </div>
     </div>
 
     <!-- Visits List -->
-    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100">
         <div class="p-6">
             @if($kunjungan->count() > 0)
                 <div class="overflow-x-auto">
@@ -72,7 +61,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Tracking</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Pengunjung</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instansi</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Kunjungan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jadwal</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -80,14 +69,21 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($kunjungan as $visit)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-indigo-50 transition-colors duration-200">
                                     <td class="px-6 py-4">
                                         <div class="text-sm font-medium text-gray-900">{{ $visit->tracking_code }}</div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div>
-                                            <div class="text-sm font-medium text-gray-900">{{ $visit->namaPengunjung }}</div>
-                                            <div class="text-sm text-gray-500">{{ $visit->noHp }}</div>
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div class="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 flex items-center justify-center">
+                                                    <span class="text-sm font-medium text-white">{{ substr($visit->namaPengunjung, 0, 1) }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $visit->namaPengunjung }}</div>
+                                                <div class="text-sm text-gray-500">{{ $visit->noHp }}</div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
@@ -95,32 +91,25 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
-                                            <div>{{ \Carbon\Carbon::parse($visit->jadwal->tanggal)->format('d M Y') }}</div>
+                                            {{ $visit->jadwal ? \Carbon\Carbon::parse($visit->jadwal->tanggal)->format('d M Y') : 'Belum dijadwalkan' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
-                                            <div>{{ $visit->jadwal->jam_mulai }} - {{ $visit->jadwal->jam_selesai }}</div>
+                                            {{ $visit->jadwal ? $visit->jadwal->time_label : 'Belum dijadwalkan' }}
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">{{ $visit->status_label }}</span>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                            SELESAI
+                                        </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex items-center space-x-2">
+                                    <td class="px-6 py-4 text-sm font-medium">
+                                        <div class="flex items-center space-x-3">
                                             <a href="{{ route('admin.kunjungan.show', $visit->id) }}" 
-                                               class="text-blue-600 hover:text-blue-900">
-                                                <i class="fas fa-eye"></i>
+                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                                <i class="fas fa-eye mr-1"></i>Detail
                                             </a>
-                                            <form method="POST" action="{{ route('admin.kunjungan.destroy', $visit->id) }}" 
-                                                  class="inline" 
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kunjungan ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
                                         </div>
                                     </td>
                                 </tr>

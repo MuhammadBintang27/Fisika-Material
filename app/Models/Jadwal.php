@@ -74,7 +74,7 @@ class Jadwal extends Model
         if (!$this->jamMulai || !$this->jamSelesai) {
             return 'Tidak ditentukan';
         }
-        return Carbon::parse($this->jamMulai)->format('H:i') . ' - ' . Carbon::parse($this->jamSelesai)->format('H:i');
+        return Carbon::parse($this->jamMulai)->format('H.i') . ' - ' . Carbon::parse($this->jamSelesai)->format('H.i');
     }
 
     public function getDurationAttribute()
