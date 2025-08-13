@@ -134,6 +134,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::prefix('pengajuan-pengujian')->name('pengajuan-pengujian.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'index'])->name('index');
+            Route::get('/menunggu', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'menunggu'])->name('menunggu');
+            Route::get('/disetujui', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'disetujui'])->name('disetujui');
+            Route::get('/diproses', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'diproses'])->name('diproses');
+            Route::get('/selesai', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'selesai'])->name('selesai');
+            Route::get('/ditolak', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'ditolak'])->name('ditolak');
             Route::get('/{id}', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'show'])->name('show');
             Route::patch('/{id}/status', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'updateStatus'])->name('update-status');
             Route::post('/{id}/upload-hasil', [App\Http\Controllers\Admin\PengajuanPengujianController::class, 'uploadHasil'])->name('upload-hasil');

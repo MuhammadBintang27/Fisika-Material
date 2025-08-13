@@ -31,8 +31,8 @@ class PengajuanPengujianController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('kodeTracking', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
                   ->orWhereHas('layanan', function($layananQuery) use ($search) {
                       $layananQuery->where('namaLayanan', 'like', "%{$search}%");
                   });
@@ -53,6 +53,111 @@ class PengajuanPengujianController extends Controller
         $layananList = LayananPengujian::orderBy('namaLayanan')->get();
         
         return view('admin.pengajuan-pengujian.index', compact('pengajuan', 'stats', 'layananList'));
+    }
+
+    public function menunggu(Request $request)
+    {
+        $query = PengajuanPengujian::with(['layanan'])->where('status', 'MENUNGGU')->orderBy('created_at', 'desc');
+
+        // Search by tracking code, nama pengaju, atau layanan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
+                  ->orWhereHas('layanan', function($layananQuery) use ($search) {
+                      $layananQuery->where('namaLayanan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pengajuan = $query->paginate(15)->withQueryString();
+        
+        return view('admin.pengajuan-pengujian.menunggu', compact('pengajuan'));
+    }
+
+    public function disetujui(Request $request)
+    {
+        $query = PengajuanPengujian::with(['layanan'])->where('status', 'DISETUJUI')->orderBy('created_at', 'desc');
+
+        // Search by tracking code, nama pengaju, atau layanan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
+                  ->orWhereHas('layanan', function($layananQuery) use ($search) {
+                      $layananQuery->where('namaLayanan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pengajuan = $query->paginate(15)->withQueryString();
+        
+        return view('admin.pengajuan-pengujian.disetujui', compact('pengajuan'));
+    }
+
+    public function diproses(Request $request)
+    {
+        $query = PengajuanPengujian::with(['layanan'])->where('status', 'DIPROSES')->orderBy('created_at', 'desc');
+
+        // Search by tracking code, nama pengaju, atau layanan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
+                  ->orWhereHas('layanan', function($layananQuery) use ($search) {
+                      $layananQuery->where('namaLayanan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pengajuan = $query->paginate(15)->withQueryString();
+        
+        return view('admin.pengajuan-pengujian.diproses', compact('pengajuan'));
+    }
+
+    public function selesai(Request $request)
+    {
+        $query = PengajuanPengujian::with(['layanan'])->where('status', 'SELESAI')->orderBy('created_at', 'desc');
+
+        // Search by tracking code, nama pengaju, atau layanan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
+                  ->orWhereHas('layanan', function($layananQuery) use ($search) {
+                      $layananQuery->where('namaLayanan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pengajuan = $query->paginate(15)->withQueryString();
+        
+        return view('admin.pengajuan-pengujian.selesai', compact('pengajuan'));
+    }
+
+    public function ditolak(Request $request)
+    {
+        $query = PengajuanPengujian::with(['layanan'])->where('status', 'DITOLAK')->orderBy('created_at', 'desc');
+
+        // Search by tracking code, nama pengaju, atau layanan
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('trackingCode', 'like', "%{$search}%")
+                  ->orWhere('namaPengaju', 'like', "%{$search}%")
+                  ->orWhereHas('layanan', function($layananQuery) use ($search) {
+                      $layananQuery->where('namaLayanan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pengajuan = $query->paginate(15)->withQueryString();
+        
+        return view('admin.pengajuan-pengujian.ditolak', compact('pengajuan'));
     }
 
     public function show($id)

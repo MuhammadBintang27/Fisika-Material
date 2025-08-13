@@ -88,9 +88,9 @@ class PengujianController extends Controller
                 'detailKhusus' => $request->detail_khusus,
                 'estimasiSelesai' => $estimasiSelesai,
                 'status' => 'MENUNGGU',
-                'supervisor_name' => $request->user_type === 'mahasiswa' ? $request->nama_pembimbing : ($request->user_type === 'pihak-luar' ? $request->nama_penanggung_jawab : null),
+                'supervisor_name' => $request->user_type === 'mahasiswa' ? $request->nama_pembimbing : null,
                 'supervisor_nip' => $request->user_type === 'mahasiswa' ? $request->nip_pembimbing : null,
-                'supervisor_jabatan' => $request->user_type === 'pihak-luar' ? $request->jabatan_penanggung_jawab : null,
+                'supervisor_jabatan' => null,
             ]);
 
             \Log::info('Testing service submission successful', ['pengajuan_id' => $pengajuan->id]);
@@ -98,7 +98,7 @@ class PengujianController extends Controller
             return view('user.pengujian.success', [
                 'tracking_code' => $trackingCode,
                 'pengajuan' => $pengajuan,
-                'tracking_link' => route('testing.tracking', ['tracking_code' => $pengajuan->trackingCode])
+                'tracking_link' => route('tracking') . '?type=pengujian&tracking_code=' . $pengajuan->trackingCode
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::warning('Validation failed', ['errors' => $e->errors()]);
@@ -191,11 +191,8 @@ class PengujianController extends Controller
                 'nama_pihak_luar' => 'required|string|max:255',
                 'nip_pihak_luar' => 'required|string|max:20',
                 'instansi_pihak_luar' => 'required|string|max:255',
-                'jabatan' => 'nullable|string|max:255',
                 'no_hp_pihak_luar' => 'required|string|max:20',
                 'email_pihak_luar' => 'nullable|email|max:255',
-                'nama_penanggung_jawab' => 'required|string|max:255',
-                'jabatan_penanggung_jawab' => 'nullable|string|max:255',
             ]);
         }
     }
@@ -258,9 +255,7 @@ class PengujianController extends Controller
 
     private function getJabatan(Request $request)
     {
-        if ($request->user_type === 'pihak-luar') {
-            return $request->jabatan;
-        } elseif ($request->user_type === 'dosen' && $request->filled('jabatan')) {
+        if ($request->user_type === 'dosen' && $request->filled('jabatan')) {
             return $request->jabatan;
         }
         return null;

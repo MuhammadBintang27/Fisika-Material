@@ -3,183 +3,149 @@
 @section('title', 'Pengajuan Berhasil - Laboratorium Fisika Material dan Energi')
 
 @section('content')
-<!-- Success Section -->
-<section class="py-16 bg-gradient-to-b from-green-50 to-white min-h-screen flex items-center">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-        <!-- Success Icon -->
+<!-- Hero Section -->
+<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('/images/hero.jpg') }}" alt="Pengajuan Berhasil" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-700/90 via-red-800/80 to-red-900/70"></div>
+    </div>
+
+    <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-6xl">
         <div class="scroll-animate mb-8 opacity-0" data-animation="fade-down">
-            <div class="w-32 h-32 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                <i class="fas fa-check-circle text-6xl text-green-500"></i>
-            </div>
+            <nav class="flex justify-center" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('home') }}" class="text-orange-200 hover:text-white transition-colors duration-200 flex items-center">
+                            <i class="fas fa-home mr-2"></i>Beranda
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-orange-300 mx-3"></i>
+                            <span class="text-orange-200">Layanan Pengujian</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-orange-300 mx-3"></i>
+                            <span class="text-white font-medium">Pengajuan Berhasil</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
         </div>
 
-        <!-- Success Message -->
         <div class="scroll-animate mb-8 opacity-0" data-animation="fade-up" data-delay="200">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Pengajuan Berhasil Dikirim!
+            <h1 class="font-poppins text-4xl md:text-6xl font-bold leading-tight mb-6">
+                <span class="text-white">Pengajuan</span>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Berhasil</span>
             </h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Terima kasih telah mengajukan layanan pengujian. Kami akan segera memproses pengajuan Anda.
+            <p class="text-xl md:text-2xl text-orange-100 max-w-4xl mx-auto leading-relaxed">
+                Permohonan pengujian Anda telah diterima!
             </p>
         </div>
+    </div>
+</section>
 
-        <!-- Tracking Code Display -->
-        @if(isset($tracking_code))
-            <div class="scroll-animate mb-12 opacity-0" data-animation="fade-up" data-delay="300">
-                <div class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto border border-gray-100">
-                    <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-xl mb-6">
-                        <h2 class="text-xl font-bold mb-2">Kode Tracking Anda</h2>
-                        <div class="bg-white/20 backdrop-blur rounded-lg p-4">
-                            <p class="text-orange-100 text-sm mb-2">Simpan kode ini untuk melacak status pengajuan:</p>
-                            <p class="font-mono text-2xl font-bold">{{ $tracking_code }}</p>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-center space-x-4">
-                            <button 
-                                onclick="copyTrackingCode()" 
-                                id="copyButton"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            >
-                                <i class="fas fa-copy mr-2"></i>
-                                Salin Kode
-                            </button>
-                            
-                            @if(isset($tracking_link))
-                                <a href="{{ $tracking_link }}" class="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Lacak Sekarang
-                                </a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+<!-- Success Section -->
+<section class="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-check-circle text-green-600 text-3xl"></i>
             </div>
-        @endif
-
-        <!-- Submission Details -->
-        @if(isset($pengajuan))
-            <div class="scroll-animate mb-12 opacity-0" data-animation="fade-up" data-delay="400">
-                <div class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-900 mb-6">Detail Pengajuan</h3>
-
-                    <div class="space-y-4 text-left">
-                        @if($pengajuan->layanan)
-                            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                                <span class="text-gray-600">Layanan:</span>
-                                <span class="font-semibold text-gray-900">{{ $pengajuan->layanan->namaLayanan }}</span>
-                            </div>
-                        @endif
-                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                            <span class="text-gray-600">Nama Pengaju:</span>
-                            <span class="font-semibold text-gray-900">{{ $pengajuan->namaPengaju }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                            <span class="text-gray-600">No. HP:</span>
-                            <span class="font-semibold text-gray-900">{{ $pengajuan->noHp }}</span>
-                        </div>
-                        @if($pengajuan->email)
-                            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                                <span class="text-gray-600">Email:</span>
-                                <span class="font-semibold text-gray-900">{{ $pengajuan->email }}</span>
-                            </div>
-                        @endif
-                        @if($pengajuan->instansi)
-                            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                                <span class="text-gray-600">Instansi:</span>
-                                <span class="font-semibold text-gray-900">{{ $pengajuan->instansi }}</span>
-                            </div>
-                        @endif
-                        <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                            <span class="text-gray-600">Status:</span>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                                <i class="fas fa-clock mr-2"></i>
-                                Menunggu Persetujuan
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center py-3">
-                            <span class="text-gray-600">Tanggal Pengajuan:</span>
-                            <span class="font-semibold text-gray-900">{{ $pengajuan->tanggalPengajuan->format('d/m/Y H:i') }}</span>
-                        </div>
-                    </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Pengajuan Pengujian Berhasil!</h3>
+            <p class="text-gray-600 mb-4">Terima kasih telah mengajukan layanan pengujian di Laboratorium Fisika Material dan Energi.</p>
+            <p class="text-gray-600 mb-6">Gunakan kode tracking berikut untuk memantau status pengujian Anda:</p>
+            
+            @if(isset($tracking_code))
+            <div class="bg-gray-100 rounded-xl p-4 mb-6">
+                <p class="text-lg font-semibold text-gray-900">Kode Tracking: {{ $tracking_code }}</p>
+                @if(isset($tracking_link))
+                <div class="mt-4 flex justify-center items-center space-x-2">
+                    <input id="trackingLink" type="text" value="{{ $tracking_link }}" readonly 
+                           class="w-full max-w-md px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-700">
+                    <button id="copyButton" class="bg-orange-600 text-white px-4 py-3 rounded-xl hover:bg-orange-700 transition-colors">
+                        <i class="fas fa-copy mr-2"></i>Salin
+                    </button>
                 </div>
-            </div>
-        @endif
-
-        <!-- Next Steps -->
-        <div class="scroll-animate mb-12 opacity-0" data-animation="fade-up" data-delay="600">
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 max-w-3xl mx-auto">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6">Langkah Selanjutnya</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-clock text-2xl text-blue-600"></i>
-                        </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Menunggu Persetujuan</h4>
-                        <p class="text-sm text-gray-600">Tim kami akan meninjau pengajuan Anda dalam 1-2 hari kerja</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fab fa-whatsapp text-2xl text-green-600"></i>
-                        </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Notifikasi WhatsApp</h4>
-                        <p class="text-sm text-gray-600">Anda akan menerima notifikasi status melalui WhatsApp</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-search text-2xl text-orange-600"></i>
-                        </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Lacak Status</h4>
-                        <p class="text-sm text-gray-600">Gunakan kode tracking untuk melihat progress pengujian</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="scroll-animate opacity-0" data-animation="fade-up" data-delay="800">
-            <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                @if(isset($tracking_code))
-                    <a href="{{ route('tracking') }}?code={{ $tracking_code }}" 
-                       class="bg-gradient-to-r from-orange-600 to-red-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center">
-                        <i class="fas fa-search mr-2"></i>
-                        Lacak Status
-                    </a>
                 @endif
-                <a href="{{ route('testing.services') }}" 
-                   class="bg-white text-orange-600 py-3 px-6 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300 border border-orange-600 flex items-center justify-center">
-                    <i class="fas fa-plus mr-2"></i>
-                    Ajukan Lagi
+            </div>
+            @endif
+            
+            <p class="text-sm text-gray-500 mb-6">
+                <i class="fas fa-info-circle mr-1"></i>
+                Simpan kode tracking untuk memeriksa perkembangan status pengujian Anda kapan saja.
+            </p>
+            
+            <div class="flex justify-center space-x-4">
+                @if(isset($tracking_code))
+                <a href="{{ route('tracking') }}?type=pengujian&tracking_code={{ $tracking_code }}" class="bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-700 transition-colors">
+                    <i class="fas fa-search mr-2"></i>Cek Status Sekarang
+                </a>
+                @endif
+                <a href="{{ route('testing.services') }}" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Layanan
                 </a>
             </div>
         </div>
 
+        <!-- Additional Info Section -->
+        @if(isset($pengajuan))
+        <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <h4 class="text-lg font-semibold text-gray-900 mb-4 text-center">Detail Pengajuan</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                @if($pengajuan->layanan)
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Layanan:</span>
+                    <span class="font-medium text-gray-900">{{ $pengajuan->layanan->namaLayanan }}</span>
+                </div>
+                @endif
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Nama Pengaju:</span>
+                    <span class="font-medium text-gray-900">{{ $pengajuan->namaPengaju }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">No. HP:</span>
+                    <span class="font-medium text-gray-900">{{ $pengajuan->noHp }}</span>
+                </div>
+                @if($pengajuan->instansi)
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Instansi:</span>
+                    <span class="font-medium text-gray-900">{{ $pengajuan->instansi }}</span>
+                </div>
+                @endif
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Status:</span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <i class="fas fa-clock mr-1"></i>Menunggu Persetujuan
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Tanggal Pengajuan:</span>
+                    <span class="font-medium text-gray-900">{{ $pengajuan->tanggalPengajuan->format('d/m/Y H:i') }}</span>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Contact Info -->
-        <div class="scroll-animate mt-16 opacity-0" data-animation="fade-up" data-delay="1000">
-            <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-white max-w-2xl mx-auto">
-                <h4 class="text-xl font-bold mb-6">Butuh Bantuan?</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div class="flex items-center">
-                        <i class="fas fa-phone w-5 h-5 mr-3 text-orange-400"></i>
-                        <div>
-                            <p class="text-gray-300">Telepon</p>
-                            <p class="font-semibold">+62 651 7551394</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-envelope w-5 h-5 mr-3 text-orange-400"></i>
-                        <div>
-                            <p class="text-gray-300">Email</p>
-                            <p class="font-semibold">fisika@unsyiah.ac.id</p>
-                        </div>
+        <div class="mt-8 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 text-white text-center">
+            <h4 class="text-lg font-semibold mb-4">Butuh Bantuan?</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-phone w-4 h-4 mr-2 text-orange-400"></i>
+                    <div>
+                        <p class="text-gray-300">Telepon</p>
+                        <p class="font-semibold">+62 651 7551394</p>
                     </div>
                 </div>
-                <div class="mt-6 pt-6 border-t border-gray-700">
-                    <p class="text-gray-300 text-center">
-                        <i class="fas fa-clock mr-2"></i>
-                        Jam Operasional: Senin - Jumat, 08:00 - 16:00 WIB
-                    </p>
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-envelope w-4 h-4 mr-2 text-orange-400"></i>
+                    <div>
+                        <p class="text-gray-300">Email</p>
+                        <p class="font-semibold">fisika@unsyiah.ac.id</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -191,38 +157,74 @@
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
 .scroll-animate[data-animation="fade-down"] {
     transform: translateY(-60px);
 }
-
 .scroll-animate[data-animation="fade-up"] {
     transform: translateY(60px);
 }
-
 .scroll-animate.animate {
     opacity: 1;
     transform: translateY(0);
 }
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-.animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
-    copyTrackingCode();
+
+    // Copy tracking link to clipboard
+    const copyButton = document.getElementById('copyButton');
+    const trackingLink = document.getElementById('trackingLink');
+    
+    if (copyButton && trackingLink) {
+        copyButton.addEventListener('click', function() {
+            trackingLink.select();
+            try {
+                document.execCommand('copy');
+                copyButton.innerHTML = '<i class="fas fa-check mr-2"></i>Disalin';
+                copyButton.classList.replace('bg-orange-600', 'bg-green-600');
+                copyButton.classList.replace('hover:bg-orange-700', 'hover:bg-green-700');
+                setTimeout(() => {
+                    copyButton.innerHTML = '<i class="fas fa-copy mr-2"></i>Salin';
+                    copyButton.classList.replace('bg-green-600', 'bg-orange-600');
+                    copyButton.classList.replace('hover:bg-green-700', 'hover:bg-orange-700');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Gagal menyalin link. Silakan salin secara manual.');
+            }
+        });
+    }
+
+    // Auto select tracking code when clicked
+    const trackingCode = document.querySelector('.font-mono');
+    if (trackingCode) {
+        trackingCode.addEventListener('click', function() {
+            const range = document.createRange();
+            range.selectNode(trackingCode);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                const originalText = trackingCode.textContent;
+                trackingCode.textContent = 'Disalin!';
+                setTimeout(() => {
+                    trackingCode.textContent = originalText;
+                }, 1000);
+            } catch (err) {
+                console.log('Copy failed');
+            }
+            
+            window.getSelection().removeAllRanges();
+        });
+    }
 });
 
 function initScrollAnimations() {
@@ -244,34 +246,6 @@ function initScrollAnimations() {
     animatedElements.forEach(element => {
         observer.observe(element);
     });
-}
-
-function copyTrackingCode() {
-    // Auto select tracking code when clicked
-    const trackingCode = document.querySelector('.font-mono');
-    if (trackingCode) {
-        trackingCode.addEventListener('click', function() {
-            const range = document.createRange();
-            range.selectNode(trackingCode);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            
-            // Try to copy to clipboard
-            try {
-                document.execCommand('copy');
-                // Show tooltip or notification
-                const originalText = trackingCode.textContent;
-                trackingCode.textContent = 'Disalin!';
-                setTimeout(() => {
-                    trackingCode.textContent = originalText;
-                }, 1000);
-            } catch (err) {
-                console.log('Copy failed');
-            }
-            
-            window.getSelection().removeAllRanges();
-        });
-    }
 }
 </script>
 @endsection

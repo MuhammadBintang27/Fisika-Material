@@ -215,32 +215,41 @@
 
                         <!-- User Type Selection -->
                         <div class="mb-8">
-                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Kategori Pengaju *</h4>
-                            <div class="grid grid-cols-1 gap-3">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-6">Kategori Peminjam</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <label class="user-type-option cursor-pointer">
                                     <input type="radio" name="user_type" value="dosen" class="sr-only" {{ old('user_type') == 'dosen' ? 'checked' : '' }}>
-                                    <div class="p-4 border-2 border-gray-200 rounded-xl text-left hover:border-amber-300 hover:bg-amber-50 transition-all duration-300">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-user-tie text-xl text-amber-600 mr-3"></i>
-                                            <h5 class="font-semibold text-gray-900">Dosen</h5>
+                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 group">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+                                                <i class="fas fa-user-tie text-xl text-blue-600"></i>
+                                            </div>
+                                            <h5 class="font-semibold text-gray-900 mb-2">Dosen</h5>
+                                            <p class="text-sm text-gray-600">Dosen USK yang akan menggunakan sarana laboratorium untuk penelitian</p>
                                         </div>
                                     </div>
                                 </label>
                                 <label class="user-type-option cursor-pointer">
                                     <input type="radio" name="user_type" value="mahasiswa" class="sr-only" {{ old('user_type') == 'mahasiswa' ? 'checked' : '' }}>
-                                    <div class="p-4 border-2 border-gray-200 rounded-xl text-left hover:border-amber-300 hover:bg-amber-50 transition-all duration-300">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-user-graduate text-xl text-amber-600 mr-3"></i>
-                                            <h5 class="font-semibold text-gray-900">Mahasiswa</h5>
+                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-green-400 hover:bg-green-50 transition-all duration-300 group">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+                                                <i class="fas fa-user-graduate text-xl text-green-600"></i>
+                                            </div>
+                                            <h5 class="font-semibold text-gray-900 mb-2">Mahasiswa</h5>
+                                            <p class="text-sm text-gray-600">Mahasiswa yang akan menggunakan sarana laboratorium untuk penelitian</p>
                                         </div>
                                     </div>
                                 </label>
                                 <label class="user-type-option cursor-pointer">
                                     <input type="radio" name="user_type" value="pihak-luar" class="sr-only" {{ old('user_type') == 'pihak-luar' ? 'checked' : '' }}>
-                                    <div class="p-4 border-2 border-gray-200 rounded-xl text-left hover:border-amber-300 hover:bg-amber-50 transition-all duration-300">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-building text-xl text-amber-600 mr-3"></i>
-                                            <h5 class="font-semibold text-gray-900">Pihak Luar</h5>
+                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 group">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                                                <i class="fas fa-building text-xl text-purple-600"></i>
+                                            </div>
+                                            <h5 class="font-semibold text-gray-900 mb-2">Pihak Luar USK</h5>
+                                            <p class="text-sm text-gray-600">Pihak luar USK yang ingin menggunakan peralatan laboratorium</p>
                                         </div>
                                     </div>
                                 </label>
@@ -253,128 +262,136 @@
                         <!-- Dynamic Forms for each user type -->
                         <!-- Dosen Form -->
                         <div id="dosenForm" class="user-form hidden mb-6">
-                            <h5 class="text-md font-semibold text-gray-900 mb-4">Informasi Dosen</h5>
-                            <div class="space-y-4">
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6">Informasi Pemohon</h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="nama_dosen" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
+                                    <label for="nama_dosen" class="block text-sm font-medium text-gray-700 mb-2">Nama Dosen *</label>
                                     <input type="text" id="nama_dosen" name="nama_dosen" value="{{ old('nama_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="nip_dosen" class="block text-sm font-medium text-gray-700 mb-2">NIP *</label>
                                     <input type="text" id="nip_dosen" name="nip_dosen" value="{{ old('nip_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 </div>
                                 <div>
-                                    <label for="no_hp_dosen" class="block text-sm font-medium text-gray-700 mb-2">No. HP *</label>
+                                    <label for="no_hp_dosen" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_dosen" name="no_hp_dosen" value="{{ old('no_hp_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
-                                    <label for="email_dosen" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <label for="email_dosen" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_dosen" name="email_dosen" value="{{ old('email_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                            placeholder="nama@email.com">
                                 </div>
+                            </div>
+                            
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6 mt-8">Informasi Penelitian</h5>
+                            <div>
+                                <label for="judul_penelitian_dosen" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
+                                <textarea id="judul_penelitian_dosen" name="judul_penelitian" rows="3"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                          placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
 
                         <!-- Mahasiswa Form -->
                         <div id="mahasiswaForm" class="user-form hidden mb-6">
-                            <h5 class="text-md font-semibold text-gray-900 mb-4">Informasi Mahasiswa</h5>
-                            <div class="space-y-4 mb-6">
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6">Informasi Pemohon</h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
-                                    <label for="nama_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
+                                    <label for="nama_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Nama Mahasiswa *</label>
                                     <input type="text" id="nama_mahasiswa" name="nama_mahasiswa" value="{{ old('nama_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="nim_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">NIM *</label>
                                     <input type="text" id="nim_mahasiswa" name="nim_mahasiswa" value="{{ old('nim_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
-                                    <label for="no_hp_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">No. HP *</label>
+                                    <label for="no_hp_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_mahasiswa" name="no_hp_mahasiswa" value="{{ old('no_hp_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
-                                    <label for="email_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <label for="email_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_mahasiswa" name="email_mahasiswa" value="{{ old('email_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                            placeholder="nama@email.com">
                                 </div>
                             </div>
                             
                             <h6 class="text-sm font-semibold text-gray-900 mb-3">Informasi Pembimbing</h6>
-                            <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label for="nama_pembimbing" class="block text-sm font-medium text-gray-700 mb-2">Nama Pembimbing *</label>
                                     <input type="text" id="nama_pembimbing" name="nama_pembimbing" value="{{ old('nama_pembimbing') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="nip_pembimbing" class="block text-sm font-medium text-gray-700 mb-2">NIP Pembimbing *</label>
                                     <input type="text" id="nip_pembimbing" name="nip_pembimbing" value="{{ old('nip_pembimbing') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
+                            </div>
+                            
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6">Informasi Penelitian</h5>
+                            <div>
+                                <label for="judul_penelitian_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
+                                <textarea id="judul_penelitian_mahasiswa" name="judul_penelitian" rows="3"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                          placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
 
                         <!-- Pihak Luar Form -->
                         <div id="pihakLuarForm" class="user-form hidden mb-6">
-                            <h5 class="text-md font-semibold text-gray-900 mb-4">Informasi Pihak Luar</h5>
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6">Informasi Pemohon</h5>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label for="nama_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
                                     <input type="text" id="nama_pihak_luar" name="nama_pihak_luar" value="{{ old('nama_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="nip_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">NIK/Nomor Identitas *</label>
                                     <input type="text" id="nip_pihak_luar" name="nip_pihak_luar" value="{{ old('nip_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                                 </div>
                                 <div>
-                                    <label for="instansi_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Instansi/Perusahaan *</label>
-                                    <input type="text" id="instansi_pihak_luar" name="instansi_pihak_luar" value="{{ old('instansi_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="jabatan" class="block text-sm font-medium text-gray-700 mb-2">Jabatan</label>
-                                    <input type="text" id="jabatan" name="jabatan" value="{{ old('jabatan') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label for="no_hp_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">No. HP *</label>
+                                    <label for="no_hp_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_pihak_luar" name="no_hp_pihak_luar" value="{{ old('no_hp_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
-                                    <label for="email_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <label for="email_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_pihak_luar" name="email_pihak_luar" value="{{ old('email_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                            placeholder="nama@email.com">
                                 </div>
                             </div>
                             
-                            <h6 class="text-sm font-semibold text-gray-900 mb-3">Informasi Penanggung Jawab Pengujian</h6>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <h6 class="text-sm font-semibold text-gray-900 mb-3">Informasi Instansi</h6>
+                            <div class="grid grid-cols-1 gap-6 mb-6">
                                 <div>
-                                    <label for="nama_penanggung_jawab" class="block text-sm font-medium text-gray-700 mb-2">Nama Penanggung Jawab *</label>
-                                    <input type="text" id="nama_penanggung_jawab" name="nama_penanggung_jawab" value="{{ old('nama_penanggung_jawab') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                                           placeholder="Nama orang yang bertanggung jawab atas pengujian">
+                                    <label for="instansi_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Nama Instansi *</label>
+                                    <input type="text" id="instansi_pihak_luar" name="instansi_pihak_luar" value="{{ old('instansi_pihak_luar') }}" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                           placeholder="Masukkan nama instansi/perusahaan">
                                 </div>
-                                <div>
-                                    <label for="jabatan_penanggung_jawab" class="block text-sm font-medium text-gray-700 mb-2">Jabatan Penanggung Jawab</label>
-                                    <input type="text" id="jabatan_penanggung_jawab" name="jabatan_penanggung_jawab" value="{{ old('jabatan_penanggung_jawab') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                                           placeholder="Jabatan penanggung jawab">
-                                </div>
+                            </div>
+                            
+                            <h5 class="text-2xl font-bold text-gray-900 mb-6">Informasi Penelitian</h5>
+                            <div>
+                                <label for="judul_penelitian_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
+                                <textarea id="judul_penelitian_pihak_luar" name="judul_penelitian" rows="3"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                          placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
 
@@ -534,15 +551,24 @@ function initUserTypeSelection() {
     
     userTypeInputs.forEach(input => {
         input.addEventListener('change', function() {
+            console.log('User type selected:', this.value); // Debug log
+            
             // Hide all forms
             userForms.forEach(form => {
                 form.classList.add('hidden');
             });
             
             // Show selected form
-            const selectedForm = document.getElementById(this.value + 'Form');
+            const selectedFormId = getFormId(this.value);
+            const selectedForm = document.getElementById(selectedFormId);
+            console.log('Looking for form with ID:', selectedFormId); // Debug log
+            console.log('Found form:', selectedForm); // Debug log
+            
             if (selectedForm) {
                 selectedForm.classList.remove('hidden');
+                console.log('Form shown successfully'); // Debug log
+            } else {
+                console.error('Form not found for ID:', selectedFormId); // Debug log
             }
             
             // Update UI
@@ -550,15 +576,31 @@ function initUserTypeSelection() {
         });
     });
     
+    // Helper function to get form ID
+    function getFormId(userType) {
+        const formIdMap = {
+            'dosen': 'dosenForm',
+            'mahasiswa': 'mahasiswaForm',
+            'pihak-luar': 'pihakLuarForm'
+        };
+        return formIdMap[userType];
+    }
+    
     // Initialize user type UI
     updateUserTypeUI();
     
     // Show form for initially selected user type
     const checkedInput = document.querySelector('input[name="user_type"]:checked');
     if (checkedInput) {
-        const selectedForm = document.getElementById(checkedInput.value + 'Form');
+        console.log('Initially selected user type:', checkedInput.value); // Debug log
+        const selectedFormId = getFormId(checkedInput.value);
+        const selectedForm = document.getElementById(selectedFormId);
+        console.log('Initially looking for form with ID:', selectedFormId); // Debug log
+        console.log('Initially found form:', selectedForm); // Debug log
+        
         if (selectedForm) {
             selectedForm.classList.remove('hidden');
+            console.log('Initial form shown successfully'); // Debug log
         }
     }
     
@@ -569,10 +611,20 @@ function initUserTypeSelection() {
             const div = option.querySelector('div');
             
             if (input.checked) {
-                div.classList.add('border-orange-500', 'bg-orange-50');
-                div.classList.remove('border-gray-200');
+                // Remove all possible color classes
+                div.classList.remove('border-gray-200', 'border-blue-400', 'bg-blue-50', 'border-green-400', 'bg-green-50', 'border-purple-400', 'bg-purple-50');
+                
+                // Add appropriate color based on user type
+                if (input.value === 'dosen') {
+                    div.classList.add('border-blue-400', 'bg-blue-50');
+                } else if (input.value === 'mahasiswa') {
+                    div.classList.add('border-green-400', 'bg-green-50');
+                } else if (input.value === 'pihak-luar') {
+                    div.classList.add('border-purple-400', 'bg-purple-50');
+                }
             } else {
-                div.classList.remove('border-orange-500', 'bg-orange-50');
+                // Remove all active color classes and add default
+                div.classList.remove('border-blue-400', 'bg-blue-50', 'border-green-400', 'bg-green-50', 'border-purple-400', 'bg-purple-50');
                 div.classList.add('border-gray-200');
             }
         });
@@ -620,7 +672,7 @@ function initFormValidation() {
         } else if (userType.value === 'mahasiswa') {
             requiredFields = ['nama_mahasiswa', 'nim_mahasiswa', 'no_hp_mahasiswa', 'nama_pembimbing', 'nip_pembimbing'];
         } else if (userType.value === 'pihak-luar') {
-            requiredFields = ['nama_pihak_luar', 'nip_pihak_luar', 'instansi_pihak_luar', 'no_hp_pihak_luar', 'nama_penanggung_jawab'];
+            requiredFields = ['nama_pihak_luar', 'nip_pihak_luar', 'instansi_pihak_luar', 'no_hp_pihak_luar'];
         }
 
         // Check user type specific fields
@@ -673,4 +725,17 @@ function initFormValidation() {
     });
 }
 </script>
+
+<style>
+.user-form {
+    display: block;
+}
+.user-form.hidden {
+    display: none !important;
+}
+.user-type-option input:checked + div {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}
+</style>
 @endsection

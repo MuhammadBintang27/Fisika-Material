@@ -77,59 +77,50 @@
             <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                 <i class="fas fa-search text-white"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900">Filter & Pencarian</h3>
+            <h3 class="text-xl font-bold text-gray-900">Pencarian Pengajuan</h3>
         </div>
-        
-        <form method="GET" action="{{ route('admin.pengajuan-pengujian.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-3">Pencarian</label>
-                <input type="text" name="search" id="search" 
+        <form method="GET" action="{{ route('admin.pengajuan-pengujian.index') }}" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div class="flex-1 w-full">
+                <input type="text" name="search" 
                        value="{{ request('search') }}"
-                       placeholder="Nama, kode tracking, atau layanan..."
-                       class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200">
+                       placeholder="Cari berdasarkan nama, kode tracking, atau layanan..."
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
             </div>
-            
-            <div>
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-3">Status</label>
-                <select name="status" id="status" 
-                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200">
-                    <option value="">Semua Status</option>
-                    <option value="MENUNGGU" {{ request('status') == 'MENUNGGU' ? 'selected' : '' }}>Menunggu</option>
-                    <option value="DISETUJUI" {{ request('status') == 'DISETUJUI' ? 'selected' : '' }}>Disetujui</option>
-                    <option value="DIPROSES" {{ request('status') == 'DIPROSES' ? 'selected' : '' }}>Diproses</option>
-                    <option value="SELESAI" {{ request('status') == 'SELESAI' ? 'selected' : '' }}>Selesai</option>
-                    <option value="DITOLAK" {{ request('status') == 'DITOLAK' ? 'selected' : '' }}>Ditolak</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="layanan" class="block text-sm font-medium text-gray-700 mb-3">Layanan</label>
-                <select name="layanan" id="layanan" 
-                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200">
-                    <option value="">Semua Layanan</option>
-                    @foreach($layananList as $layanan)
-                        <option value="{{ $layanan->id }}" {{ request('layanan') == $layanan->id ? 'selected' : '' }}>
-                            {{ $layanan->namaLayanan }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">Aksi</label>
-                <div class="flex space-x-3">
-                    <button type="submit" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-semibold group flex-1">
-                        <i class="fas fa-search mr-2 group-hover:animate-pulse"></i>
-                        Cari
-                    </button>
-                    <a href="{{ route('admin.pengajuan-pengujian.index') }}" 
-                       class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
-                        <i class="fas fa-refresh"></i>
-                    </a>
-                </div>
-            </div>
+            <button type="submit" 
+                    class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg font-semibold">
+                <i class="fas fa-search mr-2"></i>Cari
+            </button>
         </form>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <div class="flex items-center space-x-2 overflow-x-auto">
+            <a href="{{ route('admin.pengajuan-pengujian.index') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.index') ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-list mr-2"></i>Semua
+            </a>
+            <a href="{{ route('admin.pengajuan-pengujian.menunggu') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.menunggu') ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-clock mr-2"></i>Menunggu
+            </a>
+            <a href="{{ route('admin.pengajuan-pengujian.disetujui') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.disetujui') ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-check-circle mr-2"></i>Disetujui
+            </a>
+            <a href="{{ route('admin.pengajuan-pengujian.diproses') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.diproses') ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-cogs mr-2"></i>Diproses
+            </a>
+            <a href="{{ route('admin.pengajuan-pengujian.selesai') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.selesai') ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-check-double mr-2"></i>Selesai
+            </a>
+            <a href="{{ route('admin.pengajuan-pengujian.ditolak') }}" 
+               class="px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap {{ request()->routeIs('admin.pengajuan-pengujian.ditolak') ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg' : 'text-gray-600 hover:bg-gray-100' }}">
+                <i class="fas fa-times-circle mr-2"></i>Ditolak
+            </a>
+        </div>
     </div>
 
     <!-- Data Table -->
