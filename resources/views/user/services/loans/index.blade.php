@@ -140,7 +140,7 @@
                 <!-- Image -->
                 <div class="relative overflow-hidden h-48 bg-gradient-to-br from-gray-100 to-gray-200">
                     @if($equipment->gambar->first())
-                        <img src="{{ asset($equipment->gambar->first()->url) }}"
+                        <img src="{{ url('storage/' . $equipment->gambar->first()->url) }}"
                              alt="{{ $equipment->nama }}"
                              class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
                     @else

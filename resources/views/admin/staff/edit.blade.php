@@ -59,7 +59,7 @@
                     <label for="image" class="block text-sm font-semibold text-gray-700 mb-2">Foto</label>
                     @if($staff->gambar->first())
                         <div class="mb-4">
-                            <img src="{{ asset($staff->gambar->first()->url) }}" 
+                            <img src="{{ url('storage/' . $staff->gambar->first()->url) }}" 
                                  alt="{{ $staff->nama }}" 
                                  class="w-24 h-24 rounded-lg object-cover shadow-md hover:shadow-lg transition-shadow">
                         </div>

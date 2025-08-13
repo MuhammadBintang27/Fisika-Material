@@ -106,7 +106,7 @@
                     <!-- Card Header with Photo -->
                     <div class="relative overflow-hidden">
                         @if($article->gambar->first())
-                            <img src="{{ asset($article->gambar->first()->url) }}" 
+                            <img src="{{ url('storage/' . $article->gambar->first()->url) }}" 
                                  alt="{{ $article->namaAcara }}" 
                                  class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
                         @else

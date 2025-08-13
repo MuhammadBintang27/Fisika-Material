@@ -27,7 +27,7 @@
             <article class="group bg-white rounded-3xl overflow-hidden border border-yellow-200 hover:border-yellow-300 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 articles-animate" data-animation="fade-up" data-delay="{{ ($index + 1) * 100 }}">
                 <div class="relative overflow-hidden">
                     @if($article->gambar && $article->gambar->first())
-                        <img src="{{ asset($article->gambar->first()->url) }}"
+                        <img src="{{ url('storage/' . $article->gambar->first()->url) }}"
                              alt="{{ $article->namaAcara }}"
                              class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
                     @else

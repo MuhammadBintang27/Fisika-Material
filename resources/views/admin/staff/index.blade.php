@@ -66,7 +66,7 @@
                         <div class="flex flex-col items-center">
                             @if($member->gambar->first())
                                 <div class="mb-4">
-                                    <img src="{{ asset($member->gambar->first()->url) }}" 
+                                    <img src="{{ url('storage/' . $member->gambar->first()->url) }}" 
                                          alt="{{ $member->nama }}" 
                                          class="w-24 h-24 rounded-full object-cover shadow-md">
                                 </div>

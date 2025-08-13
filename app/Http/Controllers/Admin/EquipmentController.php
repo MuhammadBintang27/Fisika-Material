@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Alat;
 use App\Models\Gambar;
+use App\Services\FileUploadService;
 use Illuminate\Support\Str;
 
 class EquipmentController extends Controller
 {
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
     public function index()
     {
         $equipments = Alat::with('gambar')->orderBy('created_at', 'desc')->paginate(10);
@@ -43,16 +50,18 @@ class EquipmentController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/equipment'), $imageName);
-
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'alatID' => $equipment->id,
-                'url' => 'images/equipment/' . $imageName,
-                'kategori' => 'ALAT',
-            ]);
+            try {
+                $uploadResult = $this->fileUploadService->uploadEquipmentImage($request->file('image'));
+                
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'alatID' => $equipment->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'ALAT',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.equipment.index')->with('success', 'Alat berhasil ditambahkan.');
@@ -93,25 +102,29 @@ class EquipmentController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($equipment->gambar) {
-                $oldImagePath = public_path($equipment->gambar->url);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+            try {
+                // Hapus gambar lama jika ada
+                if ($equipment->gambar && $equipment->gambar->count() > 0) {
+                    foreach ($equipment->gambar as $gambar) {
+                        $oldImagePath = $gambar->url;
+                        if ($this->fileUploadService->fileExists($oldImagePath)) {
+                            $this->fileUploadService->deleteFile($oldImagePath);
+                        }
+                    }
+                    $equipment->gambar()->delete();
                 }
-                $equipment->gambar->delete();
+
+                $uploadResult = $this->fileUploadService->uploadEquipmentImage($request->file('image'));
+
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'alatID' => $equipment->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'ALAT',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
             }
-
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/equipment'), $imageName);
-
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'alatID' => $equipment->id,
-                'url' => 'images/equipment/' . $imageName,
-                'kategori' => 'ALAT',
-            ]);
         }
 
         return redirect()->route('admin.equipment.index')->with('success', 'Alat berhasil diperbarui.');
@@ -122,12 +135,14 @@ class EquipmentController extends Controller
         $equipment = Alat::with('gambar')->findOrFail($id);
         
         // Hapus gambar jika ada
-        if ($equipment->gambar) {
-            $imagePath = public_path($equipment->gambar->url);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        if ($equipment->gambar && $equipment->gambar->count() > 0) {
+            foreach ($equipment->gambar as $gambar) {
+                $imagePath = $gambar->url;
+                if ($this->fileUploadService->fileExists($imagePath)) {
+                    $this->fileUploadService->deleteFile($imagePath);
+                }
             }
-            $equipment->gambar->delete();
+            $equipment->gambar()->delete();
         }
 
         $equipment->delete();

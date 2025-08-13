@@ -43,7 +43,7 @@
                     <label for="gambar" class="block text-sm font-semibold text-gray-700 mb-2">Gambar</label>
                     @if($galeri->gambar_url)
                         <div class="mb-4">
-                            <img src="{{ asset($galeri->gambar_url) }}" 
+                            <img src="{{ url('storage/' . $galeri->gambar_url) }}" 
                                  alt="{{ $galeri->judul }}" 
                                  class="w-32 h-20 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         </div>

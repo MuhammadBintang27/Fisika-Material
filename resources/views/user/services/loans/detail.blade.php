@@ -35,7 +35,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <!-- Equipment Image -->
             @if($equipment->gambar->first())
-                <img src="{{ asset($equipment->gambar->first()->url) }}" alt="{{ $equipment->nama }}" class="w-full h-64 object-cover rounded-xl mb-6">
+                <img src="{{ url('storage/' . $equipment->gambar->first()->url) }}" alt="{{ $equipment->nama }}" class="w-full h-64 object-cover rounded-xl mb-6">
             @else
                 <div class="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-6">No Image</div>
             @endif

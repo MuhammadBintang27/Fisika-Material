@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BiodataPengurus;
 use App\Models\Gambar;
+use App\Services\FileUploadService;
 use Illuminate\Support\Str;
 
 class StaffController extends Controller
 {
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
     public function index()
     {
         $staff = BiodataPengurus::with('gambar')->orderBy('created_at', 'desc')->paginate(10);
@@ -37,16 +44,18 @@ class StaffController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/staff'), $imageName);
+            try {
+                $uploadResult = $this->fileUploadService->uploadStaffImage($request->file('image'));
 
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'pengurusId' => $staff->id,
-                'url' => 'images/staff/' . $imageName,
-                'kategori' => 'PENGURUS',
-            ]);
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'pengurusId' => $staff->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'PENGURUS',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.staff.index')->with('success', 'Staf berhasil ditambahkan.');
@@ -74,25 +83,27 @@ class StaffController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($staff->gambar->first()) {
-                $oldImagePath = public_path($staff->gambar->first()->url);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+            try {
+                // Hapus gambar lama jika ada
+                if ($staff->gambar->first()) {
+                    $oldImagePath = $staff->gambar->first()->url;
+                    if ($this->fileUploadService->fileExists($oldImagePath)) {
+                        $this->fileUploadService->deleteFile($oldImagePath);
+                    }
+                    $staff->gambar->first()->delete();
                 }
-                $staff->gambar->first()->delete();
+
+                $uploadResult = $this->fileUploadService->uploadStaffImage($request->file('image'));
+
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'pengurusId' => $staff->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'PENGURUS',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
             }
-
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/staff'), $imageName);
-
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'pengurusId' => $staff->id,
-                'url' => 'images/staff/' . $imageName,
-                'kategori' => 'PENGURUS',
-            ]);
         }
 
         return redirect()->route('admin.staff.index')->with('success', 'Data staf berhasil diperbarui.');
@@ -105,9 +116,9 @@ class StaffController extends Controller
         // Hapus gambar jika ada
         if ($staff->gambar->isNotEmpty()) {
             $gambar = $staff->gambar->first(); // Ambil gambar pertama
-            $imagePath = public_path($gambar->url); // Akses url dari instance Gambar
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+            $imagePath = $gambar->url; // Akses url dari instance Gambar
+            if ($this->fileUploadService->fileExists($imagePath)) {
+                $this->fileUploadService->deleteFile($imagePath);
             }
             $gambar->delete(); // Hapus record gambar
         }

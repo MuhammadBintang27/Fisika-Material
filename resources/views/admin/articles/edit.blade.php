@@ -100,7 +100,7 @@
             <div class="flex items-center space-x-6 mb-2">
                 @if($article->gambar && $article->gambar->first())
                     <div class="w-32 h-24 border border-gray-300 rounded-lg overflow-hidden">
-                        <img src="{{ asset($article->gambar->first()->url) }}" alt="Gambar Artikel" class="w-full h-full object-cover">
+                        <img src="{{ url('storage/' . $article->gambar->first()->url) }}" alt="Gambar Artikel" class="w-full h-full object-cover">
                     </div>
                 @else
                     <div class="w-32 h-24 bg-gray-200 border border-gray-300 rounded-lg flex items-center justify-center text-gray-400">

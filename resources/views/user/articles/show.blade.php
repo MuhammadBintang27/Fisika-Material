@@ -84,7 +84,7 @@
         <!-- Featured Image -->
         <div class="mb-12">
             @if($article->gambar && $article->gambar->first())
-                <img src="{{ asset($article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-64 object-cover rounded-xl mb-6">
+                <img src="{{ url('storage/' . $article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-64 object-cover rounded-xl mb-6">
             @else
                 <div class="w-full h-64 flex items-center justify-center bg-gray-200 text-gray-400 rounded-xl mb-6">No Image</div>
             @endif
@@ -165,7 +165,7 @@
             @forelse($relatedArticles as $relatedArticle)
             <article class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 @if($relatedArticle->gambar && $relatedArticle->gambar->first())
-                    <img src="{{ asset($relatedArticle->gambar->first()->url) }}"
+                    <img src="{{ url('storage/' . $relatedArticle->gambar->first()->url) }}"
                          alt="{{ $relatedArticle->namaAcara }}"
                          class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                 @else

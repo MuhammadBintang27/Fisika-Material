@@ -66,7 +66,7 @@
                 <div class="lg:flex">
                     <div class="lg:w-1/2">
                         @if($articles[0]->gambar && $articles[0]->gambar->first())
-                            <img src="{{ asset($articles[0]->gambar->first()->url) }}"
+                            <img src="{{ url('storage/' . $articles[0]->gambar->first()->url) }}"
                                  alt="{{ $articles[0]->namaAcara }}"
                                  class="w-full h-64 lg:h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         @endif
@@ -106,7 +106,7 @@
             <article class="article-card group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                 <div class="relative overflow-hidden">
                     @if($article->gambar && $article->gambar->first())
-                        <img src="{{ asset($article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
+                        <img src="{{ url('storage/' . $article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
                     @else
                         <div class="w-full h-48 flex items-center justify-center bg-gray-200 text-gray-400 rounded-t-xl mb-4">No Image</div>
                     @endif

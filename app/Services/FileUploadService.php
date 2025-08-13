@@ -142,6 +142,114 @@ class FileUploadService
     }
 
     /**
+     * Upload gambar untuk galeri laboratorium
+     */
+    public function uploadGalleryImage(UploadedFile $file): array
+    {
+        $this->validateFile($file, [
+            'max_size' => 2 * 1024 * 1024, // 2MB
+            'allowed_types' => ['jpg', 'jpeg', 'png', 'gif', 'webp']
+        ]);
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        
+        $directory = 'gallery/' . date('Y/m');
+        $filename = 'gallery_' . time() . '_' . Str::random(8) . '.' . $extension;
+        
+        $filePath = $file->storeAs($directory, $filename, 'public');
+        
+        return [
+            'file_path' => $filePath,
+            'original_name' => $originalName,
+            'file_size' => $this->formatFileSize($file->getSize()),
+            'mime_type' => $file->getMimeType(),
+            'filename' => $filename
+        ];
+    }
+
+    /**
+     * Upload gambar untuk equipment/alat
+     */
+    public function uploadEquipmentImage(UploadedFile $file): array
+    {
+        $this->validateFile($file, [
+            'max_size' => 2 * 1024 * 1024, // 2MB
+            'allowed_types' => ['jpg', 'jpeg', 'png', 'gif']
+        ]);
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        
+        $directory = 'equipment/' . date('Y/m');
+        $filename = 'equipment_' . time() . '_' . Str::random(8) . '.' . $extension;
+        
+        $filePath = $file->storeAs($directory, $filename, 'public');
+        
+        return [
+            'file_path' => $filePath,
+            'original_name' => $originalName,
+            'file_size' => $this->formatFileSize($file->getSize()),
+            'mime_type' => $file->getMimeType(),
+            'filename' => $filename
+        ];
+    }
+
+    /**
+     * Upload gambar untuk articles
+     */
+    public function uploadArticleImage(UploadedFile $file): array
+    {
+        $this->validateFile($file, [
+            'max_size' => 2 * 1024 * 1024, // 2MB
+            'allowed_types' => ['jpg', 'jpeg', 'png', 'gif']
+        ]);
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        
+        $directory = 'articles/' . date('Y/m');
+        $filename = 'article_' . time() . '_' . Str::random(8) . '.' . $extension;
+        
+        $filePath = $file->storeAs($directory, $filename, 'public');
+        
+        return [
+            'file_path' => $filePath,
+            'original_name' => $originalName,
+            'file_size' => $this->formatFileSize($file->getSize()),
+            'mime_type' => $file->getMimeType(),
+            'filename' => $filename
+        ];
+    }
+
+    /**
+     * Upload gambar untuk staff
+     */
+    public function uploadStaffImage(UploadedFile $file): array
+    {
+        $this->validateFile($file, [
+            'max_size' => 2 * 1024 * 1024, // 2MB
+            'allowed_types' => ['jpg', 'jpeg', 'png', 'gif']
+        ]);
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        
+        $directory = 'staff/' . date('Y/m');
+        $filename = 'staff_' . time() . '_' . Str::random(8) . '.' . $extension;
+        
+        $filePath = $file->storeAs($directory, $filename, 'public');
+        
+        return [
+            'file_path' => $filePath,
+            'original_name' => $originalName,
+            'file_size' => $this->formatFileSize($file->getSize()),
+            'mime_type' => $file->getMimeType(),
+            'filename' => $filename
+        ];
+    }
+
+    /**
      * Get file download URL
      */
     public function getFileUrl(string $filePath): string

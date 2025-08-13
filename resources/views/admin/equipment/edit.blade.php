@@ -186,10 +186,10 @@
                             Foto Alat
                         </label>
                         
-                        @if($equipment->image)
+                        @if($equipment->gambar && $equipment->gambar->first())
                         <div class="mb-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
                             <p class="text-sm font-medium text-gray-700 mb-2">Foto saat ini:</p>
-                            <img src="{{ asset('storage/' . $equipment->image) }}" 
+                            <img src="{{ url('storage/' . $equipment->gambar->first()->url) }}" 
                                  alt="{{ $equipment->nama }}" 
                                  class="w-32 h-32 object-cover rounded-lg border border-gray-300">
                         </div>

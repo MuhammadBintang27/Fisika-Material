@@ -101,7 +101,7 @@
                     <div class="mb-6">
                         @if($member->gambar && $member->gambar->first())
                             <div class="relative mx-auto w-40 h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300 overflow-hidden">
-                                <img src="{{ asset($member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ url('storage/' . $member->gambar->first()->url) }}" alt="{{ $member->nama }}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300">
                             </div>
                         @else
                             <div class="relative mx-auto w-40 h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">

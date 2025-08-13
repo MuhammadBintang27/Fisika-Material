@@ -254,7 +254,7 @@
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     @if($item->alat->gambar->first())
-                                        <img src="{{ asset($item->alat->gambar->first()->url) }}" 
+                                        <img src="{{ url('storage/' . $item->alat->gambar->first()->url) }}" 
                                              alt="{{ $item->alat->nama }}" 
                                              class="w-10 h-10 object-cover rounded">
                                     @else

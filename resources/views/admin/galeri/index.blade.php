@@ -45,7 +45,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <img src="{{ asset($item->gambar_url) }}" 
+                                        <img src="{{ url('storage/' . $item->gambar_url) }}" 
                                              alt="{{ $item->judul }}" 
                                              class="w-24 h-16 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow">
                                     </td>

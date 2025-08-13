@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Artikel;
 use App\Models\Gambar;
+use App\Services\FileUploadService;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
     public function index(Request $request)
     {
         $query = Artikel::with('gambar')->orderBy('created_at', 'desc');
@@ -61,16 +68,18 @@ class ArticleController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/articles'), $imageName);
+            try {
+                $uploadResult = $this->fileUploadService->uploadArticleImage($request->file('image'));
 
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'acaraId' => $article->id,
-                'url' => 'images/articles/' . $imageName,
-                'kategori' => 'ACARA',
-            ]);
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'acaraId' => $article->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'ACARA',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dibuat.');
@@ -103,27 +112,29 @@ class ArticleController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($article->gambar && $article->gambar->count() > 0) {
-                foreach ($article->gambar as $gambar) {
-                    $oldImagePath = public_path($gambar->url);
-                    if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
+            try {
+                // Hapus gambar lama jika ada
+                if ($article->gambar && $article->gambar->count() > 0) {
+                    foreach ($article->gambar as $gambar) {
+                        $oldImagePath = $gambar->url;
+                        if ($this->fileUploadService->fileExists($oldImagePath)) {
+                            $this->fileUploadService->deleteFile($oldImagePath);
+                        }
                     }
+                    $article->gambar()->delete();
                 }
-                $article->gambar()->delete();
+
+                $uploadResult = $this->fileUploadService->uploadArticleImage($request->file('image'));
+
+                Gambar::create([
+                    'id' => (string) Str::uuid(),
+                    'acaraId' => $article->id,
+                    'url' => $uploadResult['file_path'],
+                    'kategori' => 'ACARA',
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
             }
-
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/articles'), $imageName);
-
-            Gambar::create([
-                'id' => (string) Str::uuid(),
-                'acaraId' => $article->id,
-                'url' => 'images/articles/' . $imageName,
-                'kategori' => 'ACARA',
-            ]);
         }
 
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
@@ -136,9 +147,9 @@ class ArticleController extends Controller
         // Hapus gambar jika ada
         if ($article->gambar && $article->gambar->count() > 0) {
             foreach ($article->gambar as $gambar) {
-                $imagePath = public_path($gambar->url);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+                $imagePath = $gambar->url;
+                if ($this->fileUploadService->fileExists($imagePath)) {
+                    $this->fileUploadService->deleteFile($imagePath);
                 }
             }
             $article->gambar()->delete();

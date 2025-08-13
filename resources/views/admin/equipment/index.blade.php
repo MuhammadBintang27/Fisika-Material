@@ -110,7 +110,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             @if($equipment->gambar->first())
-                                                <img src="{{ asset($equipment->gambar->first()->url) }}" 
+                                                <img src="{{ url('storage/' . $equipment->gambar->first()->url) }}" 
                                                      alt="{{ $equipment->nama }}" 
                                                      class="w-16 h-16 rounded-xl object-cover mr-4 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-200 group-hover:border-blue-300">
                                             @else

@@ -4,10 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GaleriLaboratorium;
+use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 
 class GaleriLaboratoriumController extends Controller
 {
+    protected $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,15 +41,19 @@ class GaleriLaboratoriumController extends Controller
             'judul' => 'required|string|max:255',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
-        $file = $request->file('gambar');
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('images/galeri'), $filename);
-        $gambar_url = 'images/galeri/' . $filename;
-        GaleriLaboratorium::create([
-            'judul' => $request->judul,
-            'gambar_url' => $gambar_url,
-        ]);
-        return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+
+        try {
+            $uploadResult = $this->fileUploadService->uploadGalleryImage($request->file('gambar'));
+            
+            GaleriLaboratorium::create([
+                'judul' => $request->judul,
+                'gambar_url' => $uploadResult['file_path'],
+            ]);
+
+            return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -71,14 +82,24 @@ class GaleriLaboratoriumController extends Controller
             'judul' => 'required|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
         $galeri = GaleriLaboratorium::findOrFail($id);
         $data = ['judul' => $request->judul];
+
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/galeri'), $filename);
-            $data['gambar_url'] = 'images/galeri/' . $filename;
+            try {
+                // Hapus gambar lama jika ada
+                if ($galeri->gambar_url && $this->fileUploadService->fileExists($galeri->gambar_url)) {
+                    $this->fileUploadService->deleteFile($galeri->gambar_url);
+                }
+
+                $uploadResult = $this->fileUploadService->uploadGalleryImage($request->file('gambar'));
+                $data['gambar_url'] = $uploadResult['file_path'];
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal mengupload gambar: ' . $e->getMessage());
+            }
         }
+
         $galeri->update($data);
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil diupdate.');
     }
@@ -89,6 +110,12 @@ class GaleriLaboratoriumController extends Controller
     public function destroy($id)
     {
         $galeri = GaleriLaboratorium::findOrFail($id);
+        
+        // Hapus file gambar jika ada
+        if ($galeri->gambar_url && $this->fileUploadService->fileExists($galeri->gambar_url)) {
+            $this->fileUploadService->deleteFile($galeri->gambar_url);
+        }
+        
         $galeri->delete();
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil dihapus.');
     }
