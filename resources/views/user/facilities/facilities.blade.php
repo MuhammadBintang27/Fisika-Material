@@ -65,144 +65,63 @@
                 Fasilitas Unggulan
             </div>
             <h2 class="font-poppins text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Ruang <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Berkualitas</span>
+                Fasilitas <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Laboratorium</span>
             </h2>
             <p class="text-gray-600 text-lg md:text-xl max-w-4xl mx-auto leading-relaxed">
-                Setiap ruang dirancang khusus dengan standar internasional dan teknologi terdepan untuk mendukung kegiatan pembelajaran dan penelitian yang optimal.
+                Berikut adalah fasilitas-fasilitas yang tersedia di Laboratorium Material dan Energi untuk mendukung kegiatan penelitian dan pembelajaran.
             </p>
         </div>
 
-        <!-- Facilities Grid Layout -->
-        <div class="space-y-24">
-            @foreach($facilities as $index => $facility)
-            <!-- Facility {{ $index + 1 }} -->
-            <div class="relative">
-                <!-- Background Decoration -->
-                <div class="absolute inset-0 -z-10">
-                    <div class="absolute {{ $index % 2 == 0 ? 'right-0' : 'left-0' }} top-1/2 transform -translate-y-1/2 w-96 h-96 bg-blue-{{ $facility['color_intensity'] }}/5 rounded-full blur-3xl"></div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    @if($index % 2 == 0)
-                        <!-- Content Left (7 columns) -->
-                        <div class="lg:col-span-7 space-y-8 scroll-animate" data-animation="slide-left" data-delay="{{ $index * 200 }}">
-                            <!-- Header -->
-                            <div class="space-y-6">
-                                <div class="inline-flex items-center px-4 py-2 bg-blue-{{ $facility['color_intensity'] }}/10 border border-blue-{{ $facility['color_intensity'] }}/20 rounded-full text-blue-{{ $facility['color_intensity'] }} text-sm font-semibold">
-                                    <i class="{{ $facility['icon'] }} mr-2"></i>
-                                    {{ $facility['name'] }}
-                                </div>
-                                <h3 class="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-                                    {{ $facility['title'] }}
-                                </h3>
-                                <p class="text-gray-700 text-lg leading-relaxed">
-                                    {{ $facility['description'] }}
-                                </p>
-                            </div>
-
-                            <!-- Features -->
-                            <div class="space-y-6">
-                                <h4 class="text-xl font-bold text-gray-900">Fasilitas Unggulan</h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    @foreach($facility['features'] as $feature)
-                                    <div class="flex items-start space-x-3 group">
-                                        <div class="w-6 h-6 bg-blue-{{ $facility['color_intensity'] }} rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
-                                            <i class="fas fa-check text-white text-xs"></i>
-                                        </div>
-                                        <span class="text-gray-700 group-hover:text-blue-{{ $facility['color_intensity'] }} transition-colors duration-300">{{ $feature }}</span>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <!-- Capacity Info -->
-                            <div class="flex items-center space-x-6 pt-4 border-t border-gray-200">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-users text-blue-{{ $facility['color_intensity'] }} mr-2"></i>
-                                    <span class="font-medium">{{ $facility['capacity'] }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Image Right (5 columns) -->
-                        <div class="lg:col-span-5 scroll-animate" data-animation="slide-right" data-delay="{{ ($index * 200) + 100 }}">
-                            <div class="relative overflow-hidden rounded-2xl shadow-2xl group">
-                                <img src="{{ asset('images/facilities/' . $facility['image']) }}"
-                                     alt="{{ $facility['title'] }}"
-                                     class="w-full h-64 lg:h-80 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 via-transparent to-transparent"></div>
-
-                                <!-- Floating Icon -->
-                                <div class="absolute top-6 right-6">
-                                    <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                                        <i class="{{ $facility['icon'] }} text-blue-{{ $facility['color_intensity'] }} text-lg"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <!-- Image Left (5 columns) -->
-                        <div class="lg:col-span-5 scroll-animate" data-animation="slide-left" data-delay="{{ $index * 200 }}">
-                            <div class="relative overflow-hidden rounded-2xl shadow-2xl group">
-                                <img src="{{ asset('images/facilities/' . $facility['image']) }}"
-                                     alt="{{ $facility['title'] }}"
-                                     class="w-full h-64 lg:h-80 object-cover transform group-hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 via-transparent to-transparent"></div>
-
-                                <!-- Floating Icon -->
-                                <div class="absolute top-6 left-6">
-                                    <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                                        <i class="{{ $facility['icon'] }} text-blue-{{ $facility['color_intensity'] }} text-lg"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Content Right (7 columns) -->
-                        <div class="lg:col-span-7 space-y-8 scroll-animate" data-animation="slide-right" data-delay="{{ ($index * 200) + 100 }}">
-                            <!-- Header -->
-                            <div class="space-y-6">
-                                <div class="inline-flex items-center px-4 py-2 bg-blue-{{ $facility['color_intensity'] }}/10 border border-blue-{{ $facility['color_intensity'] }}/20 rounded-full text-blue-{{ $facility['color_intensity'] }} text-sm font-semibold">
-                                    <i class="{{ $facility['icon'] }} mr-2"></i>
-                                    {{ $facility['name'] }}
-                                </div>
-                                <h3 class="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-                                    {{ $facility['title'] }}
-                                </h3>
-                                <p class="text-gray-700 text-lg leading-relaxed">
-                                    {{ $facility['description'] }}
-                                </p>
-                            </div>
-                            
-
-                            <!-- Features -->
-                            <div class="space-y-6">
-                                <h4 class="text-xl font-bold text-gray-900">Fasilitas Unggulan</h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    @foreach($facility['features'] as $feature)
-                                    <div class="flex items-start space-x-3 group">
-                                        <div class="w-6 h-6 bg-blue-{{ $facility['color_intensity'] }} rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
-                                            <i class="fas fa-check text-white text-xs"></i>
-                                        </div>
-                                        <span class="text-gray-700 group-hover:text-blue-{{ $facility['color_intensity'] }} transition-colors duration-300">{{ $feature }}</span>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <!-- Capacity Info -->
-                            <div class="flex items-center space-x-6 pt-4 border-t border-gray-200">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-users text-blue-{{ $facility['color_intensity'] }} mr-2"></i>
-                                    <span class="font-medium">{{ $facility['capacity'] }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+        <!-- Facilities List -->
+        @if(count($fasilitas) > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+            @foreach($fasilitas as $index => $item)
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300 scroll-animate group" data-animation="fade-up" data-delay="{{ $index * 100 }}">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ $item->nama }}</h3>
+                    </div>
                 </div>
             </div>
             @endforeach
         </div>
+        @endif
+
+        <!-- Gallery Section -->
+        @if(count($galeriData) > 0)
+        <div class="mb-20">
+            
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($galeriData as $item)
+                <div class="group relative rounded-3xl overflow-hidden shadow-lg bg-white border border-blue-200 hover:shadow-blue-200/50 transition-all duration-300 scroll-animate" data-animation="fade-up" data-delay="{{ $loop->iteration * 100 }}">
+                    <img src="{{ url('storage/' . $item->gambar_url) }}" alt="{{ $item->judul }}" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-blue-800/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <h4 class="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500 drop-shadow-lg">
+                            {{ $item->judul }}
+                        </h4>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        @if(count($fasilitas) == 0 && count($galeriData) == 0)
+        <div class="text-center py-20">
+            <div class="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class="fas fa-tools text-blue-500 text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Fasilitas Akan Segera Tersedia</h3>
+            <p class="text-gray-500 mb-8 max-w-lg mx-auto text-lg">
+                Informasi fasilitas laboratorium sedang dalam proses pembaruan. Silakan kembali lagi nanti.
+            </p>
+        </div>
+        @endif
     </div>
 </section>
 

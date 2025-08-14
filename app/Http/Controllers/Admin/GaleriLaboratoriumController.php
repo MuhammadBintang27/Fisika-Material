@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GaleriLaboratorium;
+use App\Models\Fasilitas;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,8 @@ class GaleriLaboratoriumController extends Controller
     public function index()
     {
         $galeri = GaleriLaboratorium::all();
-        return view('admin.galeri.index', compact('galeri'));
+        $fasilitas = Fasilitas::active()->orderBy('nama')->get();
+        return view('admin.galeri.index', compact('galeri', 'fasilitas'));
     }
 
     /**
@@ -118,5 +120,52 @@ class GaleriLaboratoriumController extends Controller
         
         $galeri->delete();
         return redirect()->route('admin.galeri.index')->with('success', 'Galeri berhasil dihapus.');
+    }
+
+    // Methods untuk mengelola fasilitas
+    public function storeFasilitas(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:fasilitas,nama',
+        ]);
+
+        Fasilitas::create([
+            'nama' => $request->nama,
+            'is_active' => true
+        ]);
+
+        return redirect()->route('admin.galeri.index')->with('success', 'Fasilitas berhasil ditambahkan.');
+    }
+
+    public function updateFasilitas(Request $request, $id)
+    {
+        $fasilitas = Fasilitas::findOrFail($id);
+        
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:fasilitas,nama,' . $id,
+        ]);
+
+        $fasilitas->update([
+            'nama' => $request->nama
+        ]);
+
+        return redirect()->route('admin.galeri.index')->with('success', 'Fasilitas berhasil diupdate.');
+    }
+
+    public function destroyFasilitas($id)
+    {
+        $fasilitas = Fasilitas::findOrFail($id);
+        $fasilitas->delete();
+
+        return redirect()->route('admin.galeri.index')->with('success', 'Fasilitas berhasil dihapus.');
+    }
+
+    public function toggleFasilitas($id)
+    {
+        $fasilitas = Fasilitas::findOrFail($id);
+        $fasilitas->update(['is_active' => !$fasilitas->is_active]);
+
+        $status = $fasilitas->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        return redirect()->route('admin.galeri.index')->with('success', "Fasilitas berhasil {$status}.");
     }
 }

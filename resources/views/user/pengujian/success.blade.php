@@ -7,7 +7,7 @@
 <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('/images/hero.jpg') }}" alt="Pengajuan Berhasil" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-br from-orange-700/90 via-red-800/80 to-red-900/70"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
     <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-6xl">
@@ -15,19 +15,19 @@
             <nav class="flex justify-center" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
                     <li class="inline-flex items-center">
-                        <a href="{{ route('home') }}" class="text-orange-200 hover:text-white transition-colors duration-200 flex items-center">
+                        <a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center">
                             <i class="fas fa-home mr-2"></i>Beranda
                         </a>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-orange-300 mx-3"></i>
-                            <span class="text-orange-200">Layanan Pengujian</span>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
+                            <span class="text-blue-200">Layanan Pengujian</span>
                         </div>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-orange-300 mx-3"></i>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
                             <span class="text-white font-medium">Pengajuan Berhasil</span>
                         </div>
                     </li>
@@ -40,7 +40,7 @@
                 <span class="text-white">Pengajuan</span>
                 <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Berhasil</span>
             </h1>
-            <p class="text-xl md:text-2xl text-orange-100 max-w-4xl mx-auto leading-relaxed">
+            <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
                 Permohonan pengujian Anda telah diterima!
             </p>
         </div>
@@ -65,7 +65,7 @@
                 <div class="mt-4 flex justify-center items-center space-x-2">
                     <input id="trackingLink" type="text" value="{{ $tracking_link }}" readonly 
                            class="w-full max-w-md px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-700">
-                    <button id="copyButton" class="bg-orange-600 text-white px-4 py-3 rounded-xl hover:bg-orange-700 transition-colors">
+                    <button id="copyButton" class="bg-blue-600 text-white px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors">
                         <i class="fas fa-copy mr-2"></i>Salin
                     </button>
                 </div>
@@ -80,7 +80,7 @@
             
             <div class="flex justify-center space-x-4">
                 @if(isset($tracking_code))
-                <a href="{{ route('tracking') }}?type=pengujian&tracking_code={{ $tracking_code }}" class="bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-700 transition-colors">
+                <a href="{{ route('tracking') }}?type=pengujian&tracking_code={{ $tracking_code }}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
                     <i class="fas fa-search mr-2"></i>Cek Status Sekarang
                 </a>
                 @endif
@@ -129,26 +129,7 @@
         </div>
         @endif
 
-        <!-- Contact Info -->
-        <div class="mt-8 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 text-white text-center">
-            <h4 class="text-lg font-semibold mb-4">Butuh Bantuan?</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                <div class="flex items-center justify-center">
-                    <i class="fas fa-phone w-4 h-4 mr-2 text-orange-400"></i>
-                    <div>
-                        <p class="text-gray-300">Telepon</p>
-                        <p class="font-semibold">+62 651 7551394</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center">
-                    <i class="fas fa-envelope w-4 h-4 mr-2 text-orange-400"></i>
-                    <div>
-                        <p class="text-gray-300">Email</p>
-                        <p class="font-semibold">fisika@unsyiah.ac.id</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </section>
 
@@ -188,12 +169,12 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 document.execCommand('copy');
                 copyButton.innerHTML = '<i class="fas fa-check mr-2"></i>Disalin';
-                copyButton.classList.replace('bg-orange-600', 'bg-green-600');
-                copyButton.classList.replace('hover:bg-orange-700', 'hover:bg-green-700');
+                copyButton.classList.replace('bg-blue-600', 'bg-green-600');
+                copyButton.classList.replace('hover:bg-blue-700', 'hover:bg-green-700');
                 setTimeout(() => {
                     copyButton.innerHTML = '<i class="fas fa-copy mr-2"></i>Salin';
-                    copyButton.classList.replace('bg-green-600', 'bg-orange-600');
-                    copyButton.classList.replace('hover:bg-green-700', 'hover:bg-orange-700');
+                    copyButton.classList.replace('bg-green-600', 'bg-blue-600');
+                    copyButton.classList.replace('hover:bg-green-700', 'hover:bg-blue-700');
                 }, 2000);
             } catch (err) {
                 console.error('Failed to copy:', err);

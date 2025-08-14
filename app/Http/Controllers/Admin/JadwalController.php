@@ -196,7 +196,45 @@ class JadwalController extends Controller
             ->orderBy('tanggal')
             ->orderBy('jamMulai')
             ->get()
-            ->groupBy('tanggal');
+            ->groupBy(function($schedule) {
+                return $schedule->tanggal->format('Y-m-d');
+            });
+
+        // Debug: cek data jadwal untuk tanggal 14
+        $debug14 = $schedules->get('2025-08-14');
+        if ($debug14) {
+            \Log::info('Debug Calendar Data untuk 14 Agustus:', [
+                'schedules_count' => $debug14->count(),
+                'schedules_data' => $debug14->map(function($s) {
+                    return [
+                        'id' => $s->id,
+                        'jamMulai' => $s->jamMulai,
+                        'isActive' => $s->isActive,
+                        'kunjunganId' => $s->kunjunganId,
+                        'kunjungan_name' => $s->kunjungan ? $s->kunjungan->namaPengunjung : null,
+                        'is_booked_accessor' => $s->is_booked
+                    ];
+                })->toArray()
+            ]);
+        }
+
+        // Debug: cek data jadwal untuk tanggal 14
+        $debug14 = $schedules->get('2025-08-14');
+        if ($debug14) {
+            \Log::info('Debug Calendar Data untuk 14 Agustus:', [
+                'schedules_count' => $debug14->count(),
+                'schedules_data' => $debug14->map(function($s) {
+                    return [
+                        'id' => $s->id,
+                        'jamMulai' => $s->jamMulai,
+                        'isActive' => $s->isActive,
+                        'kunjunganId' => $s->kunjunganId,
+                        'kunjungan_name' => $s->kunjungan ? $s->kunjungan->namaPengunjung : null,
+                        'is_booked_accessor' => $s->is_booked
+                    ];
+                })->toArray()
+            ]);
+        }
 
         $calendarData = [];
         $today = Carbon::today()->toDateString();
@@ -220,6 +258,7 @@ class JadwalController extends Controller
                 'schedules' => $daySchedules->map(function ($schedule) {
                     return [
                         'id' => $schedule->id,
+                        'jamMulai' => $schedule->jamMulai,
                         'isActive' => $schedule->isActive,
                         'isBooked' => $schedule->is_booked,
                         'timeLabel' => $schedule->time_label,
@@ -230,7 +269,7 @@ class JadwalController extends Controller
                     ];
                 })->toArray(),
             ];
-
+            
             $currentDate->addDay();
         }
 
@@ -261,6 +300,7 @@ class JadwalController extends Controller
                 ->map(function ($schedule) {
                     return [
                         'id' => $schedule->id,
+                        'jamMulai' => $schedule->jamMulai,
                         'timeLabel' => $schedule->time_label,
                         'isActive' => $schedule->isActive,
                         'isBooked' => $schedule->is_booked,

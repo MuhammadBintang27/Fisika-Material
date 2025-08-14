@@ -4,10 +4,10 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('/images/hero.jpg') }}" alt="Layanan Pengujian" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#968c82]/80 via-[#635849]/70 to-[#443f35]/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
     <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-6xl">
@@ -15,19 +15,19 @@
             <nav class="flex justify-center" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
                     <li class="inline-flex items-center">
-                        <a href="{{ route('home') }}" class="text-amber-200 hover:text-white transition-colors duration-200 flex items-center">
+                        <a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center">
                             <i class="fas fa-home mr-2"></i>Beranda
                         </a>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-amber-300 mx-3"></i>
-                            <span class="text-amber-200">Layanan</span>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
+                            <span class="text-blue-200">Layanan</span>
                         </div>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-amber-300 mx-3"></i>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
                             <span class="text-white font-medium">Pengujian</span>
                         </div>
                     </li>
@@ -38,9 +38,9 @@
         <div class="scroll-animate mb-8 opacity-0" data-animation="fade-up" data-delay="200">
             <h1 class="font-poppins text-4xl md:text-6xl font-bold leading-tight mb-6">
                 <span class="text-white">Layanan</span>
-                <span class="bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent drop-shadow-lg"> Pengujian</span>
+                <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Pengujian</span>
             </h1>
-            <p class="text-xl md:text-2xl text-amber-100 max-w-4xl mx-auto leading-relaxed">
+            <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
                 Karakterisasi dan analisis material dengan teknologi terdepan
             </p>
         </div>
@@ -64,7 +64,7 @@
                 @foreach($layanan as $item)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden group">
                     <!-- Header -->
-                    <div class="bg-gradient-to-r from-[#968c82] to-[#635849] p-6 text-white">
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white">
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
                                 <i class="fas fa-flask text-2xl"></i>
@@ -77,11 +77,11 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2">{{ $item->namaLayanan }}</h3>
                         @if($item->harga)
-                            <p class="text-amber-100 text-lg font-semibold">
+                            <p class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent text-lg font-semibold">
                                 Rp {{ number_format($item->harga, 0, ',', '.') }}
                             </p>
                         @else
-                            <p class="text-amber-100 text-lg font-semibold">Gratis</p>
+                            <p class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent text-lg font-semibold">Gratis</p>
                         @endif
                     </div>
 
@@ -96,22 +96,22 @@
                         <!-- Features -->
                         <div class="space-y-3 mb-6">
                             <div class="flex items-center text-sm text-gray-500">
-                                <i class="fas fa-clock w-4 h-4 mr-3 text-amber-600"></i>
+                                <i class="fas fa-clock w-4 h-4 mr-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent"></i>
                                 <span>Estimasi selesai: {{ $item->estimasiSelesaiHari }} hari kerja</span>
                             </div>
                             <div class="flex items-center text-sm text-gray-500">
-                                <i class="fas fa-certificate w-4 h-4 mr-3 text-amber-600"></i>
+                                <i class="fas fa-certificate w-4 h-4 mr-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent"></i>
                                 <span>Hasil berstandar internasional</span>
                             </div>
                             <div class="flex items-center text-sm text-gray-500">
-                                <i class="fas fa-download w-4 h-4 mr-3 text-amber-600"></i>
+                                <i class="fas fa-download w-4 h-4 mr-3 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent"></i>
                                 <span>Report digital tersedia</span>
                             </div>
                         </div>
 
                         <!-- Action Button -->
                         <a href="{{ route('testing.detail', $item->id) }}" 
-                           class="w-full bg-gradient-to-r from-[#968c82] to-[#635849] text-white py-3 px-6 rounded-xl font-semibold hover:from-[#635849] hover:to-[#443f35] transition-all duration-300 transform group-hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center">
+                           class="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform group-hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i>
                             Ajukan Pengujian
                         </a>
@@ -121,11 +121,11 @@
             </div>
 
             <!-- Info Section -->
-            <div class="mt-16 bg-gradient-to-r from-[#968c82] to-[#635849] rounded-2xl p-8 text-white">
+            <div class="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div>
                         <h3 class="text-2xl font-bold mb-4">Butuh Bantuan?</h3>
-                        <p class="text-amber-100 mb-6 leading-relaxed">
+                        <p class="text-blue-100 mb-6 leading-relaxed">
                             Tim ahli kami siap membantu Anda memilih layanan pengujian yang tepat untuk penelitian Anda.
                         </p>
                         <div class="space-y-3">
@@ -143,7 +143,7 @@
                         <div class="inline-flex items-center justify-center w-32 h-32 bg-white/20 rounded-full mb-4">
                             <i class="fas fa-microscope text-4xl"></i>
                         </div>
-                        <p class="text-amber-100">
+                        <p class="text-blue-100">
                             Laboratorium Fisika Material dan Energi<br>
                             Universitas Syiah Kuala
                         </p>
@@ -161,7 +161,7 @@
                     Saat ini belum ada layanan pengujian yang tersedia. Silakan hubungi admin untuk informasi lebih lanjut.
                 </p>
                 <a href="{{ route('home') }}" 
-                   class="bg-amber-600 text-white px-6 py-3 rounded-xl hover:bg-amber-700 transition-colors font-semibold inline-flex items-center">
+                   class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors font-semibold inline-flex items-center">
                     <i class="fas fa-home mr-2"></i>
                     Kembali ke Beranda
                 </a>

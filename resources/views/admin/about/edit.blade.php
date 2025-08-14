@@ -4,23 +4,27 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <div class="space-y-6">
+    <div class="space-y-8">
         <!-- Header -->
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Edit Profil Laboratorium</h1>
-                <p class="text-gray-600">Perbarui informasi profil laboratorium</p>
+        <div class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-xl p-8 text-white shadow-xl border border-blue-600">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Edit Profil Laboratorium</h1>
+                    <p class="text-blue-100 text-lg">Perbarui informasi dan identitas laboratorium</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('admin.about.index') }}" 
+                       class="px-6 py-3 bg-white/90 backdrop-blur-sm text-blue-700 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:bg-white transition-all duration-300 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Kembali
+                    </a>
+                </div>
             </div>
-            <a href="{{ route('admin.about.index') }}" 
-               class="text-gray-600 hover:text-gray-900">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Kembali ke Profil
-            </a>
         </div>
 
         <!-- Form -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-            <form method="POST" action="{{ route('admin.about.update') }}" class="p-6 space-y-6">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100">
+            <form method="POST" action="{{ route('admin.about.update') }}" class="p-8 space-y-8">
                 @csrf
                 @method('PUT')
 

@@ -4,10 +4,10 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden  pt-20 md:pt-24">
+<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden  pt-20 md:pt-24">
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('/images/hero.jpg') }}" alt="{{ $layanan->namaLayanan }}" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#968c82]/80 via-[#635849]/70 to-[#443f35]/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
     <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-6xl">
@@ -16,21 +16,21 @@
             <nav class="flex justify-center" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
                     <li class="inline-flex items-center">
-                        <a href="{{ route('home') }}" class="text-amber-200 hover:text-white transition-colors duration-200 flex items-center">
+                        <a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center">
                             <i class="fas fa-home mr-2"></i>Beranda
                         </a>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-amber-300 mx-3"></i>
-                            <a href="{{ route('testing.services') }}" class="text-amber-200 hover:text-white transition-colors duration-200">
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
+                            <a href="{{ route('testing.services') }}" class="text-blue-200 hover:text-white transition-colors duration-200">
                                 Pengujian
                             </a>
                         </div>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-amber-300 mx-3"></i>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
                             <span class="text-white font-medium">{{ $layanan->namaLayanan }}</span>
                         </div>
                     </li>
@@ -46,23 +46,23 @@
             <h1 class="font-poppins text-4xl md:text-6xl font-bold leading-tight mb-6">
                 <span class="text-white">{{ $kata[0] }}</span>
                 @if(isset($kata[1]))
-                    <span class="bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent drop-shadow-lg">
+                    <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg">
                         {{ $kata[1] }}
                     </span>
                 @endif
             </h1>
 
             @if($layanan->harga)
-                <p class="text-xl md:text-2xl text-amber-200 mb-4">
+                <p class="text-xl md:text-2xl text-blue-200 mb-4">
                     Rp {{ number_format($layanan->harga, 0, ',', '.') }}
                 </p>
             @else
-                <p class="text-xl md:text-2xl text-amber-200 mb-4">Gratis</p>
+                <p class="text-xl md:text-2xl text-blue-200 mb-4">Gratis</p>
             @endif
 
             <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <i class="fas fa-clock mr-2 text-amber-200"></i>
-                <span class="text-amber-100">Estimasi selesai: {{ $layanan->estimasiSelesaiHari }} hari kerja</span>
+                <i class="fas fa-clock mr-2 text-blue-200"></i>
+                <span class="text-blue-100">Estimasi selesai: {{ $layanan->estimasiSelesaiHari }} hari kerja</span>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
                 <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Deskripsi Layanan</h2>
                     @if($layanan->deskripsi)
-                        <div class="prose prose-amber max-w-none">
+                        <div class="prose prose-blue max-w-none">
                             {!! nl2br(e($layanan->deskripsi)) !!}
                         </div>
                     @else
@@ -94,8 +94,8 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Fitur Layanan</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex items-start">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-certificate text-amber-600"></i>
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-certificate text-blue-600"></i>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 mb-2">Hasil Berstandar</h3>
@@ -103,8 +103,8 @@
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-clock text-amber-600"></i>
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-clock text-blue-600"></i>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 mb-2">Proses Cepat</h3>
@@ -112,8 +112,8 @@
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-download text-amber-600"></i>
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-download text-blue-600"></i>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 mb-2">Report Digital</h3>
@@ -121,8 +121,8 @@
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-user-tie text-amber-600"></i>
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 mt-1">
+                                <i class="fas fa-user-tie text-blue-600"></i>
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 mb-2">Tim Ahli</h3>
@@ -143,7 +143,7 @@
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-gray-600 text-sm">Harga:</span>
                             @if($layanan->harga)
-                                <span class="font-bold text-lg text-amber-600">
+                                <span class="font-bold text-lg text-blue-600">
                                     Rp {{ number_format($layanan->harga, 0, ',', '.') }}
                                 </span>
                             @else
@@ -400,7 +400,7 @@
                             <div>
                                 <label for="tanggal_penyerahan" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Penyerahan Sampel *</label>
                                 <input type="date" id="tanggal_penyerahan" name="tanggal_penyerahan" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                        min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                                        value="{{ old('tanggal_penyerahan') }}">
                                 @error('tanggal_penyerahan')
@@ -411,7 +411,7 @@
                             <div>
                                 <label for="jumlah_sampel" class="block text-sm font-medium text-gray-700 mb-2">Jumlah Sampel *</label>
                                 <input type="number" id="jumlah_sampel" name="jumlah_sampel" required min="1"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                        placeholder="Masukkan jumlah sampel"
                                        value="{{ old('jumlah_sampel') }}">
                                 @error('jumlah_sampel')
@@ -424,7 +424,7 @@
                             <div>
                                 <label for="deskripsi_sampel" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Sampel *</label>
                                 <textarea id="deskripsi_sampel" name="deskripsi_sampel" required rows="4"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                           placeholder="Jelaskan detail sampel yang akan diuji, termasuk jenis material, dimensi, atau spesifikasi lainnya...">{{ old('deskripsi_sampel') }}</textarea>
                                 @error('deskripsi_sampel')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -434,7 +434,7 @@
                             <div>
                                 <label for="alamat" class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap</label>
                                 <textarea id="alamat" name="alamat" rows="2"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                           placeholder="Alamat lengkap untuk pengiriman hasil">{{ old('alamat') }}</textarea>
                                 @error('alamat')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -444,7 +444,7 @@
                             <div>
                                 <label for="file_pendukung" class="block text-sm font-medium text-gray-700 mb-2">File Pendukung</label>
                                 <input type="file" id="file_pendukung" name="file_pendukung"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                                 <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, JPG, PNG. Maksimal 5MB</p>
                                 @error('file_pendukung')

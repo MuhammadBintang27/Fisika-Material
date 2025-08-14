@@ -75,10 +75,12 @@ class PengujianController extends Controller
                 'namaPengaju' => $this->getPengajuName($request),
                 'noHp' => $this->getPengajuPhone($request),
                 'email' => $this->getPengajuEmail($request),
-                'nip_nim' => $this->getPengajuId($request),
+                'nim' => $request->user_type === 'mahasiswa' ? $request->nim : null,
+                'nip' => $request->user_type === 'dosen' ? $request->nip : null,
                 'instansi' => $request->user_type === 'pihak-luar' ? $request->instansi_pihak_luar : 'Universitas Syiah Kuala',
-                'jabatan' => $this->getJabatan($request),
+                'prodi' => $request->user_type === 'mahasiswa' ? $request->prodi : null,
                 'alamat' => $request->alamat,
+                'userType' => $this->mapUserType($request->user_type),
                 'layananId' => $request->layanan_id,
                 'tanggalPengajuan' => now(),
                 'tanggalPenyerahan' => $tanggalPenyerahan,
@@ -88,9 +90,6 @@ class PengujianController extends Controller
                 'detailKhusus' => $request->detail_khusus,
                 'estimasiSelesai' => $estimasiSelesai,
                 'status' => 'MENUNGGU',
-                'supervisor_name' => $request->user_type === 'mahasiswa' ? $request->nama_pembimbing : null,
-                'supervisor_nip' => $request->user_type === 'mahasiswa' ? $request->nip_pembimbing : null,
-                'supervisor_jabatan' => null,
             ]);
 
             \Log::info('Testing service submission successful', ['pengajuan_id' => $pengajuan->id]);
@@ -259,6 +258,17 @@ class PengujianController extends Controller
             return $request->jabatan;
         }
         return null;
+    }
+
+    private function mapUserType($userType)
+    {
+        $mapping = [
+            'dosen' => 'DOSEN',
+            'mahasiswa' => 'MAHASISWA',
+            'pihak-luar' => 'UMUM',
+        ];
+
+        return $mapping[$userType] ?? 'UMUM';
     }
 
     public function downloadHasil($pengajuanId, $hasilId)

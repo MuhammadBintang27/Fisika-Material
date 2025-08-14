@@ -14,10 +14,12 @@ class PengajuanPengujian extends Model
         'namaPengaju',
         'noHp',
         'email',
-        'nip_nim',
+        'nim',
+        'nip',
         'instansi',
-        'jabatan',
+        'prodi',
         'alamat',
+        'userType',
         'layananId',
         'tanggalPengajuan',
         'tanggalPenyerahan',
@@ -29,11 +31,6 @@ class PengajuanPengujian extends Model
         'estimasiSelesai',
         'catatanAdmin',
         'tanggalSelesai',
-        'supervisor_name',
-        'supervisor_nip',
-        'supervisor_jabatan',
-        'selected_services',
-        'user_type',
     ];
 
     protected $casts = [
@@ -42,7 +39,6 @@ class PengajuanPengujian extends Model
         'tanggalSelesai' => 'datetime',
         'estimasiSelesai' => 'date',
         'detailKhusus' => 'array',
-        'selected_services' => 'array',
         'jumlahSampel' => 'integer',
     ];
 
@@ -91,12 +87,12 @@ class PengajuanPengujian extends Model
     public function getUserTypeLabelAttribute()
     {
         $labels = [
-            'dosen' => 'Dosen',
-            'mahasiswa' => 'Mahasiswa',
-            'pihak-luar' => 'Pihak Luar USK',
+            'DOSEN' => 'Dosen',
+            'MAHASISWA' => 'Mahasiswa',
+            'UMUM' => 'Umum',
         ];
 
-        return $labels[$this->user_type] ?? $this->user_type;
+        return $labels[$this->userType] ?? $this->userType;
     }
 
     public function getStatusLabelAttribute()

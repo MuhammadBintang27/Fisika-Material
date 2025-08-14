@@ -5,34 +5,24 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-    <!-- Background Image -->
+<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/hero.jpg') }}"
-             alt="Hero Background"
-             class="w-full h-full object-cover transform scale-105 transition-transform duration-[20s] ease-in-out hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#968c82]/80 via-[#635849]/70 to-[#443f35]/80"></div>
+        <img src="{{ asset('/images/hero.jpg') }}" alt="Staff dan Tenaga Ahli" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
     </div>
 
-    <!-- Animated Particles -->
-    <div class="absolute inset-0 z-10">
-        <div class="staff-molecules-container" id="staff-molecules-container"></div>
-    </div>
-
-    <!-- Content -->
-    <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-        <!-- Breadcrumb -->
-        <div class="staff-hero-animate mb-8 opacity-0" data-animation="fade-down">
+    <div class="relative z-20 mx-6 px-4 sm:px-6 lg:px-8 text-center max-w-6xl">
+        <div class="scroll-animate mb-8 opacity-0" data-animation="fade-down">
             <nav class="flex justify-center" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
                     <li class="inline-flex items-center">
-                        <a href="{{ route('home') }}" class="text-amber-200 hover:text-white transition-colors duration-200 flex items-center">
+                        <a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center">
                             <i class="fas fa-home mr-2"></i>Beranda
                         </a>
                     </li>
                     <li>
                         <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-amber-300 mx-3"></i>
+                            <i class="fas fa-chevron-right text-blue-300 mx-3"></i>
                             <span class="text-white font-medium">Staff dan Tenaga Ahli</span>
                         </div>
                     </li>
@@ -40,14 +30,13 @@
             </nav>
         </div>
 
-        <!-- Main Title -->
-        <div class="staff-hero-animate mb-8 opacity-0" data-animation="fade-up" data-delay="200">
-            <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
-                <span class="text-white drop-shadow-lg">Tim</span>
+        <div class="scroll-animate mb-8 opacity-0" data-animation="fade-up" data-delay="200">
+            <h1 class="font-poppins text-4xl md:text-6xl font-bold leading-tight mb-6">
+                <span class="text-white">Tim</span>
                 <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent drop-shadow-lg"> Profesional</span>
             </h1>
-            <p class="text-xl md:text-2xl text-amber-100 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
-                Berkenalan dengan para ahli yang berdedikasi mengembangkan ilmu fisika dan mendampingi perjalanan akademik Anda
+            <p class="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
+                Laboratorium Fisika Material dan Energi Departemen Fisika Universitas Syiah Kuala
             </p>
         </div>
     </div>
@@ -62,11 +51,11 @@
                 <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                     <!-- Category Filter -->
                     <div class="flex flex-wrap justify-center lg:justify-start gap-4">
-                        <button class="staff-filter-btn active px-6 py-3 bg-gradient-to-r from-[#968c82] to-[#635849] text-white rounded-full font-medium transition-all duration-300 hover:from-[#635849] hover:to-[#443f35] shadow-lg" data-filter="all">
+                        <button class="staff-filter-btn active px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full font-medium transition-all duration-300 hover:from-blue-700 hover:to-blue-900 shadow-lg" data-filter="all">
                             <i class="fas fa-users mr-2"></i>Semua Tim ({{ $stats['total_staff'] }})
                         </button>
                         @foreach($stats['jabatan_list'] as $jabatan => $count)
-                        <button class="staff-filter-btn px-6 py-3 bg-white text-amber-700 border border-amber-200 rounded-full font-medium transition-all duration-300 hover:bg-amber-50" data-filter="{{ $jabatan }}">
+                        <button class="staff-filter-btn px-6 py-3 bg-white text-blue-700 border border-blue-200 rounded-full font-medium transition-all duration-300 hover:bg-blue-50" data-filter="{{ $jabatan }}">
                             <span class="mr-2">{{ $jabatan }}</span> ({{ $count }})
                         </button>
                         @endforeach
@@ -74,7 +63,7 @@
                     <!-- Search (by name only) -->
                     <div class="relative">
                         <input type="text" id="staff-search" placeholder="Cari berdasarkan nama..."
-                               class="pl-12 pr-4 py-3 w-80 border border-gray-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300">
+                               class="pl-12 pr-4 py-3 w-80 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                 </div>
@@ -91,7 +80,7 @@
                 });
             @endphp
             @foreach($sortedStaff as $index => $member)
-            <div class="staff-card group relative bg-white rounded-3xl p-8 border border-gray-200 hover:border-amber-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden staff-animate"
+            <div class="staff-card group relative bg-white rounded-3xl p-8 border border-gray-200 hover:border-blue-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden staff-animate"
                  data-animation="fade-up"
                  data-delay="{{ ($index + 1) * 100 }}"
                  data-category="{{ $member->jabatan }}"
@@ -105,18 +94,18 @@
                             </div>
                         @else
                             <div class="relative mx-auto w-40 h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
-                                <i class="fas fa-user text-5xl text-gray-400 group-hover:text-amber-500 transition-colors duration-300"></i>
+                                <i class="fas fa-user text-5xl text-gray-400 group-hover:text-blue-500 transition-colors duration-300"></i>
                             </div>
                         @endif
                     </div>
                     
                     <!-- Staff Info -->
                     <div class="space-y-3">
-                        <h3 class="font-poppins text-xl font-bold text-gray-900 group-hover:text-amber-700 transition-colors duration-300">
+                        <h3 class="font-poppins text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
                             {{ $member->nama }}
                         </h3>
                         <div class="flex justify-center">
-                            <span class="text-sm text-amber-600 font-medium bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
+                            <span class="text-sm text-blue-600 font-medium bg-blue-50 px-4 py-2 rounded-full border border-blue-200">
                                 {{ $member->jabatan }}
                             </span>
                         </div>
@@ -129,6 +118,25 @@
 </section>
 
 <style>
+/* Scroll Animations */
+.scroll-animate {
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-animate[data-animation="fade-down"] {
+    transform: translateY(-60px);
+}
+
+.scroll-animate[data-animation="fade-up"] {
+    transform: translateY(60px);
+}
+
+.scroll-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Enhanced Gradient Text */
 .bg-clip-text {
     -webkit-background-clip: text;
@@ -434,12 +442,37 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize scroll animations
+    initScrollAnimations();
+    
+    // Function for scroll animations
+    function initScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.scroll-animate');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('animate');
+                    }, delay);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        animatedElements.forEach(element => {
+            observer.observe(element);
+        });
+    }
+    
     // ===== MOLECULAR ANIMATION =====
     function createStaffMolecularAnimation() {
         const container = document.getElementById('staff-molecules-container');
         if (!container) return;
 
-        const moleculeTypes = ['amber', 'orange', 'brown'];
+        const moleculeTypes = ['blue', 'cyan', 'indigo'];
         const moleculeSizes = ['small', 'normal', 'large'];
 
         function createMolecule() {

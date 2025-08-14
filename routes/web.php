@@ -166,6 +166,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}/edit', [GaleriLaboratoriumController::class, 'edit'])->name('edit');
             Route::put('/{id}', [GaleriLaboratoriumController::class, 'update'])->name('update');
             Route::delete('/{id}', [GaleriLaboratoriumController::class, 'destroy'])->name('destroy');
+            
+            // Routes untuk fasilitas
+            Route::post('/fasilitas', [GaleriLaboratoriumController::class, 'storeFasilitas'])->name('fasilitas.store');
+            Route::put('/fasilitas/{id}', [GaleriLaboratoriumController::class, 'updateFasilitas'])->name('fasilitas.update');
+            Route::delete('/fasilitas/{id}', [GaleriLaboratoriumController::class, 'destroyFasilitas'])->name('fasilitas.destroy');
+            Route::patch('/fasilitas/{id}/toggle', [GaleriLaboratoriumController::class, 'toggleFasilitas'])->name('fasilitas.toggle');
         });
 
         Route::prefix('jadwal')->name('jadwal.')->group(function () {

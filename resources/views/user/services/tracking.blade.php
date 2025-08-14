@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+<section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('/images/hero.jpg') }}" alt="Tracking Peminjaman" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-700/90 via-blue-800/80 to-blue-900/70"></div>
@@ -565,7 +565,7 @@
                             <h4 class="text-lg font-bold text-gray-900">{{ $pengujian->namaPengaju }}</h4>
                             <p class="text-sm text-gray-600">{{ $pengujian->instansi ?? 'Tidak ada instansi' }}</p>
                             @if($pengujian->user_type)
-                                <p class="text-sm text-gray-600">{{ $pengujian->nip_nim }} • {{ $pengujian->getUserTypeLabelAttribute() }}</p>
+                                <p class="text-sm text-gray-600">{{ $pengujian->nim ?? $pengujian->nip ?? 'N/A' }} • {{ $pengujian->getUserTypeLabelAttribute() }}</p>
                             @endif
                         </div>
                         <div class="text-right">

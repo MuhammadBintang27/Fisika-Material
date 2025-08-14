@@ -173,7 +173,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">{{ $item->namaPengaju }}</div>
-                                                <div class="text-sm text-gray-500">{{ $item->nip_nim ?? 'No ID' }}</div>
+                                                <div class="text-sm text-gray-500">{{ $item->nim ?? $item->nip ?? 'No ID' }}</div>
                                                 <div class="text-sm text-gray-500">{{ $item->noHp }}</div>
                                                 @if($item->instansi)
                                                     <div class="text-xs text-gray-400">{{ $item->instansi }}</div>

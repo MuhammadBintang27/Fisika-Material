@@ -82,10 +82,10 @@
                                     <label class="block text-sm font-medium text-gray-500">Tipe User</label>
                                     <p class="mt-1 text-lg text-gray-900">{{ $pengajuan->getUserTypeLabelAttribute() }}</p>
                                 </div>
-                                @if($pengajuan->nip_nim)
+                                @if($pengajuan->nim || $pengajuan->nip)
                                 <div>
                                     <label class="block text-sm font-medium text-gray-500">NIP/NIM</label>
-                                    <p class="mt-1 text-lg text-gray-900">{{ $pengajuan->nip_nim }}</p>
+                                    <p class="mt-1 text-lg text-gray-900">{{ $pengajuan->nim ?? $pengajuan->nip ?? 'N/A' }}</p>
                                 </div>
                                 @endif
                                 @if($pengajuan->email)

@@ -23,8 +23,6 @@ class Jadwal extends Model
 
     protected $casts = [
         'tanggal' => 'date',
-        'jamMulai' => 'datetime:H:i:s', // Match database time format
-        'jamSelesai' => 'datetime:H:i:s', // Match database time format
         'isActive' => 'boolean',
     ];
 
