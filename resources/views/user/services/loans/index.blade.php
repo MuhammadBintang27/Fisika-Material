@@ -65,6 +65,7 @@
         </div>
 
         <!-- Filter Section -->
+        @if(count($equipments) > 0)
         <div class="mb-8 scroll-animate" data-animation="fade-up" data-delay="200">
             <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                 <div class="flex flex-col lg:flex-row gap-6 items-center">
@@ -117,8 +118,10 @@
                 </button>
             </div>
         </div>
+        @endif
 
         <!-- Equipment Grid -->
+        @if(count($equipments) > 0)
         <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($equipments as $index => $equipment)
             <div class="equipment-card bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 scroll-animate"
@@ -144,8 +147,11 @@
                              alt="{{ $equipment->nama }}"
                              class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
                     @else
-                        <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
-                            <i class="fas fa-tools text-4xl"></i>
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400">
+                            <div class="text-center">
+                                <i class="fas fa-tools text-4xl mb-2"></i>
+                                <p class="text-sm">Tidak ada gambar</p>
+                            </div>
                         </div>
                     @endif
                     
@@ -202,6 +208,42 @@
                 <i class="fas fa-arrow-right mr-2"></i>Lanjut ke Formulir
             </button>
         </div>
+        @else
+        <!-- Empty State for Equipment -->
+        <div class="text-center py-20">
+            <div class="max-w-lg mx-auto">
+                <div class="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+                    <i class="fas fa-tools text-blue-400 text-5xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Belum Ada Alat Tersedia</h3>
+                <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                    Saat ini belum ada alat yang tersedia untuk dipinjam. Silakan hubungi admin laboratorium untuk informasi lebih lanjut atau kembali lagi nanti.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-home mr-2"></i>
+                            Kembali ke Beranda
+                        </a>
+                        <a href="mailto:admin@lab.fisika.unsyiah.ac.id" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-envelope mr-2"></i>
+                            Hubungi Admin
+                        </a>
+                    </div>
+                    <div class="text-sm text-gray-500 space-y-2">
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-clock mr-2"></i>
+                            Alat akan segera tersedia
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-phone mr-2"></i>
+                            Telepon: (0651) 7552843
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <!-- No Results Message -->
         <div id="no-results" class="hidden text-center py-16">
@@ -217,6 +259,7 @@
 </section>
 
 <!-- Floating Cart Button -->
+@if(count($equipments) > 0)
 <button id="cart-btn" class="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 hover:scale-105 transition-all duration-300" style="display:none;">
     <i class="fas fa-shopping-cart"></i>
     <span id="cart-count" class="font-bold">0</span>
@@ -231,6 +274,7 @@
         <button id="proceed-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">Lanjut ke Formulir</button>
     </div>
 </div>
+@endif
 
 <style>
 .line-clamp-3 {
@@ -303,15 +347,23 @@ function initFilters() {
     const categoryFilter = document.getElementById('category-filter');
     const statusFilter = document.getElementById('status-filter');
 
-    searchInput.addEventListener('input', filterEquipment);
-    categoryFilter.addEventListener('change', filterEquipment);
-    statusFilter.addEventListener('change', filterEquipment);
+    // Check if elements exist before adding event listeners
+    if (searchInput) searchInput.addEventListener('input', filterEquipment);
+    if (categoryFilter) categoryFilter.addEventListener('change', filterEquipment);
+    if (statusFilter) statusFilter.addEventListener('change', filterEquipment);
 }
 
 function filterEquipment() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const category = document.getElementById('category-filter').value;
-    const status = document.getElementById('status-filter').value;
+    const searchInput = document.getElementById('search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    const statusFilter = document.getElementById('status-filter');
+    
+    // Check if elements exist
+    if (!searchInput || !categoryFilter || !statusFilter) return;
+    
+    const searchTerm = searchInput.value.toLowerCase();
+    const category = categoryFilter.value;
+    const status = statusFilter.value;
 
     const equipmentCards = document.querySelectorAll('.equipment-card');
     let visibleCount = 0;
@@ -335,7 +387,9 @@ function filterEquipment() {
 
     // Show/hide no results message
     const noResults = document.getElementById('no-results');
-    if (visibleCount === 0) {
+    const equipmentGrid = document.getElementById('equipment-grid');
+    
+    if (visibleCount === 0 && equipmentGrid) {
         noResults.classList.remove('hidden');
     } else {
         noResults.classList.add('hidden');
@@ -461,13 +515,37 @@ const cartList = document.getElementById('cart-list');
 const proceedBtn = document.getElementById('proceed-btn');
 const closeCartModal = document.getElementById('close-cart-modal');
 
+// Check if cart elements exist before adding event listeners
+if (cartBtn && cartModal && closeCartModal && proceedBtn) {
+    cartBtn.addEventListener('click', function() {
+        updateCartList();
+        cartModal.classList.remove('hidden');
+    });
+    
+    closeCartModal.addEventListener('click', function() {
+        cartModal.classList.add('hidden');
+    });
+    
+    proceedBtn.addEventListener('click', function() {
+        proceedToForm();
+    });
+}
+
 function updateCartBtn() {
+    const cartBtn = document.getElementById('cart-btn');
+    const cartCount = document.getElementById('cart-count');
+    
+    if (!cartBtn || !cartCount) return; // Check if elements exist
+    
     const selectedCheckboxes = document.querySelectorAll('.equipment-checkbox:checked');
     cartCount.textContent = selectedCheckboxes.length;
     cartBtn.style.display = selectedCheckboxes.length > 0 ? 'flex' : 'none';
 }
 
 function updateCartList() {
+    const cartList = document.getElementById('cart-list');
+    if (!cartList) return; // Check if element exists
+    
     cartList.innerHTML = '';
     const selectedCheckboxes = document.querySelectorAll('.equipment-checkbox:checked');
     selectedCheckboxes.forEach(checkbox => {
@@ -480,12 +558,6 @@ function updateCartList() {
     });
 }
 
-document.addEventListener('change', function(e) {
-    if (e.target.classList.contains('equipment-checkbox') || e.target.classList.contains('quantity-input')) {
-        updateCartBtn();
-    }
-});
-
 cartBtn.addEventListener('click', function() {
     updateCartList();
     cartModal.classList.remove('hidden');
@@ -496,6 +568,13 @@ closeCartModal.addEventListener('click', function() {
 proceedBtn.addEventListener('click', function() {
     proceedToForm();
 });
+
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('equipment-checkbox') || e.target.classList.contains('quantity-input')) {
+        updateCartBtn();
+    }
+});
+
 // Inisialisasi awal
 updateCartBtn();
 

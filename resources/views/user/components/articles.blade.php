@@ -1,5 +1,8 @@
 {{-- resources/views/components/articles.blade.php --}}
 <section id="articles" class="py-24 bg-white relative">
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent"></div>
+    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full"></div>
+
     <!-- Decorative Elements -->
     <div class="absolute top-20 left-10 w-32 h-32 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
     <div class="absolute bottom-20 right-10 w-40 h-40 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
@@ -21,6 +24,7 @@
         </div>
 
         <!-- Articles Grid -->
+        @if(count($featuredArticles) > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             @foreach($featuredArticles as $index => $article)
             <!-- Article {{ $index + 1 }} -->
@@ -31,9 +35,11 @@
                              alt="{{ $article->namaAcara }}"
                              class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105">
                     @else
-                        <div class="w-full h-48 flex items-center justify-center bg-blue-50 text-blue-400">
-                            <i class="fas fa-image text-4xl mb-2"></i>
-                            <span class="text-sm">Tidak ada gambar</span>
+                        <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 text-blue-400">
+                            <div class="text-center">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <span class="text-sm">Tidak ada gambar</span>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -67,6 +73,24 @@
                 <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
+        @else
+        <!-- Empty State for Articles -->
+        <div class="text-center py-16 articles-animate" data-animation="fade-up">
+            <div class="max-w-md mx-auto">
+                <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <i class="fas fa-newspaper text-blue-400 text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Belum Ada Artikel</h3>
+                <p class="text-gray-600 leading-relaxed mb-6">
+                    Artikel dan berita akan segera hadir. Silakan kembali lagi nanti untuk membaca konten terbaru dari laboratorium.
+                </p>
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-clock mr-2"></i>
+                    Konten akan segera tersedia
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 

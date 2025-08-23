@@ -48,6 +48,14 @@
 <!-- Form Section -->
 <section class="py-16 bg-gradient-to-b from-gray-50 to-white">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <button onclick="goBack()" 
+                    class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali ke Pilihan Alat
+            </button>
+        </div>
+        
         <!-- Selected Equipment Summary (unchanged) -->
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
             <h3 class="text-lg font-semibold text-blue-900 mb-4">Alat yang Dipilih</h3>
@@ -262,6 +270,34 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <!-- Informasi Dosen Pembimbing untuk Pihak Luar -->
+                    <div class="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
+                        <h4 class="font-semibold text-green-900 mb-4">Informasi Dosen Pembimbing/Pimpinan Instansi</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Dosen Pembimbing/Pimpinan *</label>
+                                <input type="text" name="nama_pembimbing_pihak_luar" value="{{ old('nama_pembimbing_pihak_luar') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                @error('nama_pembimbing_pihak_luar')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">NIP Dosen Pembimbing/Pimpinan *</label>
+                                <input type="text" name="nip_pembimbing_pihak_luar" value="{{ old('nip_pembimbing_pihak_luar') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                @error('nip_pembimbing_pihak_luar')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Instansi Dosen Pembimbing/Pimpinan *</label>
+                                <input type="text" name="instansi_pembimbing_pihak_luar" value="{{ old('instansi_pembimbing_pihak_luar') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                @error('instansi_pembimbing_pihak_luar')
+                                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -316,13 +352,6 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Waktu Penelitian *</label>
                         <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         @error('waktu_mulai')
-                            <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Durasi (Jam) *</label>
-                        <input type="number" name="durasi_jam" min="1" max="24" value="{{ old('durasi_jam') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        @error('durasi_jam')
                             <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
@@ -388,7 +417,19 @@ document.addEventListener('DOMContentLoaded', function() {
     initUserTypeSelection();
     initDateValidation();
     loadSelectedEquipment();
+    initBackButton();
 });
+
+function initBackButton() {
+    // Add back button functionality if needed
+    window.goBack = function() {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '{{ route("equipment.loan") }}';
+        }
+    };
+}
 
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.scroll-animate');
@@ -554,10 +595,13 @@ document.getElementById('loanForm').addEventListener('submit', function(e) {
         const jabatan = document.querySelector('input[name="jabatan"]').value;
         const noHpPihakLuar = document.querySelector('input[name="no_hp_pihak_luar"]').value;
         const emailPihakLuar = document.querySelector('input[name="email_pihak_luar"]').value;
-        if (!namaPihakLuar || !nipPihakLuar || !instansi || !jabatan || !noHpPihakLuar || !emailPihakLuar) {
+        const namaPembimbingPihakLuar = document.querySelector('input[name="nama_pembimbing_pihak_luar"]').value;
+        const nipPembimbingPihakLuar = document.querySelector('input[name="nip_pembimbing_pihak_luar"]').value;
+        const instansiPembimbingPihakLuar = document.querySelector('input[name="instansi_pembimbing_pihak_luar"]').value;
+        if (!namaPihakLuar || !nipPihakLuar || !instansi || !jabatan || !noHpPihakLuar || !emailPihakLuar || !namaPembimbingPihakLuar || !nipPembimbingPihakLuar || !instansiPembimbingPihakLuar) {
             console.log('Pihak luar fields incomplete');
             e.preventDefault();
-            alert('Semua field pihak luar harus diisi.');
+            alert('Semua field pihak luar dan dosen pembimbing harus diisi.');
             return;
         }
     }

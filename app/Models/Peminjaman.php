@@ -24,6 +24,7 @@ class Peminjaman extends Model
         'jabatan',
         'judul_penelitian',
         'deskripsi_penelitian',
+        'tujuan_peminjaman',
         'tanggal_pinjam',
         'tanggal_pengembalian',
         'durasi_jam',
@@ -31,6 +32,7 @@ class Peminjaman extends Model
         'notes',
         'supervisor_name',
         'supervisor_nip',
+        'supervisor_instansi',
     ];
 
     protected $casts = [

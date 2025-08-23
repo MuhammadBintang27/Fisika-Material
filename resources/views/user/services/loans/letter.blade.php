@@ -185,7 +185,13 @@
     <div class="content">
         <!-- Applicant Information -->
         <div class="section" style="margin-bottom: 10px;">
-            <div style="margin-bottom: 8px;">Saya yang bertanda tangan di bawah ini sebagai Dosen Pembimbing/Pimpinan Instansi<br>dari mahasiswa/staf/peneliti:</div>
+            <div style="margin-bottom: 8px;">
+                @if($loan->user_type === 'dosen')
+                    Saya yang bertanda tangan di bawah ini sebagai Dosen Universitas Syiah Kuala:
+                @else
+                    Saya yang bertanda tangan di bawah ini sebagai Dosen Pembimbing/Pimpinan Instansi<br>dari mahasiswa/staf/peneliti:
+                @endif
+            </div>
             <table style="width:100%; border-collapse:collapse; margin-bottom: 10px;">
                 <thead>
                     <tr>
@@ -202,7 +208,11 @@
             </table>
         </div>
         <div class="section" style="margin-bottom: 10px;">
-            Mohon diberikan izin kepada mahasiswa/staf/peneliti tersebut agar dapat memakai peralatan sebagai berikut:
+            @if($loan->user_type === 'dosen')
+                Mohon diberikan izin kepada saya agar dapat memakai peralatan sebagai berikut:
+            @else
+                Mohon diberikan izin kepada mahasiswa/staf/peneliti tersebut agar dapat memakai peralatan sebagai berikut:
+            @endif
             <table style="width:100%; border-collapse:collapse; margin-top: 8px;">
                 <thead>
                     <tr>
@@ -232,7 +242,11 @@
             </div>
         </div>
         <div class="section" style="margin-bottom: 10px;">
-            Segala sesuatu yang menyebabkan kerugian akan menjadi tanggung jawab mahasiswa yang bersangkutan.
+            @if($loan->user_type === 'dosen')
+                Segala sesuatu yang menyebabkan kerugian akan menjadi tanggung jawab saya yang bersangkutan.
+            @else
+                Segala sesuatu yang menyebabkan kerugian akan menjadi tanggung jawab mahasiswa yang bersangkutan.
+            @endif
         </div>
         <div class="section" style="margin-bottom: 10px;">
             Demikian surat ini dibuat, untuk dipergunakan sebagaimana mestinya.
@@ -249,22 +263,21 @@
                 1100023129401912
             </div>
             <div style="text-align: center; width: 300px;">
-                Pembimbing Penelitian/Pimpinan Instansi,<br><br><br><br>
-                <strong>
-                    @if($loan->user_type === 'mahasiswa')
-                        {{ $loan->supervisor_name ?? '-' }}
-                    @elseif($loan->user_type === 'pihak-luar')
-                        {{ $loan->pimpinan_instansi ?? '-' }}
-                    @else
-                        {{ $loan->namaPeminjam }}
-                    @endif
-                </strong><br>
-                @if($loan->user_type === 'mahasiswa')
-                    {{ $loan->supervisor_nip ?? '-' }}
-                @elseif($loan->user_type === 'pihak-luar')
-                    {{ $loan->pimpinan_nip ?? '-' }}
-                @else
+                @if($loan->user_type === 'dosen')
+                    Pemohon,<br><br><br><br>
+                    <strong>{{ $loan->namaPeminjam }}</strong><br>
                     {{ $loan->nip_nim }}
+                @elseif($loan->user_type === 'mahasiswa')
+                    Pembimbing Penelitian,<br><br><br><br>
+                    <strong>{{ $loan->supervisor_name ?? '-' }}</strong><br>
+                    {{ $loan->supervisor_nip ?? '-' }}
+                @else
+                    Pimpinan Instansi,<br><br><br><br>
+                    <strong>{{ $loan->supervisor_name ?? '-' }}</strong><br>
+                    {{ $loan->supervisor_nip ?? '-' }}
+                    @if($loan->supervisor_instansi)
+                        <br>{{ $loan->supervisor_instansi }}
+                    @endif
                 @endif
             </div>
         </div>

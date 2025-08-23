@@ -58,88 +58,123 @@
 <section class="py-20 bg-gray-50">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <!-- Featured Article (First Article) -->
         @if(count($articles) > 0)
-        <div class="mb-16">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Artikel Unggulan</h2>
-            <article class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                <div class="lg:flex">
-                    <div class="lg:w-1/2">
-                        @if($articles[0]->gambar && $articles[0]->gambar->first())
-                            <img src="{{ url('storage/' . $articles[0]->gambar->first()->url) }}"
-                                 alt="{{ $articles[0]->namaAcara }}"
-                                 class="w-full h-64 lg:h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <!-- Featured Article (First Article) -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Artikel Unggulan</h2>
+                <article class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="lg:flex">
+                        <div class="lg:w-1/2">
+                            @if($articles[0]->gambar && $articles[0]->gambar->first())
+                                <img src="{{ url('storage/' . $articles[0]->gambar->first()->url) }}"
+                                     alt="{{ $articles[0]->namaAcara }}"
+                                     class="w-full h-64 lg:h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            @else
+                                <div class="w-full h-64 lg:h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 text-blue-400">
+                                    <div class="text-center">
+                                        <i class="fas fa-image text-6xl mb-4"></i>
+                                        <p class="text-sm">Tidak ada gambar</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="lg:w-1/2 p-8 lg:p-12">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">Acara</span>
+                                <span class="text-gray-500 text-sm ml-4">{{ date('d M Y', strtotime($articles[0]->tanggalAcara)) }}</span>
+                            </div>
+                            <h3 class="font-poppins text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
+                                {{ $articles[0]->namaAcara }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                                {{ Str::limit(strip_tags($articles[0]->deskripsi), 150) }}
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-600"></i>
+                                    </div>
+                                    <span class="text-gray-700 font-medium">{{ $articles[0]->penulis ?? '-' }}</span>
+                                </div>
+                                <a href="{{ route('articles.show', $articles[0]->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200 group">
+                                    Baca Selengkapnya
+                                    <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Articles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="articles-grid">
+                @foreach($articles->slice(1) as $article)
+                <article class="article-card group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        @if($article->gambar && $article->gambar->first())
+                            <img src="{{ url('storage/' . $article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-48 object-cover rounded-t-xl">
+                        @else
+                            <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 rounded-t-xl">
+                                <div class="text-center">
+                                    <i class="fas fa-image text-4xl mb-2"></i>
+                                    <p class="text-sm">Tidak ada gambar</p>
+                                </div>
+                            </div>
                         @endif
                     </div>
-                    <div class="lg:w-1/2 p-8 lg:p-12">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">Acara</span>
-                            <span class="text-gray-500 text-sm ml-4">{{ date('d M Y', strtotime($articles[0]->tanggalAcara)) }}</span>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="fas fa-calendar mr-2"></i>
+                            <span>{{ date('d M Y', strtotime($article->tanggalAcara)) }}</span>
+                            <i class="fas fa-user ml-4 mr-2"></i>
+                            <span>{{ $article->penulis ?? '-' }}</span>
                         </div>
-                        <h3 class="font-poppins text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
-                            {{ $articles[0]->namaAcara }}
+                        <h3 class="font-poppins text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                            {{ $article->namaAcara }}
                         </h3>
-                        <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                            {{ Str::limit(strip_tags($articles[0]->deskripsi), 150) }}
+                        <p class="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                            {{ Str::limit(strip_tags($article->deskripsi), 100) }}
                         </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-user text-blue-600"></i>
-                                </div>
-                                <span class="text-gray-700 font-medium">{{ $articles[0]->penulis ?? '-' }}</span>
-                            </div>
-                            <a href="{{ route('articles.show', $articles[0]->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200 group">
-                                Baca Selengkapnya
-                                <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
-                            </a>
+                        <a href="{{ route('articles.show', $article->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200 group">
+                            Baca Selengkapnya
+                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
+                        </a>
+                    </div>
+                </article>
+                @endforeach
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-16">
+                <button class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-full hover:from-blue-700 hover:to-blue-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
+                    <i class="fas fa-plus mr-2"></i>
+                    Muat Artikel Lainnya
+                </button>
+            </div>
+        @else
+            <!-- Empty State for Articles -->
+            <div class="text-center py-20">
+                <div class="max-w-md mx-auto">
+                    <div class="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+                        <i class="fas fa-newspaper text-blue-400 text-5xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Belum Ada Artikel</h3>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                        Saat ini belum ada artikel yang tersedia. Silakan kembali lagi nanti untuk melihat artikel dan berita terbaru dari laboratorium.
+                    </p>
+                    <div class="space-y-4">
+                        <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-home mr-2"></i>
+                            Kembali ke Beranda
+                        </a>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-clock mr-2"></i>
+                            Artikel akan segera hadir
                         </div>
                     </div>
                 </div>
-            </article>
-        </div>
+            </div>
         @endif
-
-        <!-- Articles Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="articles-grid">
-            @foreach($articles->slice(1) as $article)
-            <article class="article-card group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                <div class="relative overflow-hidden">
-                    @if($article->gambar && $article->gambar->first())
-                        <img src="{{ url('storage/' . $article->gambar->first()->url) }}" alt="{{ $article->namaAcara }}" class="w-full h-48 object-cover rounded-t-xl mb-4">
-                    @else
-                        <div class="w-full h-48 flex items-center justify-center bg-gray-200 text-gray-400 rounded-t-xl mb-4">No Image</div>
-                    @endif
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                        <i class="fas fa-calendar mr-2"></i>
-                        <span>{{ date('d M Y', strtotime($article->tanggalAcara)) }}</span>
-                        <i class="fas fa-user ml-4 mr-2"></i>
-                        <span>{{ $article->penulis ?? '-' }}</span>
-                    </div>
-                    <h3 class="font-poppins text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
-                        {{ $article->namaAcara }}
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-4 line-clamp-3">
-                        {{ Str::limit(strip_tags($article->deskripsi), 100) }}
-                    </p>
-                    <a href="{{ route('articles.show', $article->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-200 group">
-                        Baca Selengkapnya
-                        <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
-                    </a>
-                </div>
-            </article>
-            @endforeach
-        </div>
-
-        <!-- Load More Button -->
-        <div class="text-center mt-16">
-            <button class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-full hover:from-blue-700 hover:to-blue-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
-                <i class="fas fa-plus mr-2"></i>
-                Muat Artikel Lainnya
-            </button>
-        </div>
     </div>
 </section>
 

@@ -50,6 +50,26 @@
 <!-- Tracking Section -->
 <section class="py-16 bg-gradient-to-b from-gray-50 to-white">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                    <p class="text-green-800">{{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
+                    <p class="text-red-800">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+        
         <!-- Search Form -->
         <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 mb-8">
             <h3 class="text-2xl font-bold text-gray-900 mb-6">Cari Pengajuan</h3>
@@ -173,7 +193,7 @@
                     @if($peminjaman->status === 'PENDING')
                         <p class="text-gray-600 mt-3">Pengajuan peminjaman Anda sedang menunggu review dari admin laboratorium</p>
                     @elseif($peminjaman->status === 'APPROVED')
-                        <p class="text-gray-600 mt-3">✅ Peminjaman disetujui! Silakan ambil alat sesuai jadwal dan unduh surat peminjaman</p>
+                        <p class="text-gray-600 mt-3">✅ Peminjaman disetujui! Silakan unduh surat peminjaman di bawah ini, print surat tersebut, dan bawa saat datang ke laboratorium untuk mengambil alat.</p>
                     @elseif($peminjaman->status === 'ONGOING')
                         <p class="text-gray-600 mt-3">🚀 Peminjaman sedang berlangsung. Silakan kembalikan alat sesuai jadwal</p>
                     @elseif($peminjaman->status === 'COMPLETED')
@@ -188,11 +208,24 @@
                     <p><b>Kode Tracking:</b> {{ $peminjaman->tracking_code }}</p>
                     <p><b>Nama Peminjam:</b> {{ $peminjaman->namaPeminjam }}</p>
                     @if($peminjaman->status === 'APPROVED')
-                        <div class="mt-4">
-                            <a href="{{ route('equipment.loan.letter', $peminjaman->id) }}" 
-                               class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                                <i class="fas fa-file-pdf mr-2"></i>Unduh Surat Peminjaman (PDF)
-                            </a>
+                        <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                            <h4 class="font-semibold text-green-900 mb-3">
+                                <i class="fas fa-file-download mr-2"></i>Unduh Surat Izin Peminjaman
+                            </h4>
+                            <p class="text-sm text-green-800 mb-3">
+                                Surat izin ini wajib dibawa saat datang ke laboratorium untuk mengambil alat. 
+                                Silakan print surat dan tunjukkan kepada petugas laboratorium.
+                            </p>
+                            <div class="flex gap-3">
+                                <a href="{{ route('equipment.loan.letter', $peminjaman->id) }}" 
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>Lihat Surat
+                                </a>
+                                <a href="{{ route('equipment.loan.download', $peminjaman->id) }}" 
+                                   class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                                    <i class="fas fa-download mr-2"></i>Unduh PDF
+                                </a>
+                            </div>
                         </div>
                     @endif
                 </div>

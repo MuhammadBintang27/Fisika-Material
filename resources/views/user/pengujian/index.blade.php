@@ -51,11 +51,17 @@
 <section class="py-16 bg-gradient-to-b from-gray-50 to-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Katalog Layanan Pengujian</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Pilih layanan pengujian yang sesuai dengan kebutuhan penelitian Anda
-            </p>
+        
+        <div class="text-center mb-20 scroll-animate" data-animation="fade-down">
+            <div class="inline-flex items-center px-6 py-3 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-sm font-semibold mb-6 shadow-sm">
+                <i class="fas fa-building mr-2"></i>
+                Katalog Layanan Pengujian
+            </div>
+            <h2 class="font-poppins text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                Pilih <span class="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Pengujian</span>
+            </h2>
+            <p class="text-gray-600 text-lg md:text-xl max-w-4xl mx-auto leading-relaxed">
+Pilih layanan pengujian yang sesuai dengan kebutuhan penelitian Anda            </p>
         </div>
 
         @if($layanan->count() > 0)

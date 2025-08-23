@@ -157,7 +157,7 @@
                     </div>
 
                     <!-- Contact Info -->
-                    <div class="bg-gradient-to-br from-[#968c82] to-[#635849] rounded-2xl p-6 text-white">
+                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white">
                         <h4 class="font-bold mb-4">Butuh Bantuan?</h4>
                         <div class="space-y-3 text-sm">
                             <div class="flex items-center">
@@ -231,7 +231,7 @@
                                 </label>
                                 <label class="user-type-option cursor-pointer">
                                     <input type="radio" name="user_type" value="mahasiswa" class="sr-only" {{ old('user_type') == 'mahasiswa' ? 'checked' : '' }}>
-                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-green-400 hover:bg-green-50 transition-all duration-300 group">
+                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 group">
                                         <div class="flex flex-col items-center">
                                             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
                                                 <i class="fas fa-user-graduate text-xl text-green-600"></i>
@@ -243,7 +243,7 @@
                                 </label>
                                 <label class="user-type-option cursor-pointer">
                                     <input type="radio" name="user_type" value="pihak-luar" class="sr-only" {{ old('user_type') == 'pihak-luar' ? 'checked' : '' }}>
-                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 group">
+                                    <div class="p-6 border-2 border-gray-200 rounded-xl text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 group">
                                         <div class="flex flex-col items-center">
                                             <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
                                                 <i class="fas fa-building text-xl text-purple-600"></i>
@@ -267,23 +267,23 @@
                                 <div>
                                     <label for="nama_dosen" class="block text-sm font-medium text-gray-700 mb-2">Nama Dosen *</label>
                                     <input type="text" id="nama_dosen" name="nama_dosen" value="{{ old('nama_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="nip_dosen" class="block text-sm font-medium text-gray-700 mb-2">NIP *</label>
                                     <input type="text" id="nip_dosen" name="nip_dosen" value="{{ old('nip_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="no_hp_dosen" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_dosen" name="no_hp_dosen" value="{{ old('no_hp_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
                                     <label for="email_dosen" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_dosen" name="email_dosen" value="{{ old('email_dosen') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="nama@email.com">
                                 </div>
                             </div>
@@ -292,7 +292,7 @@
                             <div>
                                 <label for="judul_penelitian_dosen" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
                                 <textarea id="judul_penelitian_dosen" name="judul_penelitian" rows="3"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                           placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
@@ -304,23 +304,23 @@
                                 <div>
                                     <label for="nama_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Nama Mahasiswa *</label>
                                     <input type="text" id="nama_mahasiswa" name="nama_mahasiswa" value="{{ old('nama_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="nim_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">NIM *</label>
                                     <input type="text" id="nim_mahasiswa" name="nim_mahasiswa" value="{{ old('nim_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="no_hp_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_mahasiswa" name="no_hp_mahasiswa" value="{{ old('no_hp_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
                                     <label for="email_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_mahasiswa" name="email_mahasiswa" value="{{ old('email_mahasiswa') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="nama@email.com">
                                 </div>
                             </div>
@@ -330,12 +330,12 @@
                                 <div>
                                     <label for="nama_pembimbing" class="block text-sm font-medium text-gray-700 mb-2">Nama Pembimbing *</label>
                                     <input type="text" id="nama_pembimbing" name="nama_pembimbing" value="{{ old('nama_pembimbing') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="nip_pembimbing" class="block text-sm font-medium text-gray-700 mb-2">NIP Pembimbing *</label>
                                     <input type="text" id="nip_pembimbing" name="nip_pembimbing" value="{{ old('nip_pembimbing') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                             </div>
                             
@@ -343,7 +343,7 @@
                             <div>
                                 <label for="judul_penelitian_mahasiswa" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
                                 <textarea id="judul_penelitian_mahasiswa" name="judul_penelitian" rows="3"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                           placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
@@ -355,23 +355,23 @@
                                 <div>
                                     <label for="nama_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
                                     <input type="text" id="nama_pihak_luar" name="nama_pihak_luar" value="{{ old('nama_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="nip_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">NIK/Nomor Identitas *</label>
                                     <input type="text" id="nip_pihak_luar" name="nip_pihak_luar" value="{{ old('nip_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="no_hp_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">No HP *</label>
                                     <input type="tel" id="no_hp_pihak_luar" name="no_hp_pihak_luar" value="{{ old('no_hp_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="0812xxxxxxxx">
                                 </div>
                                 <div>
                                     <label for="email_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                                     <input type="email" id="email_pihak_luar" name="email_pihak_luar" value="{{ old('email_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="nama@email.com">
                                 </div>
                             </div>
@@ -381,7 +381,7 @@
                                 <div>
                                     <label for="instansi_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Nama Instansi *</label>
                                     <input type="text" id="instansi_pihak_luar" name="instansi_pihak_luar" value="{{ old('instansi_pihak_luar') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                            placeholder="Masukkan nama instansi/perusahaan">
                                 </div>
                             </div>
@@ -390,7 +390,7 @@
                             <div>
                                 <label for="judul_penelitian_pihak_luar" class="block text-sm font-medium text-gray-700 mb-2">Judul Penelitian *</label>
                                 <textarea id="judul_penelitian_pihak_luar" name="judul_penelitian" rows="3"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                           placeholder="Masukkan judul penelitian">{{ old('judul_penelitian') }}</textarea>
                             </div>
                         </div>
@@ -442,11 +442,49 @@
                             </div>
 
                             <div>
-                                <label for="file_pendukung" class="block text-sm font-medium text-gray-700 mb-2">File Pendukung</label>
-                                <input type="file" id="file_pendukung" name="file_pendukung"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, JPG, PNG. Maksimal 5MB</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="file_pendukung" class="block text-sm font-medium text-gray-700">
+                                        File Pendukung
+                                    </label>
+                                    <a href="{{ route('template.index') }}" 
+                                       class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center">
+                                        <i class="fas fa-download mr-1"></i>Unduh Template Surat
+                                    </a>
+                                </div>
+                                
+                                <!-- File Upload Area -->
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-blue-400 transition-colors duration-200" id="uploadAreaPengujian">
+                                    <input type="file" id="file_pendukung" name="file_pendukung"
+                                           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                    
+                                    <div class="text-center" id="uploadPlaceholderPengujian">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-upload text-blue-600"></i>
+                                        </div>
+                                        <p class="text-gray-700 font-medium text-sm mb-1">Klik untuk upload atau drag & drop</p>
+                                        <p class="text-xs text-gray-500">PDF, DOC, DOCX, JPG, PNG • Maksimal 5MB</p>
+                                    </div>
+                                    
+                                    <div class="hidden" id="uploadPreviewPengujian">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-file-alt text-green-600 text-sm"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-gray-900 text-sm" id="fileNamePengujian"></p>
+                                                <p class="text-xs text-gray-500" id="fileSizePengujian"></p>
+                                            </div>
+                                            <button type="button" class="text-red-600 hover:text-red-800" id="removeFilePengujian">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-xs text-gray-500 mt-2">
+                                    File pendukung dapat berupa surat pengajuan, proposal penelitian, atau dokumen pendukung lainnya
+                                </p>
                                 @error('file_pendukung')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
@@ -455,7 +493,7 @@
 
                         <!-- Submit Button -->
                         <button type="submit" 
-                                class="w-full bg-gradient-to-r from-[#968c82] to-[#635849] text-white py-4 px-6 rounded-xl font-semibold hover:from-[#635849] hover:to-[#443f35] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center">
+                                class="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i>
                             Kirim Pengajuan
                         </button>
@@ -467,7 +505,7 @@
                 </div>
 
                 <!-- Contact Info -->
-                <div class="bg-gradient-to-br from-[#968c82] to-[#635849] rounded-2xl p-6 text-white mt-6">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white mt-6">
                     <h4 class="font-bold mb-4">Butuh Bantuan?</h4>
                     <div class="space-y-3 text-sm">
                         <div class="flex items-center">
@@ -612,19 +650,13 @@ function initUserTypeSelection() {
             
             if (input.checked) {
                 // Remove all possible color classes
-                div.classList.remove('border-gray-200', 'border-blue-400', 'bg-blue-50', 'border-green-400', 'bg-green-50', 'border-purple-400', 'bg-purple-50');
+                div.classList.remove('border-gray-200', 'border-blue-400', 'bg-blue-50');
                 
-                // Add appropriate color based on user type
-                if (input.value === 'dosen') {
-                    div.classList.add('border-blue-400', 'bg-blue-50');
-                } else if (input.value === 'mahasiswa') {
-                    div.classList.add('border-green-400', 'bg-green-50');
-                } else if (input.value === 'pihak-luar') {
-                    div.classList.add('border-purple-400', 'bg-purple-50');
-                }
+                // Add blue color for all selected types (consistent styling)
+                div.classList.add('border-blue-400', 'bg-blue-50');
             } else {
                 // Remove all active color classes and add default
-                div.classList.remove('border-blue-400', 'bg-blue-50', 'border-green-400', 'bg-green-50', 'border-purple-400', 'bg-purple-50');
+                div.classList.remove('border-blue-400', 'bg-blue-50');
                 div.classList.add('border-gray-200');
             }
         });
@@ -723,6 +755,87 @@ function initFormValidation() {
             return;
         }
     });
+    
+    // Initialize file upload enhancement for pengujian
+    initFileUploadPengujian();
+}
+
+function initFileUploadPengujian() {
+    const fileInput = document.getElementById('file_pendukung');
+    const uploadArea = document.getElementById('uploadAreaPengujian');
+    const placeholder = document.getElementById('uploadPlaceholderPengujian');
+    const preview = document.getElementById('uploadPreviewPengujian');
+    const fileName = document.getElementById('fileNamePengujian');
+    const fileSize = document.getElementById('fileSizePengujian');
+    const removeBtn = document.getElementById('removeFilePengujian');
+
+    if (!uploadArea || !fileInput) return; // Exit if elements don't exist
+
+    // Drag and drop events
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('border-blue-400', 'bg-blue-50');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileSelectionPengujian(files[0]);
+        }
+    });
+
+    // File input change
+    fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            handleFileSelectionPengujian(e.target.files[0]);
+        }
+    });
+
+    // Remove file
+    removeBtn.addEventListener('click', function() {
+        fileInput.value = '';
+        placeholder.classList.remove('hidden');
+        preview.classList.add('hidden');
+        uploadArea.classList.remove('border-green-400');
+    });
+
+    function handleFileSelectionPengujian(file) {
+        // Validate file type
+        const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Format file tidak didukung. Gunakan PDF, DOC, DOCX, JPG, atau PNG.');
+            return;
+        }
+
+        // Validate file size (5MB = 5242880 bytes)
+        if (file.size > 5242880) {
+            alert('Ukuran file terlalu besar. Maksimal 5MB.');
+            return;
+        }
+
+        // Update preview
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        placeholder.classList.add('hidden');
+        preview.classList.remove('hidden');
+        uploadArea.classList.add('border-green-400');
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
 }
 </script>
 
@@ -734,8 +847,13 @@ function initFormValidation() {
     display: none !important;
 }
 .user-type-option input:checked + div {
-    border-color: #3b82f6;
-    background-color: #eff6ff;
+    border-color: #3b82f6 !important;
+    background-color: #eff6ff !important;
+}
+.bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 </style>
 @endsection

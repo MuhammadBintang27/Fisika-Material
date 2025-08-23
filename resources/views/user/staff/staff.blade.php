@@ -51,7 +51,7 @@
                 <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                     <!-- Category Filter -->
                     <div class="flex flex-wrap justify-center lg:justify-start gap-4">
-                        <button class="staff-filter-btn active px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full font-medium transition-all duration-300 hover:from-blue-700 hover:to-blue-900 shadow-lg" data-filter="all">
+                        <button class="staff-filter-btn active px-6 py-3 bg-white text-blue-700 border border-blue-200 rounded-full font-medium transition-all duration-300 hover:bg-blue-50" data-filter="all">
                             <i class="fas fa-users mr-2"></i>Semua Tim ({{ $stats['total_staff'] }})
                         </button>
                         @foreach($stats['jabatan_list'] as $jabatan => $count)
@@ -327,9 +327,9 @@
 
 /* Filter Button Styles */
 .staff-filter-btn.active {
-    background: linear-gradient(135deg, #968c82 0%, #635849 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(150, 140, 130, 0.3);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
 /* Search Input */

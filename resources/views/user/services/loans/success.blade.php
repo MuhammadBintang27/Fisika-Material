@@ -74,6 +74,16 @@
                 Simpan kode tracking atau bookmark link ini untuk memeriksa perkembangan status peminjaman Anda kapan saja.
             </p>
             
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                <h4 class="font-semibold text-blue-900 mb-2">
+                    <i class="fas fa-file-download mr-2"></i>Unduh Surat Izin
+                </h4>
+                <p class="text-sm text-blue-800">
+                    Surat izin pemakaian alat akan tersedia untuk diunduh setelah pengajuan Anda <strong>disetujui</strong> oleh admin. 
+                    Silakan cek status peminjaman secara berkala melalui halaman tracking.
+                </p>
+            </div>
+            
             <div class="flex justify-center space-x-4">
                 <a href="{{ $tracking_link }}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
                     <i class="fas fa-search mr-2"></i>Cek Status Sekarang

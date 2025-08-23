@@ -60,7 +60,6 @@ class EquipmentLoanController extends Controller
             'tanggal_mulai' => 'required|date|after_or_equal:' . Carbon::now()->addDays(7)->format('Y-m-d'),
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
             'waktu_mulai' => 'required',
-            'durasi_jam' => 'required|integer|min:1|max:24',
             'selected_equipment' => 'required',
         ]);
 
@@ -101,10 +100,11 @@ class EquipmentLoanController extends Controller
             'deskripsi_penelitian' => $request->deskripsi_penelitian,
             'tanggal_pinjam' => $request->tanggal_mulai . ' ' . $request->waktu_mulai,
             'tanggal_pengembalian' => $request->tanggal_selesai . ' ' . $request->waktu_mulai,
-            'durasi_jam' => $request->durasi_jam,
+            'durasi_jam' => null, // Tidak menggunakan durasi jam lagi
             'status' => 'PENDING',
-            'supervisor_name' => $request->user_type === 'mahasiswa' ? $request->nama_pembimbing : null,
-            'supervisor_nip' => $request->user_type === 'mahasiswa' ? $request->nip_pembimbing : null,
+            'supervisor_name' => $this->getSupervisorName($request),
+            'supervisor_nip' => $this->getSupervisorNip($request),
+            'supervisor_instansi' => $this->getSupervisorInstansi($request),
         ]);
 
         // Create peminjaman items
@@ -124,8 +124,8 @@ class EquipmentLoanController extends Controller
 
         return view('user.services.loans.success', [
             'tracking_code' => $trackingCode,
-            'tracking_link' => route('tracking', ['type' => 'peminjaman', 'tracking_code' => $peminjaman->tracking_code])
-
+            'tracking_link' => route('tracking', ['type' => 'peminjaman', 'tracking_code' => $peminjaman->tracking_code]),
+            'loan_id' => $peminjaman->id
         ]);
     } catch (\Illuminate\Validation\ValidationException $e) {
         \Log::warning('Validation failed', ['errors' => $e->errors()]);
@@ -143,12 +143,26 @@ class EquipmentLoanController extends Controller
     public function letter($id)
     {
         $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
+        
+        // Only allow access to letter if status is APPROVED or later
+        if (!in_array($loan->status, ['APPROVED', 'ONGOING', 'COMPLETED'])) {
+            return redirect()->route('tracking', ['type' => 'peminjaman', 'tracking_code' => $loan->tracking_code])
+                           ->with('error', 'Surat peminjaman hanya dapat diakses setelah pengajuan disetujui.');
+        }
+        
         return view('user.services.loans.letter', compact('loan'));
     }
 
     public function download($id)
     {
         $loan = Peminjaman::with(['items.alat'])->findOrFail($id);
+        
+        // Only allow download if status is APPROVED or later
+        if (!in_array($loan->status, ['APPROVED', 'ONGOING', 'COMPLETED'])) {
+            return redirect()->route('tracking', ['type' => 'peminjaman', 'tracking_code' => $loan->tracking_code])
+                           ->with('error', 'Surat peminjaman hanya dapat diunduh setelah pengajuan disetujui.');
+        }
+        
         $pdf = \PDF::loadView('user.services.loans.letter', compact('loan'));
         $filename = 'Surat_Peminjaman_Alat_' . $loan->namaPeminjam . '_' . $loan->tracking_code . '.pdf';
         return $pdf->download($filename);
@@ -217,6 +231,9 @@ class EquipmentLoanController extends Controller
                 'jabatan' => 'required|string|max:255',
                 'no_hp_pihak_luar' => 'required|string|max:20',
                 'email_pihak_luar' => 'required|email|max:255',
+                'nama_pembimbing_pihak_luar' => 'required|string|max:255',
+                'nip_pembimbing_pihak_luar' => 'required|string|max:20',
+                'instansi_pembimbing_pihak_luar' => 'required|string|max:255',
             ]);
         }
     }
@@ -285,5 +302,41 @@ class EquipmentLoanController extends Controller
             return $request->jabatan;
         }
         return null;
+    }
+
+    private function getSupervisorName(Request $request)
+    {
+        switch ($request->user_type) {
+            case 'mahasiswa':
+                return $request->nama_pembimbing;
+            case 'pihak-luar':
+                return $request->nama_pembimbing_pihak_luar;
+            default:
+                return null;
+        }
+    }
+
+    private function getSupervisorNip(Request $request)
+    {
+        switch ($request->user_type) {
+            case 'mahasiswa':
+                return $request->nip_pembimbing;
+            case 'pihak-luar':
+                return $request->nip_pembimbing_pihak_luar;
+            default:
+                return null;
+        }
+    }
+
+    private function getSupervisorInstansi(Request $request)
+    {
+        switch ($request->user_type) {
+            case 'mahasiswa':
+                return 'Universitas Syiah Kuala';
+            case 'pihak-luar':
+                return $request->instansi_pembimbing_pihak_luar;
+            default:
+                return null;
+        }
     }
 }

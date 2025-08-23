@@ -68,6 +68,13 @@ Route::get('/jadwal/get-available-sessions', [JadwalController::class, 'getAvail
 Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking');
 Route::post('/tracking/cancel', [TrackingController::class, 'cancel'])->name('tracking.cancel');
 
+// Template System Routes
+Route::prefix('template')->name('template.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\User\TemplateController::class, 'index'])->name('index');
+    Route::get('/download/{type}', [\App\Http\Controllers\User\TemplateController::class, 'download'])->name('download');
+    Route::get('/preview/{type}', [\App\Http\Controllers\User\TemplateController::class, 'preview'])->name('preview');
+});
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('login');
     Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate');
