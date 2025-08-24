@@ -73,6 +73,20 @@
                 <i class="fas fa-info-circle mr-1"></i>
                 Simpan kode tracking atau bookmark link ini untuk memeriksa perkembangan status kunjungan Anda kapan saja.
             </p>
+
+            <!-- WhatsApp Admin Notification -->
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <h4 class="font-semibold text-green-900 mb-2">
+                    <i class="fab fa-whatsapp mr-2"></i>Reminder untuk Admin
+                </h4>
+                <p class="text-sm text-green-800 mb-3">
+                    Klik tombol di bawah untuk mengirim reminder ke admin tentang permohonan kunjungan laboratorium Anda.
+                </p>
+                <button onclick="sendWhatsAppToAdmin()" 
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold">
+                    <i class="fab fa-whatsapp mr-2"></i>Kirim Reminder ke Admin
+                </button>
+            </div>
             
             <div class="flex justify-center space-x-4">
                 <a href="{{ $tracking_link }}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
@@ -133,7 +147,41 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Gagal menyalin link. Silakan salin secara manual.');
         }
     });
+    
+    // Auto-show WhatsApp notification after 3 seconds
+    setTimeout(function() {
+        showWhatsAppReminder();
+    }, 3000);
 });
+
+function showWhatsAppReminder() {
+    if (confirm('🔔 Ingin mengirim reminder ke admin tentang permohonan kunjungan Anda?\n\nKlik OK untuk membuka WhatsApp dan mengirim pesan ke admin laboratorium.')) {
+        sendWhatsAppToAdmin();
+    }
+}
+
+function sendWhatsAppToAdmin() {
+    const adminPhone = '{{ config("app.admin_whatsapp") }}';
+    const trackingCode = '{{ $tracking_code }}';
+    
+    const message = `🔔 *PERMOHONAN KUNJUNGAN LABORATORIUM BARU*
+
+Halo Admin Laboratorium Fisika Material dan Energi,
+
+Ada permohonan kunjungan laboratorium baru yang masuk:
+
+📋 *Kode Tracking:* ${trackingCode}
+🏢 *Jenis Layanan:* Kunjungan Laboratorium
+📅 *Waktu Pengajuan:* ${new Date().toLocaleString('id-ID')}
+🌐 *Link Tracking:* {{ $tracking_link }}
+
+Mohon untuk segera memproses permohonan ini.
+
+Terima kasih! 🙏`;
+
+    const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
 
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.scroll-animate');

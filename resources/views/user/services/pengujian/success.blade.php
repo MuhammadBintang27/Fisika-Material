@@ -77,6 +77,20 @@
                 <i class="fas fa-info-circle mr-1"></i>
                 Simpan kode tracking untuk memeriksa perkembangan status pengujian Anda kapan saja.
             </p>
+
+            <!-- WhatsApp Admin Notification -->
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <h4 class="font-semibold text-green-900 mb-2">
+                    <i class="fab fa-whatsapp mr-2"></i>Reminder untuk Admin
+                </h4>
+                <p class="text-sm text-green-800 mb-3">
+                    Klik tombol di bawah untuk mengirim reminder ke admin tentang permohonan pengujian Anda.
+                </p>
+                <button onclick="sendWhatsAppToAdmin()" 
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold">
+                    <i class="fab fa-whatsapp mr-2"></i>Kirim Reminder ke Admin
+                </button>
+            </div>
             
             <div class="flex justify-center space-x-4">
                 @if(isset($tracking_code))
@@ -206,7 +220,53 @@ document.addEventListener('DOMContentLoaded', function() {
             window.getSelection().removeAllRanges();
         });
     }
+    
+    // Auto-show WhatsApp notification after 3 seconds
+    setTimeout(function() {
+        showWhatsAppReminder();
+    }, 3000);
 });
+
+function showWhatsAppReminder() {
+    if (confirm('🔔 Ingin mengirim reminder ke admin tentang permohonan pengujian Anda?\n\nKlik OK untuk membuka WhatsApp dan mengirim pesan ke admin laboratorium.')) {
+        sendWhatsAppToAdmin();
+    }
+}
+
+function sendWhatsAppToAdmin() {
+    const adminPhone = '{{ config("app.admin_whatsapp") }}';
+    @if(isset($tracking_code))
+    const trackingCode = '{{ $tracking_code }}';
+    @else 
+    const trackingCode = 'N/A';
+    @endif
+    
+    @if(isset($pengajuan) && $pengajuan->layanan)
+    const layananName = '{{ $pengajuan->layanan->namaLayanan }}';
+    @else
+    const layananName = 'Layanan Pengujian';
+    @endif
+
+    const message = `🔔 *PERMOHONAN PENGUJIAN BARU*
+
+Halo Admin Laboratorium Fisika Material dan Energi,
+
+Ada permohonan pengujian baru yang masuk:
+
+📋 *Kode Tracking:* ${trackingCode}
+🧪 *Jenis Layanan:* ${layananName}
+📅 *Waktu Pengajuan:* ${new Date().toLocaleString('id-ID')}
+@if(isset($tracking_link))
+🌐 *Link Tracking:* {{ $tracking_link }}
+@endif
+
+Mohon untuk segera memproses permohonan ini.
+
+Terima kasih! 🙏`;
+
+    const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
 
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.scroll-animate');

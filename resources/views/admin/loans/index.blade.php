@@ -129,14 +129,15 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tracking Code
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Peminjam
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kategori
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Penelitian
-                                </th>
+                                
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Alat
                                 </th>
@@ -149,11 +150,18 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($loans as $loan)
                                 <tr class="hover:bg-blue-50 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-mono font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg border border-blue-200">
+                                            {{ $loan->tracking_code }}
+                                        </div>
+                                        
+                                    </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
@@ -173,15 +181,7 @@
                                         </span>
                                         <div class="text-sm text-gray-500 mt-1">{{ $loan->nip_nim }}</div>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $loan->judul_penelitian ?? 'N/A' }}</div>
-                                        @if($loan->supervisor_name)
-                                            <div class="text-sm text-gray-500">Pembimbing: {{ $loan->supervisor_name }}</div>
-                                        @endif
-                                        @if($loan->durasi_jam)
-                                            <div class="text-sm text-gray-500">{{ $loan->durasi_jam }} jam</div>
-                                        @endif
-                                    </td>
+                                    
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
                                             @if($loan->items->count() > 0)

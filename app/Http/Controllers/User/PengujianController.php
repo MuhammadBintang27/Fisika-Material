@@ -16,14 +16,14 @@ class PengujianController extends Controller
     {
         // Halaman katalog layanan pengujian
         $layanan = LayananPengujian::aktif()->orderBy('namaLayanan')->get();
-        return view('user.pengujian.index', compact('layanan'));
+        return view('user.services.pengujian.index', compact('layanan'));
     }
 
     public function show($id)
     {
         // Detail layanan dan form pengajuan
         $layanan = LayananPengujian::where('isAktif', true)->findOrFail($id);
-        return view('user.pengujian.detail', compact('layanan'));
+        return view('user.services.pengujian.detail', compact('layanan'));
     }
 
     // UNIFIED SUBMIT METHOD - mengikuti pola dari EquipmentLoanController
@@ -94,10 +94,15 @@ class PengujianController extends Controller
 
             \Log::info('Testing service submission successful', ['pengajuan_id' => $pengajuan->id]);
 
-            return view('user.pengujian.success', [
+            // Prepare WhatsApp message for admin notification
+            $adminPhone = config('app.admin_whatsapp');
+            $whatsappMessage = $this->generateAdminWhatsAppMessage($pengajuan, $trackingCode, $layanan);
+
+            return view('user.services.pengujian.success', [
                 'tracking_code' => $trackingCode,
                 'pengajuan' => $pengajuan,
-                'tracking_link' => route('tracking') . '?type=pengujian&tracking_code=' . $pengajuan->trackingCode
+                'tracking_link' => route('tracking') . '?type=pengujian&tracking_code=' . $pengajuan->trackingCode,
+                'admin_whatsapp_url' => "https://wa.me/{$adminPhone}?text=" . urlencode($whatsappMessage)
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::warning('Validation failed', ['errors' => $e->errors()]);
@@ -117,11 +122,11 @@ class PengujianController extends Controller
         if ($id) {
             // Legacy support - redirect by ID
             $pengajuan = PengajuanPengujian::with('layanan')->findOrFail($id);
-            return view('user.pengujian.success', compact('pengajuan'));
+            return view('user.services.pengujian.success', compact('pengajuan'));
         }
         
         // New pattern - success page shows tracking info
-        return view('user.pengujian.success');
+        return view('user.services.pengujian.success');
     }
 
     public function tracking(Request $request, $tracking_code = null)
@@ -144,21 +149,21 @@ class PengujianController extends Controller
 
                 if (!$pengajuan) {
                     \Log::warning('Invalid tracking code', ['tracking_code' => $trackingCode]);
-                    return view('user.pengujian.tracking', [
+                    return view('user.services.pengujian.tracking', [
                         'pengajuan' => null,
                         'pengajuans' => collect()
                     ])->withErrors(['error' => 'Kode tracking tidak valid.']);
                 }
             }
 
-            return view('user.pengujian.tracking', compact('pengajuan', 'pengajuans'));
+            return view('user.services.pengujian.tracking', compact('pengajuan', 'pengajuans'));
         } catch (\Exception $e) {
             \Log::error('Testing tracking failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'tracking_code' => $tracking_code ?? $request->query('tracking_code')
             ]);
-            return view('user.pengujian.tracking', [
+            return view('user.services.pengujian.tracking', [
                 'pengajuan' => null,
                 'pengajuans' => collect()
             ])->withErrors(['error' => 'Terjadi kesalahan saat melacak pengajuan.']);
@@ -293,6 +298,29 @@ class PengujianController extends Controller
             $hasil->fileHasil, 
             $hasil->namaFile ?: 'hasil_pengujian.pdf'
         );
+    }
+
+    /**
+     * Generate WhatsApp message for admin notification
+     */
+    private function generateAdminWhatsAppMessage($pengajuan, $trackingCode, $layanan)
+    {
+        $message = "🔔 *PERMOHONAN PENGUJIAN BARU*\n\n";
+        $message .= "Halo Admin Laboratorium Fisika Material dan Energi,\n\n";
+        $message .= "Ada permohonan pengujian baru yang masuk:\n\n";
+        $message .= "📋 *Kode Tracking:* {$trackingCode}\n";
+        $message .= "🧪 *Jenis Layanan:* {$layanan->namaLayanan}\n";
+        $message .= "👤 *Pengaju:* {$pengajuan->namaPengaju}\n";
+        $message .= "📞 *No HP:* {$pengajuan->noHp}\n";
+        $message .= "🏷️ *Tipe User:* " . $pengajuan->getUserTypeLabelAttribute() . "\n";
+        $message .= "📦 *Jumlah Sampel:* {$pengajuan->jumlahSampel}\n";
+        $message .= "📅 *Tanggal Penyerahan:* " . \Carbon\Carbon::parse($pengajuan->tanggalPenyerahan)->format('d/m/Y') . "\n";
+        $message .= "📅 *Waktu Pengajuan:* " . $pengajuan->tanggalPengajuan->format('d/m/Y H:i') . "\n";
+        $message .= "🌐 *Link Tracking:* " . route('tracking') . '?type=pengujian&tracking_code=' . $trackingCode . "\n\n";
+        $message .= "Mohon untuk segera memproses permohonan ini.\n\n";
+        $message .= "Terima kasih! 🙏";
+        
+        return $message;
     }
 }
 

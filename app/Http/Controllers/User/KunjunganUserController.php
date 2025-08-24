@@ -71,9 +71,15 @@ class KunjunganUserController extends Controller
 
             $selectedSchedule->update(['kunjunganId' => $kunjungan->id]);
             Log::info("Kunjungan created: ID={$kunjungan->id}, TrackingCode={$kunjungan->tracking_code}, Date={$request->tanggal}, User=" . (auth()->id() ?? 'guest') . ", IP={$request->ip()}");
+            
+            // Prepare WhatsApp message for admin notification
+            $adminPhone = config('app.admin_whatsapp');
+            $whatsappMessage = $this->generateAdminWhatsAppMessage($kunjungan, $selectedSchedule, $request);
+            
             return redirect()->route('user.kunjungan.success', [
                 'tracking_code' => $kunjungan->tracking_code,
-                'tracking_link' => route('tracking', ['type' => 'kunjungan', 'tracking_code' => $kunjungan->tracking_code])
+                'tracking_link' => route('tracking', ['type' => 'kunjungan', 'tracking_code' => $kunjungan->tracking_code]),
+                'admin_whatsapp_url' => "https://wa.me/{$adminPhone}?text=" . urlencode($whatsappMessage)
             ])->with('success', 'Pengajuan kunjungan berhasil dikirim!');
         });
     } catch (\Exception $e) {
@@ -103,5 +109,29 @@ class KunjunganUserController extends Controller
             Log::error("Error cancelling kunjungan: " . $e->getMessage() . ", User=" . (auth()->id() ?? 'guest') . ", IP=" . request()->ip());
             return back()->with('error', 'Gagal membatalkan kunjungan: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Generate WhatsApp message for admin notification
+     */
+    private function generateAdminWhatsAppMessage($kunjungan, $jadwal, $request)
+    {
+        $message = "🔔 *PERMOHONAN KUNJUNGAN LABORATORIUM BARU*\n\n";
+        $message .= "Halo Admin Laboratorium Fisika Material dan Energi,\n\n";
+        $message .= "Ada permohonan kunjungan laboratorium baru yang masuk:\n\n";
+        $message .= "📋 *Kode Tracking:* {$kunjungan->tracking_code}\n";
+        $message .= "👤 *Pengunjung:* {$kunjungan->namaPengunjung}\n";
+        $message .= "📞 *No HP:* {$kunjungan->noHp}\n";
+        $message .= "🏢 *Instansi:* {$kunjungan->namaInstansi}\n";
+        $message .= "👥 *Jumlah Pengunjung:* {$kunjungan->jumlahPengunjung} orang\n";
+        $message .= "🎯 *Tujuan:* {$kunjungan->tujuan}\n";
+        $message .= "📅 *Tanggal Kunjungan:* " . \Carbon\Carbon::parse($request->tanggal)->format('d/m/Y') . "\n";
+        $message .= "🕘 *Waktu:* {$request->jamMulai} - {$request->jamSelesai}\n";
+        $message .= "📅 *Waktu Pengajuan:* " . $kunjungan->created_at->format('d/m/Y H:i') . "\n";
+        $message .= "🌐 *Link Tracking:* " . route('tracking', ['type' => 'kunjungan', 'tracking_code' => $kunjungan->tracking_code]) . "\n\n";
+        $message .= "Mohon untuk segera memproses permohonan ini.\n\n";
+        $message .= "Terima kasih! 🙏";
+        
+        return $message;
     }
 }

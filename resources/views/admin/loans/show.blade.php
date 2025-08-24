@@ -69,6 +69,16 @@
                 <div class="p-8 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Tracking Code</label>
+                            <div class="text-lg font-mono font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-xl border border-blue-200">
+                                {{ $loan->tracking_code }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Pengajuan</label>
+                            <p class="text-lg font-semibold text-gray-900">{{ $loan->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+                        <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
                             <span class="px-4 py-2 text-sm font-bold rounded-xl inline-block
                                 @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800

@@ -77,9 +77,9 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tracking Code</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peminjam</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penelitian</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alat</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Periode Peminjaman</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -90,6 +90,12 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($loans as $loan)
                                 <tr class="hover:bg-red-50 transition-colors duration-200">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-mono font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-lg border border-red-200">
+                                            {{ $loan->tracking_code }}
+                                        </div>
+                                       
+                                    </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
@@ -107,15 +113,7 @@
                                         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full @if($loan->user_type === 'dosen') bg-blue-100 text-blue-800 @elseif($loan->user_type === 'mahasiswa') bg-green-100 text-green-800 @else bg-purple-100 text-purple-800 @endif">{{ $loan->user_type_label }}</span>
                                         <div class="text-sm text-gray-500 mt-1">{{ $loan->nip_nim }}</div>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $loan->judul_penelitian ?? 'N/A' }}</div>
-                                        @if($loan->supervisor_name)
-                                            <div class="text-sm text-gray-500">Pembimbing: {{ $loan->supervisor_name }}</div>
-                                        @endif
-                                        @if($loan->durasi_jam)
-                                            <div class="text-sm text-gray-500">{{ $loan->durasi_jam }} jam</div>
-                                        @endif
-                                    </td>
+                                    
                                     <td class="px-6 py-4">
                                         <div class="text-sm text-gray-900">
                                             @if($loan->items->count() > 0)

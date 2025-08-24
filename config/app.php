@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin WhatsApp Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Nomor WhatsApp admin untuk notifikasi dan reminder permohonan baru
+    |
+    */
+    'admin_whatsapp' => env('ADMIN_WHATSAPP', '4'),
+
 ];

@@ -428,7 +428,7 @@
                             <p class="text-lg font-semibold text-gray-900">{{ substr($record->jadwal->jamMulai, 0, 5) }} - {{ substr($record->jadwal->jamSelesai, 0, 5) }}</p>
                         </div>
                     </div>
-                    @if($record->canBeCancelled())
+                    <!-- @if($record->canBeCancelled())
                         <div class="mt-6">
                             <form method="POST" action="{{ route('tracking.cancel') }}" 
                                   onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pengajuan ini?')">
@@ -440,7 +440,7 @@
                                 </button>
                             </form>
                         </div>
-                    @endif
+                    @endif -->
                 </div>
             </div>
         @endif

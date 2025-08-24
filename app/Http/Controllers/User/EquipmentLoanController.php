@@ -122,10 +122,15 @@ class EquipmentLoanController extends Controller
 
         \Log::info('Equipment loan submission successful', ['peminjaman_id' => $peminjaman->id]);
 
+        // Prepare WhatsApp message for admin notification
+        $adminPhone = config('app.admin_whatsapp');
+        $whatsappMessage = $this->generateAdminWhatsAppMessage($peminjaman, $trackingCode);
+        
         return view('user.services.loans.success', [
             'tracking_code' => $trackingCode,
             'tracking_link' => route('tracking', ['type' => 'peminjaman', 'tracking_code' => $peminjaman->tracking_code]),
-            'loan_id' => $peminjaman->id
+            'loan_id' => $peminjaman->id,
+            'admin_whatsapp_url' => "https://wa.me/{$adminPhone}?text=" . urlencode($whatsappMessage)
         ]);
     } catch (\Illuminate\Validation\ValidationException $e) {
         \Log::warning('Validation failed', ['errors' => $e->errors()]);
@@ -338,5 +343,28 @@ class EquipmentLoanController extends Controller
             default:
                 return null;
         }
+    }
+
+    /**
+     * Generate WhatsApp message for admin notification
+     */
+    private function generateAdminWhatsAppMessage($peminjaman, $trackingCode)
+    {
+        $message = "🔔 *PERMOHONAN PEMINJAMAN ALAT BARU*\n\n";
+        $message .= "Halo Admin Laboratorium Fisika Material dan Energi,\n\n";
+        $message .= "Ada permohonan peminjaman alat baru yang masuk:\n\n";
+        $message .= "📋 *Kode Tracking:* {$trackingCode}\n";
+        $message .= "👤 *Peminjam:* {$peminjaman->namaPeminjam}\n";
+        $message .= "📞 *No HP:* {$peminjaman->noHp}\n";
+        $message .= "🏷️ *Jenis User:* " . ucfirst($peminjaman->user_type) . "\n";
+        $message .= "🔬 *Judul Penelitian:* {$peminjaman->judul_penelitian}\n";
+        $message .= "📅 *Tanggal Mulai:* " . \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->format('d/m/Y H:i') . "\n";
+        $message .= "📅 *Tanggal Selesai:* " . \Carbon\Carbon::parse($peminjaman->tanggal_pengembalian)->format('d/m/Y H:i') . "\n";
+        $message .= "📅 *Waktu Pengajuan:* " . $peminjaman->created_at->format('d/m/Y H:i') . "\n";
+        $message .= "🌐 *Link Tracking:* " . route('tracking', ['type' => 'peminjaman', 'tracking_code' => $trackingCode]) . "\n\n";
+        $message .= "Mohon untuk segera memproses permohonan ini.\n\n";
+        $message .= "Terima kasih! 🙏";
+        
+        return $message;
     }
 }
