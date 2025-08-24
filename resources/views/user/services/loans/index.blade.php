@@ -256,6 +256,8 @@
             </div>
         </div>
     </div>
+    
+    @include('user.components.service-info')
 </section>
 
 <!-- Floating Cart Button -->

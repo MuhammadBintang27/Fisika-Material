@@ -399,6 +399,8 @@
             </form>
         </div>
     </div>
+    
+    @include('user.components.service-info')
 </section>
 
 <style>

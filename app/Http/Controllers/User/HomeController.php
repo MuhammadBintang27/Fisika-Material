@@ -8,6 +8,12 @@ use App\Models\ProfilLaboratorium;
 use App\Models\Misi;
 use App\Models\Artikel;
 use App\Models\GaleriLaboratorium;
+use App\Models\Alat;
+use App\Models\LayananPengujian;
+use App\Models\PengajuanPengujian;
+use App\Models\Peminjaman;
+use App\Models\Kunjungan;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -20,6 +26,17 @@ class HomeController extends Controller
 
         $profil = ProfilLaboratorium::with('misi')->first();
         $misis = Misi::all();
+        
+        // Statistik dinamis untuk hero section
+        $stats = [
+            'total_equipment' => Alat::count(),
+            'total_services' => LayananPengujian::where('isAktif', true)->count(),
+            'total_requests' => PengajuanPengujian::count() + Peminjaman::count() + Kunjungan::count(),
+            'this_year_requests' => PengajuanPengujian::whereYear('created_at', Carbon::now()->year)->count() + 
+                                   Peminjaman::whereYear('created_at', Carbon::now()->year)->count() + 
+                                   Kunjungan::whereYear('created_at', Carbon::now()->year)->count()
+        ];
+        
         // Dummy fallback jika belum ada data di database
         if (!$profil) {
             $profil = (object) [
@@ -38,7 +55,7 @@ class HomeController extends Controller
 
         $galeriLaboratorium = GaleriLaboratorium::all();
 
-        return view('user.home.home', compact('featuredArticles', 'profil', 'misis', 'galeriLaboratorium'));
+        return view('user.home.home', compact('featuredArticles', 'profil', 'misis', 'galeriLaboratorium', 'stats'));
     }
 
     public function about()

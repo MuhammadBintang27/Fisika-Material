@@ -47,12 +47,12 @@
                     Jelajahi koleksi alat laboratorium kami atau jadwalkan kunjungan untuk melihat fasilitas kami secara langsung.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                    <a href="/catalog" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-blue-600/25 hover:shadow-2xl transform hover:-translate-y-1">
+                    <a href="{{ route('equipment.loan') }}" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-blue-600/25 hover:shadow-2xl transform hover:-translate-y-1">
                         <i class="fas fa-book mr-3"></i>
                         Lihat Katalog Alat
                         <i class="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform duration-300"></i>
                     </a>
-                    <a href="/visit" class="group inline-flex items-center px-8 py-4 bg-white border-2 border-blue-300 text-blue-700 hover:text-blue-800 hover:border-blue-400 font-semibold rounded-2xl transition-all duration-300 hover:shadow-lg">
+                    <a href="{{ route('user.kunjungan.form') }}" class="group inline-flex items-center px-8 py-4 bg-white border-2 border-blue-300 text-blue-700 hover:text-blue-800 hover:border-blue-400 font-semibold rounded-2xl transition-all duration-300 hover:shadow-lg">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Jadwalkan Kunjungan
                     </a>

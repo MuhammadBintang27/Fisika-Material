@@ -45,18 +45,18 @@
                 <div class="grid grid-cols-3 gap-6 md:gap-12">
                     <!-- Stat 1 -->
                     <div class="text-center">
-                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-600 mb-2 transition-all duration-300 hover:scale-110">15+</div>
+                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-600 mb-2 transition-all duration-300 hover:scale-110">{{ $stats['total_equipment'] ?? 15 }}+</div>
                         <div class="text-gray-700 text-xs md:text-sm lg:text-base font-medium">Peralatan Modern</div>
                     </div>
                     <!-- Stat 2 -->
                     <div class="text-center">
-                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-yellow-500 mb-2 transition-all duration-300 hover:scale-110">500+</div>
-                        <div class="text-gray-700 text-xs md:text-sm lg:text-base font-medium">Mahasiswa per Tahun</div>
+                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-yellow-500 mb-2 transition-all duration-300 hover:scale-110">{{ $stats['total_services'] ?? 8 }}+</div>
+                        <div class="text-gray-700 text-xs md:text-sm lg:text-base font-medium">Layanan Pengujian</div>
                     </div>
                     <!-- Stat 3 -->
                     <div class="text-center">
-                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-600 mb-2 transition-all duration-300 hover:scale-110">10+</div>
-                        <div class="text-gray-700 text-xs md:text-sm lg:text-base font-medium">Tahun Pengalaman</div>
+                        <div class="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-600 mb-2 transition-all duration-300 hover:scale-110">{{ $stats['this_year_requests'] ?? 50 }}+</div>
+                        <div class="text-gray-700 text-xs md:text-sm lg:text-base font-medium">Permohonan Tahun Ini</div>
                     </div>
                 </div>
             </div>
