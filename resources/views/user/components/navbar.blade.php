@@ -13,7 +13,7 @@
                              class="w-full h-full object-contain transition-opacity duration-300"
                              id="logo-white" />
                         <!-- Logo hitam (ketika scroll) -->
-                        <img src="{{ asset('images/logo-fisika.png') }}"
+                        <img src="{{ asset('images/logo-fisika-hitam.png') }}"
                              alt="Logo Fisika"
                              class="w-full h-full object-contain absolute top-0 left-0 opacity-0 transition-opacity duration-300"
                              id="logo-dark" />

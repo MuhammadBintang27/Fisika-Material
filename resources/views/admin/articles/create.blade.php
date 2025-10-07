@@ -3,134 +3,134 @@
 @section('title', 'Tambah Artikel')
 
 @section('content')
-<div class="space-y-6">
-    <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between">
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-xl p-8 text-white shadow-xl border border-blue-600">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Tambah Artikel Baru</h1>
-                <p class="text-gray-600">Buat artikel baru untuk website laboratorium</p>
+                <h1 class="text-3xl font-bold mb-2">Tambah Artikel Baru</h1>
+                <p class="text-blue-100 text-lg">Buat artikel baru untuk website laboratorium</p>
             </div>
-            <a href="{{ route('admin.articles.index') }}" 
-               class="text-gray-600 hover:text-gray-900">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Kembali ke Daftar
-            </a>
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('admin.articles.index') }}" 
+                   class="px-6 py-3 bg-white/90 backdrop-blur-sm text-blue-700 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:bg-white transition-all duration-300 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali
+                </a>
+            </div>
         </div>
+    </div>
 
-        <!-- Form -->
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
-            <form method="POST" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data" class="p-6 space-y-6">
-                @csrf
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <form method="POST" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data" class="p-8">
+            <div class="space-y-8">
+            @csrf
 
-                <!-- Nama Acara -->
-                <div>
-                    <label for="namaAcara" class="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Acara <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" 
-                           id="namaAcara" 
-                           name="namaAcara" 
-                           value="{{ old('namaAcara') }}"
-                           class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Masukkan nama acara"
-                           required>
-                    @error('namaAcara')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+            <!-- Nama Acara -->
+            <div>
+                <label for="namaAcara" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Nama Acara <span class="text-red-500">*</span>
+                </label>
+                <input type="text" 
+                       id="namaAcara" 
+                       name="namaAcara" 
+                       value="{{ old('namaAcara') }}"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('namaAcara') border-red-500 @enderror"
+                       placeholder="Masukkan nama acara"
+                       required>
+                @error('namaAcara')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Penulis -->
+            <div>
+                <label for="penulis" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Penulis
+                </label>
+                <input type="text" 
+                       id="penulis" 
+                       name="penulis" 
+                       value="{{ old('penulis') }}"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('penulis') border-red-500 @enderror"
+                       placeholder="Masukkan nama penulis (opsional)">
+                @error('penulis')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Deskripsi Penulis -->
+            <div>
+                <label for="deskripsi_penulis" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Deskripsi Penulis
+                </label>
+                <textarea id="deskripsi_penulis" 
+                          name="deskripsi_penulis" 
+                          rows="4"
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('deskripsi_penulis') border-red-500 @enderror"
+                          placeholder="Tulis deskripsi singkat tentang penulis (opsional)...">{{ old('deskripsi_penulis') }}</textarea>
+                <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
+                    <span>Contoh: "Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika"</span>
+                    <span id="penulisCharCount">0 karakter</span>
                 </div>
+                @error('deskripsi_penulis')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <!-- Penulis -->
-                <div>
-                    <label for="penulis" class="block text-sm font-medium text-gray-700 mb-2">
-                        Penulis
-                    </label>
-                    <input type="text" 
-                           id="penulis" 
-                           name="penulis" 
-                           value="{{ old('penulis') }}"
-                           class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Masukkan nama penulis (opsional)">
-                    @error('penulis')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+            <!-- Tanggal Acara -->
+            <div>
+                <label for="tanggalAcara" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Tanggal Acara <span class="text-red-500">*</span>
+                </label>
+                <input type="datetime-local" 
+                       id="tanggalAcara" 
+                       name="tanggalAcara" 
+                       value="{{ old('tanggalAcara') }}"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('tanggalAcara') border-red-500 @enderror"
+                       required>
+                @error('tanggalAcara')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <!-- Deskripsi Penulis -->
-                <div>
-                    <label for="deskripsi_penulis" class="block text-sm font-medium text-gray-700 mb-2">
-                        Deskripsi Penulis
-                    </label>
-                    <textarea id="deskripsi_penulis" 
-                              name="deskripsi_penulis" 
-                              rows="4"
-                              class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Tulis deskripsi singkat tentang penulis (opsional)...">{{ old('deskripsi_penulis') }}</textarea>
-                    <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
-                        <span>Contoh: "Peneliti dan dosen di Laboratorium Fisika Dasar dengan fokus pada bidang geofisika"</span>
-                        <span id="penulisCharCount">0 karakter</span>
-                    </div>
-                    @error('deskripsi_penulis')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+            <!-- Deskripsi -->
+            <div>
+                <label for="deskripsi" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Deskripsi <span class="text-red-500">*</span>
+                </label>
+                <textarea id="deskripsi" 
+                          name="deskripsi" 
+                          rows="12"
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('deskripsi') border-red-500 @enderror"
+                          placeholder="Tulis deskripsi artikel di sini. Anda dapat menggunakan format teks biasa atau HTML untuk formatting..."
+                          required>{{ old('deskripsi') }}</textarea>
+                <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
+                    <span>Minimal 100 karakter untuk deskripsi yang informatif</span>
+                    <span id="charCount">0 karakter</span>
                 </div>
+                @error('deskripsi')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <!-- Tanggal Acara -->
-                <div>
-                    <label for="tanggalAcara" class="block text-sm font-medium text-gray-700 mb-2">
-                        Tanggal Acara <span class="text-red-500">*</span>
-                    </label>
-                    <input type="datetime-local" 
-                           id="tanggalAcara" 
-                           name="tanggalAcara" 
-                           value="{{ old('tanggalAcara') }}"
-                           class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                           required>
-                    @error('tanggalAcara')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Deskripsi -->
-                <div>
-                    <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
-                        Deskripsi <span class="text-red-500">*</span>
-                    </label>
-                    <textarea id="deskripsi" 
-                              name="deskripsi" 
-                              rows="12"
-                              class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Tulis deskripsi artikel di sini. Anda dapat menggunakan format teks biasa atau HTML untuk formatting..."
-                              required>{{ old('deskripsi') }}</textarea>
-                    <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
-                        <span>Minimal 100 karakter untuk deskripsi yang informatif</span>
-                        <span id="charCount">0 karakter</span>
-                    </div>
-                    @error('deskripsi')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Image -->
-                <div>
-                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
-                        Gambar Artikel <span class="text-red-500">*</span>
-                    </label>
-                    <div class="flex items-center space-x-4">
-                        <input type="file" 
-                               id="image" 
-                               name="image" 
-                               accept="image/*"
-                               class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                               required>
-                    </div>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Format yang didukung: JPG, PNG, GIF. Maksimal 2MB. Gambar akan ditampilkan di halaman artikel.
-                    </p>
-                    @error('image')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+            <!-- Image -->
+            <div>
+                <label for="image" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Gambar Artikel <span class="text-red-500">*</span>
+                </label>
+                <input type="file" 
+                       id="image" 
+                       name="image" 
+                       accept="image/*"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-400 @error('image') border-red-500 @enderror"
+                       required>
+                <p class="text-xs text-gray-500 mt-1">Format yang didukung: JPG, PNG, GIF. Maksimal 2MB.</p>
+                @error('image')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
                 <!-- Preview Image -->
                 <div id="imagePreview" class="hidden">
@@ -145,20 +145,21 @@
                     </p>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
-                    <a href="{{ route('admin.articles.index') }}" 
-                       class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                        Batal
-                    </a>
-                    <button type="submit" 
-                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-save mr-2"></i>
-                        Simpan Artikel
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <a href="{{ route('admin.articles.index') }}" 
+                   class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
+                    Batal
+                </a>
+                <button type="submit" 
+                        class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
+                    <i class="fas fa-save mr-2"></i>
+                    Simpan Artikel
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

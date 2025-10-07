@@ -115,12 +115,11 @@
             @click.away="if (window.innerWidth < 1024) sidebarOpen = false">
             
             <!-- Logo -->
-            <div class="flex items-center justify-between h-16 px-6">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('images/logo-fisika.png') }}" alt="Logo" class="w-8 h-8">
-                    <span class="text-lg font-semibold text-white">Admin Panel</span>
+            <div class="flex items-center justify-between h-20 px-4">
+                <div class="flex items-center justify-center w-full">
+                    <img src="{{ asset('images/logo-fisika.png') }}" alt="Logo USK" class="w-[8rem] h-auto">
                 </div>
-                <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-200">
+                <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-200 absolute right-4">
                     <i class="fas fa-times"></i>
                 </button>
             </div>

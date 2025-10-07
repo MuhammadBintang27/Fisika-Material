@@ -3,26 +3,30 @@
 @section('title', 'Edit Staf')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-8">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Edit Staf</h1>
-            <p class="text-gray-600">Edit data staf dan tenaga ahli laboratorium</p>
+    <div class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-xl p-8 text-white shadow-xl border border-blue-600">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Edit Staf</h1>
+                <p class="text-blue-100 text-lg">Edit data staf dan tenaga ahli laboratorium</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('admin.staff.index') }}" 
+                   class="px-6 py-3 bg-white/90 backdrop-blur-sm text-blue-700 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:bg-white transition-all duration-300 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali
+                </a>
+            </div>
         </div>
-        <a href="{{ route('admin.staff.index') }}" 
-           class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
-            <i class="fas fa-arrow-left mr-2"></i>
-            Kembali ke Daftar
-        </a>
     </div>
 
     <!-- Form -->
-    <div class="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
-        <form action="{{ route('admin.staff.update', $staff->id) }}" method="POST" enctype="multipart/form-data" class="p-6">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <form action="{{ route('admin.staff.update', $staff->id) }}" method="POST" enctype="multipart/form-data" class="p-8">
             @csrf
             @method('PUT')
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <div>
                     <label for="nama" class="block text-sm font-semibold text-gray-700 mb-2">
                         Nama <span class="text-red-500">*</span>
