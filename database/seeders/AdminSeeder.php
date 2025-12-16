@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Super Administrator',
                 'email' => 'superadmin@fisika.com',
-                'password' => Hash::make('superadmin123'),
+                'password' => Hash::make('password'), // untuk testing
                 'is_admin' => true,
                 'is_super_admin' => true,
                 'email_verified_at' => now(),
@@ -32,7 +32,7 @@ class AdminSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'email' => 'admin@fisika.com',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('password'), // untuk testing
                 'is_admin' => true,
                 'is_super_admin' => false,
                 'email_verified_at' => now(),
@@ -40,8 +40,8 @@ class AdminSeeder extends Seeder
         );
 
         $this->command->info('Admin users created successfully!');
-        $this->command->info('Super Admin - Email: superadmin@fisika.com, Password: superadmin123');
-        $this->command->info('Regular Admin - Email: admin@fisika.com, Password: admin123');
+        $this->command->info('Super Admin - Email: superadmin@fisika.com, Password: password');
+        $this->command->info('Regular Admin - Email: admin@fisika.com, Password: password');
     }
 } 
  

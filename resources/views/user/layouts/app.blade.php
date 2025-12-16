@@ -43,10 +43,10 @@
         window.axios = { defaults: { headers: { 'X-CSRF-TOKEN': token } } };
     </script>
 </head>
-<body>
+<body class="overflow-x-hidden">
     @include('user.components.navbar')
 
-    <main>
+    <main class="overflow-x-hidden">
         @yield('content')
     </main>
 

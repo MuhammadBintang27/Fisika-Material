@@ -61,11 +61,15 @@
             <!-- Mobile menu button -->
             <div class="md:hidden">
                 <button type="button"
-                        class="mobile-menu-button text-white hover:text-yellow-400 focus:outline-none transition-colors duration-200"
+                        class="mobile-menu-button text-gray-900 hover:text-blue-600 focus:outline-none transition-colors duration-200"
+                        onclick="toggleMobileMenu()"
                         aria-controls="mobile-menu"
                         aria-expanded="false">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-6 w-6 hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg class="h-6 w-6 close-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -74,33 +78,33 @@
 
     <!-- Mobile menu -->
     <div class="md:hidden hidden" id="mobile-menu">
-        <div class="px-2 pt-2 pb-3 space-y-1 mobile-menu-bg bg-black/90 backdrop-blur-md">
-            <a href="{{ route('home') }}#visi-misi" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Beranda</a>
-            <a href="{{ route('staff') }}" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Staf dan Tenaga Ahli</a>
-            <a href="{{ route('articles.index') }}" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Artikel</a>
+        <div class="px-2 pt-2 pb-3 space-y-1 mobile-menu-bg bg-white backdrop-blur-md shadow-lg">
+            <a href="{{ route('home') }}#visi-misi" class="mobile-nav-link block px-3 py-2 text-gray-900 hover:text-blue-600 font-medium">Beranda</a>
+            <a href="{{ route('staff') }}" class="mobile-nav-link block px-3 py-2 text-gray-900 hover:text-blue-600 font-medium">Staf dan Tenaga Ahli</a>
+            <a href="{{ route('articles.index') }}" class="mobile-nav-link block px-3 py-2 text-gray-900 hover:text-blue-600 font-medium">Artikel</a>
 
             <!-- Mobile Layanan - Simple -->
             <div class="mobile-dropdown">
-                <button class="mobile-dropdown-btn w-full text-left px-3 py-2 text-white hover:text-yellow-400 font-medium flex items-center justify-between">
+                <button onclick="toggleMobileDropdown()" class="mobile-dropdown-btn w-full text-left px-3 py-2 text-gray-900 hover:text-blue-600 font-medium flex items-center justify-between">
                     Layanan
                     <i class="fas fa-chevron-down text-sm"></i>
                 </button>
                 <div class="mobile-dropdown-content hidden pl-6 space-y-1">
-                    <a href="{{ route('equipment.loan') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('equipment.loan') }}" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600">
                         Peminjaman Alat
                     </a>
-                    <a href="{{ route('tracking') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('tracking') }}" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600">
                         Tracking Pengajuan
                     </a>
-                    <a href="{{ route('testing.services') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('testing.services') }}" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600">
                         Layanan Pengujian
                     </a>
-                    <a href="{{ route('user.kunjungan.form') }}" class="mobile-nav-link block px-3 py-2 text-gray-300 hover:text-yellow-400">
+                    <a href="{{ route('user.kunjungan.form') }}" class="mobile-nav-link block px-3 py-2 text-gray-700 hover:text-blue-600">
                         Kunjungan Laboratorium
                     </a>
                 </div>
             </div>
-            <a href="{{ route('facilities') }}" class="mobile-nav-link block px-3 py-2 text-white hover:text-yellow-400 font-medium">Fasilitas</a>
+            <a href="{{ route('facilities') }}" class="mobile-nav-link block px-3 py-2 text-gray-900 hover:text-blue-600 font-medium">Fasilitas</a>
 
         </div>
     </div>
@@ -123,25 +127,27 @@
     color: #3b82f6 !important;
 }
 
-.navbar-scrolled .mobile-menu-button {
+/* Mobile button selalu hitam */
+.mobile-menu-button {
     color: #1f2937 !important;
 }
 
-.navbar-scrolled .mobile-menu-button:hover {
+.mobile-menu-button:hover {
     color: #3b82f6 !important;
 }
 
-/* Mobile menu background when scrolled */
-.navbar-scrolled .mobile-menu-bg {
-    background: rgba(255, 255, 255, 0.95) !important;
+/* Mobile menu background selalu putih */
+.mobile-menu-bg {
+    background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(10px);
 }
 
-.navbar-scrolled .mobile-nav-link {
+/* Mobile nav links selalu hitam */
+.mobile-nav-link {
     color: #1f2937 !important;
 }
 
-.navbar-scrolled .mobile-nav-link:hover {
+.mobile-nav-link:hover {
     color: #3b82f6 !important;
 }
 
@@ -167,14 +173,41 @@
 </style>
 
 <script>
+// Global function untuk mobile menu toggle (agar onclick bisa akses)
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.querySelector('.hamburger-icon');
+    const closeIcon = document.querySelector('.close-icon');
+    
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('hidden');
+        
+        // Toggle icon
+        if (hamburgerIcon && closeIcon) {
+            hamburgerIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+    }
+}
+
+function toggleMobileDropdown() {
+    const mobileDropdownContent = document.querySelector('.mobile-dropdown-content');
+    if (mobileDropdownContent) {
+        mobileDropdownContent.classList.toggle('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
+    // Mobile menu toggle (backup jika onclick tidak jalan)
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    mobileMenuButton.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-    });
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleMobileMenu();
+        });
+    }
 
     // Simple mobile dropdown
     const mobileDropdownBtn = document.querySelector('.mobile-dropdown-btn');
@@ -183,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileDropdownBtn && mobileDropdownContent) {
         mobileDropdownBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            mobileDropdownContent.classList.toggle('hidden');
+            toggleMobileDropdown();
         });
     }
 

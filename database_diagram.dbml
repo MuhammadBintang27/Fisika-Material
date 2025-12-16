@@ -1,0 +1,380 @@
+// Sistem Informasi Laboratorium Fisika Material dan Energi
+// Database Diagram - DBML Format
+// Use https://dbdiagram.io to visualize
+
+Project laboratorium_fisika {
+  database_type: 'MySQL'
+  Note: 'Database untuk Sistem Informasi Laboratorium Fisika Material dan Energi'
+}
+
+// ==========================================
+// MODUL AUTENTIKASI DAN USER
+// ==========================================
+
+Table users {
+  id bigint [pk, increment]
+  name varchar
+  email varchar [unique]
+  email_verified_at timestamp [null]
+  password varchar
+  is_admin boolean [default: false]
+  is_super_admin boolean [default: false]
+  remember_token varchar [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Tabel user untuk autentikasi admin'
+}
+
+// ==========================================
+// MODUL PROFIL LABORATORIUM
+// ==========================================
+
+Table profil_laboratorium {
+  id uuid [pk]
+  namaLaboratorium varchar
+  tentangLaboratorium text [null]
+  visi text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Informasi profil dan visi laboratorium'
+}
+
+Table misi {
+  id uuid [pk]
+  profilLaboratoriumId uuid [ref: > profil_laboratorium.id]
+  pointMisi text
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Daftar misi laboratorium (relasi one-to-many dengan profil)'
+}
+
+// ==========================================
+// MODUL BIODATA PENGURUS
+// ==========================================
+
+Table biodata_pengurus {
+  id uuid [pk]
+  nama varchar
+  jabatan enum('Ketua Laboratorium', 'Tenaga Laboran')
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Data pengurus laboratorium'
+}
+
+// ==========================================
+// MODUL ARTIKEL
+// ==========================================
+
+Table artikel {
+  id uuid [pk]
+  namaAcara varchar
+  deskripsi text
+  penulis varchar [null]
+  tanggalAcara datetime [default: `CURRENT_TIMESTAMP`]
+  deskripsi_penulis text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Artikel dan berita kegiatan laboratorium'
+}
+
+// ==========================================
+// MODUL GAMBAR (MULTI-PURPOSE)
+// ==========================================
+
+Table gambar {
+  id uuid [pk]
+  pengurusId uuid [null, ref: > biodata_pengurus.id]
+  acaraId uuid [null, ref: > artikel.id]
+  alatID uuid [null, ref: > alat.id]
+  url varchar
+  kategori enum('PENGURUS', 'ACARA', 'ALAT')
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Tabel gambar untuk pengurus, artikel, dan alat (polymorphic-like)'
+}
+
+// ==========================================
+// MODUL ALAT LABORATORIUM
+// ==========================================
+
+Table alat {
+  id uuid [pk]
+  nama varchar
+  deskripsi text
+  isBroken boolean [default: true]
+  stok integer [default: 1]
+  stok_dipinjam integer [default: 0]
+  stok_rusak integer [default: 0]
+  harga decimal(15,2) [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Master data alat laboratorium dengan tracking stok'
+}
+
+// ==========================================
+// MODUL PEMINJAMAN ALAT
+// ==========================================
+
+Table peminjaman {
+  id uuid [pk]
+  tracking_code varchar [unique]
+  user_type enum('dosen', 'mahasiswa', 'pihak-luar') [default: 'mahasiswa']
+  namaPeminjam varchar
+  noHp varchar
+  email varchar [null]
+  nip_nim varchar [null]
+  instansi varchar [null]
+  jabatan varchar [null]
+  judul_penelitian varchar [null]
+  deskripsi_penelitian text [null]
+  tujuan_peminjaman text [null]
+  tanggal_pinjam datetime
+  tanggal_pengembalian datetime
+  durasi_jam integer [null]
+  status enum('PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'ONGOING') [default: 'PENDING']
+  notes text [null]
+  supervisor_name varchar [null]
+  supervisor_nip varchar [null]
+  supervisor_instansi varchar [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Indexes {
+    tracking_code [unique]
+    status
+  }
+  
+  Note: 'Header peminjaman alat dengan tracking code unik'
+}
+
+Table peminjaman_item {
+  id uuid [pk]
+  peminjamanId uuid [ref: > peminjaman.id]
+  alat_id uuid [ref: > alat.id]
+  jumlah integer
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Detail item alat yang dipinjam (one-to-many dengan peminjaman)'
+}
+
+// ==========================================
+// MODUL KUNJUNGAN LABORATORIUM
+// ==========================================
+
+Table kunjungan {
+  id uuid [pk]
+  tracking_code varchar [unique]
+  namaPengunjung varchar
+  noHp varchar
+  namaInstansi varchar
+  tujuan text
+  jumlahPengunjung integer
+  status enum('PENDING', 'APPROVED', 'COMPLETED', 'CANCELLED') [default: 'PENDING']
+  suratPengajuan varchar [null]
+  notes text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Indexes {
+    tracking_code [unique]
+    status
+  }
+  
+  Note: 'Data kunjungan laboratorium dengan tracking code'
+}
+
+Table jadwal {
+  id uuid [pk]
+  kunjunganId uuid [ref: - kunjungan.id]
+  tanggal date
+  waktuMulai time
+  waktuSelesai time
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Jadwal kunjungan (one-to-one dengan kunjungan)'
+}
+
+// ==========================================
+// MODUL LAYANAN PENGUJIAN
+// ==========================================
+
+Table layanan_pengujian {
+  id bigint [pk, increment]
+  namaLayanan varchar [unique]
+  deskripsi text [null]
+  estimasiSelesaiHari smallint
+  harga bigint [null]
+  isAktif boolean [default: true]
+  instruksiSampel longtext [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Master layanan pengujian yang tersedia'
+}
+
+Table pengajuan_pengujian {
+  id bigint [pk, increment]
+  trackingCode varchar [unique]
+  namaPengaju varchar
+  noHp varchar
+  email varchar [null]
+  instansi varchar [null]
+  alamat varchar [null]
+  userType enum('UMUM', 'MAHASISWA', 'DOSEN') [default: 'UMUM']
+  nim varchar [null]
+  nip varchar [null]
+  prodi varchar [null]
+  layananId bigint [ref: > layanan_pengujian.id]
+  tanggalPengajuan datetime [default: `now()`]
+  tanggalPenyerahan date
+  jumlahSampel integer
+  deskripsiSampel text
+  filePendukung varchar [null]
+  detailKhusus json [null]
+  status enum('MENUNGGU', 'DISETUJUI', 'DITOLAK', 'DIPROSES', 'SELESAI') [default: 'MENUNGGU']
+  estimasiSelesai date [null]
+  catatanAdmin text [null]
+  tanggalSelesai datetime [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Indexes {
+    trackingCode [unique]
+    status
+    layananId
+  }
+  
+  Note: 'Pengajuan pengujian dengan tracking code'
+}
+
+Table pengajuan_hasil {
+  id bigint [pk, increment]
+  pengajuanId bigint [ref: > pengajuan_pengujian.id]
+  fileUrl varchar
+  keterangan text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'File hasil pengujian (one-to-many dengan pengajuan)'
+}
+
+// ==========================================
+// MODUL FASILITAS DAN GALERI
+// ==========================================
+
+Table fasilitas {
+  id uuid [pk]
+  namaFasilitas varchar
+  deskripsi text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Master data fasilitas laboratorium'
+}
+
+Table galeri_laboratorium {
+  id uuid [pk]
+  fasilitasId uuid [null, ref: > fasilitas.id]
+  url varchar
+  deskripsi text [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Galeri foto laboratorium dan fasilitas'
+}
+
+// ==========================================
+// Laravel SYSTEM TABLES
+// ==========================================
+
+Table password_reset_tokens {
+  email varchar [pk]
+  token varchar
+  created_at timestamp [null]
+}
+
+Table sessions {
+  id varchar [pk]
+  user_id bigint [null]
+  ip_address varchar(45) [null]
+  user_agent text [null]
+  payload longtext
+  last_activity integer
+  
+  Indexes {
+    user_id
+    last_activity
+  }
+}
+
+Table cache {
+  key varchar [pk]
+  value mediumtext
+  expiration integer
+}
+
+Table cache_locks {
+  key varchar [pk]
+  owner varchar
+  expiration integer
+}
+
+Table jobs {
+  id bigint [pk, increment]
+  queue varchar
+  payload longtext
+  attempts tinyint
+  reserved_at integer [null]
+  available_at integer
+  created_at integer
+  
+  Indexes {
+    queue
+  }
+}
+
+Table job_batches {
+  id varchar [pk]
+  name varchar
+  total_jobs integer
+  pending_jobs integer
+  failed_jobs integer
+  failed_job_ids longtext
+  options mediumtext [null]
+  cancelled_at integer [null]
+  created_at integer
+  finished_at integer [null]
+}
+
+Table failed_jobs {
+  id bigint [pk, increment]
+  uuid varchar [unique]
+  connection text
+  queue text
+  payload longtext
+  exception longtext
+  failed_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+// ==========================================
+// RELATIONSHIP SUMMARY
+// ==========================================
+
+// Profil Lab: 1 profil ->Many misi
+// Biodata Pengurus: 1 pengurus -> Many gambar
+// Artikel: 1 artikel -> Many gambar  
+// Alat: 1 alat -> Many gambar, Many peminjaman_item
+// Peminjaman: 1 peminjaman -> Many peminjaman_item
+// Kunjungan: 1 kunjungan -> 1 jadwal
+// Layanan Pengujian: 1 layanan -> Many pengajuan_pengujian
+// Pengajuan Pengujian: 1 pengajuan -> Many pengajuan_hasil
+// Fasilitas: 1 fasilitas -> Many galeri_laboratorium

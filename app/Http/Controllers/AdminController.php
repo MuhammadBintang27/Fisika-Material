@@ -55,16 +55,26 @@ class AdminController extends Controller
         $approvedLoans = Peminjaman::where('status', 'APPROVED')->count();
         $successRate = $totalLoans > 0 ? round(($approvedLoans / $totalLoans) * 100, 1) : 0;
 
-        // Calculate average response time (in hours) - simplified calculation
-        $avgResponseTime = Peminjaman::whereNotNull('updated_at')
-            ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, created_at, updated_at)) as avg_hours')
-            ->value('avg_hours');
-        $avgResponseTime = $avgResponseTime ? round($avgResponseTime, 1) : 0;
+        // Calculate average response time (in hours) - database agnostic with limit for performance
+        $peminjaman = Peminjaman::whereNotNull('updated_at')
+            ->select('created_at', 'updated_at')
+            ->latest('updated_at')
+            ->limit(100) // Only check last 100 records for performance
+            ->get();
+        
+        if ($peminjaman->isNotEmpty()) {
+            $totalHours = $peminjaman->sum(function ($item) {
+                return $item->created_at->diffInHours($item->updated_at);
+            });
+            $avgResponseTime = round($totalHours / $peminjaman->count(), 1);
+        } else {
+            $avgResponseTime = 0;
+        }
 
         // User satisfaction based on completed services vs total services
         $totalServices = Kunjungan::count() + PengajuanPengujian::count();
-        $completedServices = Kunjungan::where('status', 'selesai')->count() + 
-                           PengajuanPengujian::where('status', 'completed')->count();
+        $completedServices = Kunjungan::where('status', 'COMPLETED')->count() + 
+                           PengajuanPengujian::where('status', 'SELESAI')->count();
         $userSatisfaction = $totalServices > 0 ? round(($completedServices / $totalServices) * 5, 1) : 0;
 
         // System uptime - simplified calculation based on service availability

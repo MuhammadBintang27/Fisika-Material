@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Alat extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
     protected $table = 'alat';
     protected $primaryKey = 'id';
     public $incrementing = false;
